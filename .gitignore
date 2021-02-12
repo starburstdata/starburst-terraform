@@ -38,3 +38,4 @@ gcp/terraform.tfstate.d/test/terraform.tfstate.1613069242.backup
 gcp/terraform.tfstate.d/test/terraform.tfstate.1613163068.backup
 gcp/terraform.tfstate.d/test/terraform.tfstate.backup
 gcp/.terraform.lock.hcl
+gcp/terraform.tfstate
