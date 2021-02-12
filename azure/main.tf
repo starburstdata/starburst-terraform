@@ -1,0 +1,132 @@
+# AWS Infrastructure to be deployed
+#
+# Ensure you either have set the symbolic links to the global variable files (../common/g_*)
+# or you have copied these into this folder
+#
+# e.g.  ln -s ../common/g_data_sources.tf g_data_sources.tf
+#       ln -s ../common/g_kubernetes_secrets.tf g_kubernetes_secrets.tf
+#       ln -s ../common/g_variables.tf g_variables.tf
+#
+
+module vpc {
+    source  = "terraform-aws-modules/vpc/aws"
+    version = "2.66.0"
+
+    name                 = local.vpc_name
+    cidr                 = "172.31.0.0/16"
+    azs                  = data.aws_availability_zones.available.names
+    public_subnets       = ["172.31.74.0/24","172.31.75.0/24","172.31.76.0/24"]
+    enable_dns_hostnames = true
+
+    public_subnet_tags = {
+        "kubernetes.io/cluster/${local.cluster_name}" = "shared"
+        "kubernetes.io/role/elb"                      = "1"
+    }
+
+    # Public access to RDS
+    create_database_subnet_group           = true
+    create_database_subnet_route_table     = true
+    create_database_internet_gateway_route = true
+
+    tags              = local.common_tags
+    create_vpc        = var.create_vpc
+}
+
+module eks {
+  source  = "terraform-aws-modules/eks/aws"
+  version = "13.2.1"
+
+  cluster_name    = local.cluster_name
+  cluster_version = "1.18"
+  subnets         = module.vpc.public_subnets
+  vpc_id          = module.vpc.vpc_id
+
+  worker_groups = [
+    {
+      name                          = "demobase"
+      instance_type                 = "m5.2xlarge"
+      asg_max_size                  = 1
+      kubelet_extra_args            = "--node-labels=agentpool=demobase"
+      suspended_processes           = ["AZRebalance"]
+    },
+    {
+      name                          = "demopresto"
+      instance_type                 = "m5.xlarge"
+      asg_min_size                  = 1
+      asg_max_size                  = 10
+      kubelet_extra_args            = "--node-labels=agentpool=demopresto"
+      suspended_processes           = ["AZRebalance"]
+    }
+  ]
+
+  # Attach S3 policy to allow worker nodes to interact with Glue/S3
+  workers_additional_policies = var.s3_role
+
+  write_kubeconfig   = true
+  config_output_path = "./"
+
+  map_roles         = var.map_roles
+
+  tags              = local.common_tags
+  create_eks        = var.create_k8s
+
+  depends_on        = [module.vpc]
+}
+
+module s3_bucket {
+  source            = "terraform-aws-modules/s3-bucket/aws"
+
+  bucket            = local.bucket_name
+  acl               = "private"
+  force_destroy     = true
+
+  tags              = local.common_tags
+  create_bucket     = var.create_bucket
+}
+
+module db {
+  source                    = "../modules/aws-rds"
+
+  vpc_id                    = module.vpc.vpc_id
+  identifier                = local.db_name  
+  engine                    = "postgres"
+  instance_class            = "db.t2.micro"
+  db_name                   = "postgres"
+  username                  = "awsadmin"
+
+  vpc_security_group_id     = data.aws_security_group.default.id
+  eks_security_groups       = [module.eks.cluster_security_group_id,module.eks.worker_security_group_id]
+  subnet_ids                = module.vpc.public_subnets
+
+  tags                      = local.common_tags
+  create_db_instance        = var.create_rds
+
+  depends_on                = [module.vpc,module.eks]
+}
+
+# Create databases necessary to support the applications
+resource "postgresql_database" "database" {
+    for_each            = var.create_rds ? toset(var.databases) : []
+    
+    name                = each.value
+    connection_limit    = -1
+    allow_connections   = true
+
+    depends_on          = [module.db]
+}
+
+data "aws_availability_zones" "available" { }
+
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_eks_cluster_auth" "cluster" {
+  name = module.eks.cluster_id
+}
+
+data "aws_security_group" "default" {
+  vpc_id = module.vpc.vpc_id
+  name   = "default"
+}
+

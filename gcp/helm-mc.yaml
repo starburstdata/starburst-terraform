@@ -1,0 +1,80 @@
+affinity: {}
+authentication:
+  google:
+    clientId: null
+    clientSecret: null
+    hostedDomain: null
+  type: none
+chartsVersion: 350.1.1
+database:
+  external:
+    databaseName: null
+    host: null
+    password: null
+    port: null
+    user: null
+  internal:
+    databaseName: missioncontrol
+    image:
+      pullPolicy: IfNotPresent
+      repository: library/postgres
+      tag: "11.3"
+    password: McPass123
+    port: 5432
+    resources:
+      limits:
+        cpu: 2
+        memory: 1Gi
+      requests:
+        cpu: 2
+        memory: 1Gi
+    user: mission_control_admin
+    volume:
+      emptyDir: {}
+  type: internal
+debug:
+  enabled: false
+  port: 5005
+  suspend: "y"
+expose:
+  clusterIp:
+    name: mission-control
+    ports:
+      http:
+        port: 5042
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubernetes.io/ingress.class: nginx
+    host: null
+    path: /
+    tls:
+      enabled: true
+      secretName: mission-control-tls
+  loadBalancer:
+    name: mission-control
+    ports:
+      http:
+        port: 5042
+  type: loadBalancer
+image:
+  pullPolicy: IfNotPresent
+  repository: harbor.starburstdata.net/starburstdata/missioncontrol
+  tag: 350.1.1
+missioncontrol:
+  additionalJvmConfig: |
+    -XX:+HeapDumpOnOutOfMemoryError
+    -XX:+UseGCOverheadLimit
+    -XX:+ExitOnOutOfMemoryError
+  allowInsecureHttp: false
+  memoryAllocation: 1G
+nodeSelector: {}
+port: 5042
+prestoVersion: 350-e.1
+registryCredentials:
+  enabled: true
+  registry: harbor.starburstdata.net/starburstdata
+  username: starburstsa
+  password: 9dc579758f9a16728d6F
+replicaCount: 1
+tolerations: []

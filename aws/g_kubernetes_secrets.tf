@@ -1,0 +1,1 @@
+../common/g_kubernetes_secrets.tf
