@@ -1,3 +1,7 @@
+# NOTE: Don't put sensitive values in this file. Sensitivae values should be set as
+#       global variables prefixed with "TF_VAR_" or in sensitive.auto.tfvars (create this file
+#       in this directory if it does not already exist
+
 # SB License and DNS zone
 sb_license      = "~/signed_trial.license"
 dns_zone        = "aws.starburstdata.net"
@@ -10,7 +14,7 @@ map_roles       = [{rolearn    = "arn:aws:iam::188806360106:role/solution_archit
                     }]
 
 # email address for certs
-#email           = set by environment variable: $TF_VAR_email
+#email           = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_email
 
 # List of usernames to login to Trino & Ranger.
 # NOTE: The first user in the list is assumed to be the admin user.
@@ -24,8 +28,8 @@ databases       = ["hive","ranger","mcdemo","demo","event_logger"]
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"
-#repo_username   = set by environment variable: $TF_VAR_repo_username
-#repo_password   = set by environment variable: $TF_VAR_repo_password
+#repo_username   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
+#repo_password   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
 repo_version    = "350.1.1" # For Trino, Ranger & Hive
 presto_version  = "350-e.1" # For Mission Control & Presto Operator
 
@@ -36,15 +40,18 @@ trino_yaml_file     = ["trino_values.yaml.tpl","trino_values.withInsightsMetrics
 ranger_yaml_file    = "ranger_values.yaml.tpl"
 mc_yaml_file        = "mission_control.yaml.tpl"
 operator_yaml_file  = "operator_values.yaml.tpl"
+postgres_yaml_file  = "postgresql.yaml.tpl"
 
 # Resource tagging variables
 ch_cloud        = "aws"
+#ch_environment = automatically set to the Terraform workspace name
 ch_org          = "bizdev"
 ch_team         = "psa"
 ch_project      = "lab"
+#ch_user        = set your user identity. Can be any value you like. Defaults to "starburst"
 
 # Block creating these resources
-create_rds      = false
+create_rds      = true
 create_hive     = true
 create_mc       = false
 create_ranger   = true

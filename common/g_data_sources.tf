@@ -20,35 +20,13 @@ locals {
     ranger_yaml_file    = var.ranger_yaml_file
     mc_yaml_file        = var.mc_yaml_file
     operator_yaml_file  = var.operator_yaml_file
+    postgres_yaml_file  = var.postgres_yaml_file
 
     hms_version         = var.hms_version != null ? var.hms_version : var.repo_version
     sb_version          = var.sb_version != null  ? var.sb_version : var.repo_version
     ranger_version      = var.ranger_version != null  ? var.ranger_version : var.repo_version
     mc_version          = var.mc_version != null  ? var.mc_version : var.repo_version
     operator_version    = var.operator_version != null  ? var.operator_version : var.repo_version
-
-    # Object storage credentials
-    # GCS
-    gcp_cloud_key_secret    = var.gcp_cloud_key_secret
-    # ADL
-    adl_oauth2_client_id    = var.adl_oauth2_client_id
-    adl_oauth2_credential   = var.adl_oauth2_credential
-    adl_oauth2_refresh_url  = var.adl_oauth2_refresh_url
-    # AWS S3
-    s3_access_key           = var.s3_access_key
-    s3_endpoint             = var.s3_endpoint
-    s3_region               = var.s3_region
-    s3_secret_key           = var.s3_secret_key
-    # Azure ADLS
-    abfs_access_key         = var.abfs_access_key
-    abfs_storage_account    = var.abfs_storage_account
-    abfs_auth_type          = var.abfs_auth_type
-    abfs_client_id          = var.abfs_client_id
-    abfs_endpoint           = var.abfs_endpoint
-    abfs_secret             = var.abfs_secret
-    wasb_access_key         = var.wasb_access_key
-    wasb_storage_account    = var.wasb_storage_account
-
     
     common_tags = {
         ch_cloud        = var.ch_cloud
@@ -80,23 +58,14 @@ resource "random_string" "admin_pass" {
   special = false
 }
 
-data "kubernetes_service" "starburst" {
-  metadata {
-    name = var.expose_sb_name
-  }
-  depends_on = [module.trino]
-}
+# Create databases necessary to support the applications
+resource "postgresql_database" "databases" {
+    for_each            = var.create_rds ? toset(var.databases) : []
+    
+    name                = each.value
+    owner               = module.db.primary_db_user
+    connection_limit    = -1
+    allow_connections   = true
 
-data "kubernetes_service" "ranger" {
-  metadata {
-    name = var.expose_ranger_name
-  }
-  depends_on = [module.ranger]
-}
-
-data "kubernetes_service" "mc" {
-  metadata {
-    name = var.expose_mc_name
-  }
-  depends_on = [module.mc]
+    depends_on          = [module.db]
 }

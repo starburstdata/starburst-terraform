@@ -8,125 +8,76 @@
 #       ln -s ../common/g_variables.tf g_variables.tf
 #
 
-module vpc {
-    source  = "terraform-aws-modules/vpc/aws"
-    version = "2.66.0"
+# Create an RG for this deployment
+resource "azurerm_resource_group" "default" {
+  name     = local.azure_rg
+  location = var.region
 
-    name                 = local.vpc_name
-    cidr                 = "172.31.0.0/16"
-    azs                  = data.aws_availability_zones.available.names
-    public_subnets       = ["172.31.74.0/24","172.31.75.0/24","172.31.76.0/24"]
-    enable_dns_hostnames = true
+  tags     = local.common_tags
+}
 
-    public_subnet_tags = {
-        "kubernetes.io/cluster/${local.cluster_name}" = "shared"
-        "kubernetes.io/role/elb"                      = "1"
-    }
+# Create a Storage Account
+module storage {
+    source                    = "../modules/azure-storage"
 
-    # Public access to RDS
-    create_database_subnet_group           = true
-    create_database_subnet_route_table     = true
-    create_database_internet_gateway_route = true
+    storage_acc_name          = local.storage_name
+    resource_group            = azurerm_resource_group.default.name
+    location                  = var.region
+    account_tier              = "Standard"
+    account_replication_type  = "LRS"
 
+    storage_type              = "ADLS"
+    client_object_id          = data.azurerm_client_config.current.object_id
+
+    tags                      = local.common_tags
+
+    create_bucket             = var.create_bucket
+}
+
+# Create a VNet in the new RG
+module vnet {
+    source            = "../modules/azure-vnet"
+
+    resource_group    = azurerm_resource_group.default.name
+    location          = var.region
+    vnet_name         = local.vpc_name
+    address_space     = ["10.1.0.0/16"]
     tags              = local.common_tags
+
     create_vpc        = var.create_vpc
 }
 
-module eks {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "13.2.1"
+module k8s {
+    source            = "../modules/azure-aks"
 
-  cluster_name    = local.cluster_name
-  cluster_version = "1.18"
-  subnets         = module.vpc.public_subnets
-  vpc_id          = module.vpc.vpc_id
+    resource_group    = azurerm_resource_group.default.name
+    location          = var.region
+    cluster_name      = local.cluster_name
+    dns_prefix        = "aks"
+    subnet_id         = module.vnet.subnet_id[0]
+    primary_node_pool = var.primary_node_pool
+    worker_node_pool  = var.worker_node_pool
+    primary_node_vm   = "Standard_D8s_v3"
+    worker_node_vm    = "Standard_D4s_v3"
 
-  worker_groups = [
-    {
-      name                          = "demobase"
-      instance_type                 = "m5.2xlarge"
-      asg_max_size                  = 1
-      kubelet_extra_args            = "--node-labels=agentpool=demobase"
-      suspended_processes           = ["AZRebalance"]
-    },
-    {
-      name                          = "demopresto"
-      instance_type                 = "m5.xlarge"
-      asg_min_size                  = 1
-      asg_max_size                  = 10
-      kubelet_extra_args            = "--node-labels=agentpool=demopresto"
-      suspended_processes           = ["AZRebalance"]
-    }
-  ]
+    tags              = local.common_tags
 
-  # Attach S3 policy to allow worker nodes to interact with Glue/S3
-  workers_additional_policies = var.s3_role
+    create_k8s        = var.create_k8s
 
-  write_kubeconfig   = true
-  config_output_path = "./"
-
-  map_roles         = var.map_roles
-
-  tags              = local.common_tags
-  create_eks        = var.create_k8s
-
-  depends_on        = [module.vpc]
+    depends_on        = [module.vnet]
 }
 
-module s3_bucket {
-  source            = "terraform-aws-modules/s3-bucket/aws"
+# The db module has been moved to Kubernetes
+# module db { }
 
-  bucket            = local.bucket_name
-  acl               = "private"
-  force_destroy     = true
+# Update the local kubectl config
+resource "null_resource" "configure_kubectl" {
+  count           = var.create_k8s ? 1 : 0
 
-  tags              = local.common_tags
-  create_bucket     = var.create_bucket
+  provisioner "local-exec" {
+    command = "az aks get-credentials --resource-group ${azurerm_resource_group.default.name} --name ${module.k8s.cluster_name} --overwrite-existing"
+    interpreter = ["bash","-c"]
+  }
+
+  depends_on        = [module.k8s]
 }
-
-module db {
-  source                    = "../modules/aws-rds"
-
-  vpc_id                    = module.vpc.vpc_id
-  identifier                = local.db_name  
-  engine                    = "postgres"
-  instance_class            = "db.t2.micro"
-  db_name                   = "postgres"
-  username                  = "awsadmin"
-
-  vpc_security_group_id     = data.aws_security_group.default.id
-  eks_security_groups       = [module.eks.cluster_security_group_id,module.eks.worker_security_group_id]
-  subnet_ids                = module.vpc.public_subnets
-
-  tags                      = local.common_tags
-  create_db_instance        = var.create_rds
-
-  depends_on                = [module.vpc,module.eks]
-}
-
-# Create databases necessary to support the applications
-resource "postgresql_database" "database" {
-    for_each            = var.create_rds ? toset(var.databases) : []
-    
-    name                = each.value
-    connection_limit    = -1
-    allow_connections   = true
-
-    depends_on          = [module.db]
-}
-
-data "aws_availability_zones" "available" { }
-
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
-
-data "aws_security_group" "default" {
-  vpc_id = module.vpc.vpc_id
-  name   = "default"
-}
-

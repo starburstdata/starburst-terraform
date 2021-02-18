@@ -23,14 +23,14 @@ provider "aws" {
 
 # Provider
 provider "postgresql" {
-    host            = var.create_rds ? module.db.address : null
-    port            = var.create_rds ? module.db.port : null
-    database        = var.create_rds ? module.db.db_name : null
-    username        = var.create_rds ? module.db.username : null
-    password        = var.create_rds ? module.db.password : null
-    connect_timeout = var.create_rds ? 15 : null
+    host            = module.db.db_ingress
+    port            = module.db.db_port
+    database        = module.db.db_name
+    username        = module.db.primary_db_user
+    password        = module.db.primary_db_password
+    connect_timeout = 15
+    sslmode         = "disable"
 }
-
 
 provider "kubernetes" {
     host                   = data.aws_eks_cluster.cluster.endpoint
@@ -38,7 +38,7 @@ provider "kubernetes" {
     #token                  = data.aws_eks_cluster_auth.cluster.token
     exec {
         api_version = "client.authentication.k8s.io/v1alpha1"
-        args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
+        args        = ["eks", "get-token", "--cluster-name", module.k8s.cluster_id]
         command     = "aws"
     }
 }
@@ -50,7 +50,7 @@ provider helm {
         #token                  = data.aws_eks_cluster_auth.cluster.token
         exec {
             api_version = "client.authentication.k8s.io/v1alpha1"
-            args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
+            args        = ["eks", "get-token", "--cluster-name", module.k8s.cluster_id]
             command     = "aws"
         }
     }

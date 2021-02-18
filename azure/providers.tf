@@ -18,40 +18,39 @@ terraform {
 
 # Configure the Azure Provider
 provider "azurerm" {
-  # Configuration options
+  features {}
 }
 
 # Provider
 provider "postgresql" {
-    host            = var.create_rds ? module.db.address : null
-    port            = var.create_rds ? module.db.port : null
-    database        = var.create_rds ? module.db.db_name : null
-    username        = var.create_rds ? module.db.username : null
-    password        = var.create_rds ? module.db.password : null
-    connect_timeout = var.create_rds ? 15 : null
+    host            = module.db.db_ingress
+    port            = module.db.db_port
+    database        = module.db.db_name
+    username        = module.db.primary_db_user
+    password        = module.db.primary_db_password
+    connect_timeout = 15
+    sslmode         = "disable"
 }
 
+data "azurerm_client_config" "current" { }
+
+data "azurerm_kubernetes_cluster" "default" {
+  name                = module.k8s.cluster_name
+  resource_group_name = azurerm_resource_group.default.name
+}
 
 provider "kubernetes" {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-    #token                  = data.aws_eks_cluster_auth.cluster.token
-    exec {
-        api_version = "client.authentication.k8s.io/v1alpha1"
-        args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
-        command     = "aws"
-    }
+  host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
+  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
+  client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
 }
 
 provider helm {
     kubernetes {
-        host                   = data.aws_eks_cluster.cluster.endpoint
-        cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-        #token                  = data.aws_eks_cluster_auth.cluster.token
-        exec {
-            api_version = "client.authentication.k8s.io/v1alpha1"
-            args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_id]
-            command     = "aws"
-        }
+        host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
+        client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
+        client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
+        cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
     }
 }

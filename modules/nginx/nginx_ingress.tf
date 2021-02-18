@@ -68,30 +68,14 @@ resource helm_release cert-manager {
 resource helm_release ingress {
   count  = var.create_nginx ? 1 : 0
 
-  name = "nginx"
+  name = "ingress-nginx"
 
-  repository = "https://charts.helm.sh/stable"
+  repository = "https://kubernetes.github.io/ingress-nginx"
 
-  chart = "nginx-ingress"
+  chart = "ingress-nginx"
 
   version      = ""
   force_update = true
 
   cleanup_on_fail = true
-
-  set {
-    name  = "rbac.create"
-    value = true
-  }
-
-  set {
-    name  = "podSecurityPolicy.enabled"
-    value = true
-  }
-
-  set {
-    name  = "controller.publishService.enabled"
-    value = true
-  }
-
 }

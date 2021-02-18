@@ -22,27 +22,13 @@ resource "google_storage_bucket" "bucket" {
   uniform_bucket_level_access = true
 }
 
-module cloud_sql {
-  source              = "../modules/gcp-cloud-sql"
-  region              = var.region
-  zone                = var.zone
-  primary_db_instance = local.db_name
-  primary_db_version  = "POSTGRES_12"
-  primary_db_user     = "gcpadmin"
-  vpc_id              = module.vpc.vpc_id
-
-  create_rds          = var.create_rds
-
-  depends_on          = [module.vpc,module.gke] 
-}
-
-module gke {
+module k8s {
   source            = "../modules/gcp-gke"
   cluster_name      = local.cluster_name
   location          = var.zone
   primary_node_pool = var.primary_node_pool
   worker_node_pool  = var.worker_node_pool
-  primary_node_vm   = "e2-standard-8"
+  primary_node_vm   = "e2-standard-16"
   worker_node_vm    = "e2-standard-4"
   vpc               = module.vpc.vpc_name
 
@@ -62,30 +48,9 @@ resource kubernetes_secret dns_sa_credentials {
 # Update the local kubectl config
 resource "null_resource" "configure_kubectl" {
   provisioner "local-exec" {
-    command = "gcloud container clusters get-credentials ${module.gke.name} --zone ${var.zone} --project ${var.project}"
+    command = "gcloud container clusters get-credentials ${module.k8s.name} --zone ${var.zone} --project ${var.project}"
     interpreter = ["bash","-c"]
   }
 
-  depends_on        = [module.gke]
-}
-
-# Create databases needed for deployment
-#resource "google_sql_database" "databases" {
-#  for_each      = var.create_rds ? toset(var.databases) : []
-
-#  name          = each.value
-#  instance      = module.cloud_sql.identifier
-
-#  depends_on    = [module.cloud_sql]
-#}
-
-# Create databases necessary to support the applications
-resource "postgresql_database" "databases" {
-    for_each            = var.create_rds ? toset(var.databases) : []
-    
-    name                = each.value
-    connection_limit    = -1
-    allow_connections   = true
-
-    depends_on          = [module.cloud_sql]
+  depends_on        = [module.k8s]
 }

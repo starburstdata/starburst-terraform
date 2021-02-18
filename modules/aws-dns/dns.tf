@@ -10,7 +10,8 @@ data "kubernetes_service" "nginx" {
   count  = var.create_nginx ? 1 : 0
 
   metadata {
-    name = "nginx-nginx-ingress-controller"
+    #name = "nginx-nginx-ingress-controller"
+    name = "ingress-nginx-controller"
   }
 }
 

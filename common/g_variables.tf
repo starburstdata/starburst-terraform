@@ -8,7 +8,7 @@ variable region { }
 variable zone {                   default = ""}
 variable vpc_name {               default = "vpc"}
 variable k8s_name {               default = "k8s"}
-variable bucket_name {            default = "bucket"}
+variable bucket_name {            default = "storage"}
 variable storage_location {       default = "US"}
 variable primary_node_pool {      default = "demobase"}
 variable worker_node_pool {       default = "demopresto"}
@@ -17,6 +17,7 @@ variable hive_service {           default = "hive"}
 variable presto_service {         default = "presto"}
 variable ranger_service {         default = "ranger"}
 variable mc_service {             default = "missioncontrol"}
+variable expose_postgres_name {   default = "postgresql"}
 variable expose_sb_name {         default = "starburst"}
 variable expose_ranger_name {     default = "ranger"}
 variable expose_mc_name {         default = "missioncontrol"}
@@ -25,6 +26,7 @@ variable trino_yaml_file { }
 variable ranger_yaml_file { }
 variable mc_yaml_file { }
 variable operator_yaml_file { }
+variable postgres_yaml_file { }
 
 # Databases
 variable databases { }
@@ -68,7 +70,7 @@ variable s3_secret_key {            default = ""}
 # Azure ADLS
 variable abfs_access_key {          default = ""}
 variable abfs_storage_account {     default = ""}
-variable abfs_auth_type {           default = "accessKey"}
+variable abfs_auth_type {           default = "oauth"} # "accessKey" or "oauth"
 variable abfs_client_id {           default = ""}
 variable abfs_endpoint {            default = ""}
 variable abfs_secret {              default = ""}
@@ -82,12 +84,15 @@ variable admin_user { }
 variable create_bucket {          default = true}
 variable create_vpc {             default = true}
 variable create_k8s {             default = true}
-variable create_rds {             default = true}
 
 # Control the deployment of Kubernetes applications
+variable create_rds {             default = true}
 variable create_hive {            default = true}
 variable create_mc {              default = true}
 variable create_ranger {          default = true}
 variable create_trino {           default = true}
 variable create_demo {            default = true}
 variable create_nginx {           default = true}
+
+# debug flag
+variable debug_this {             default = false}

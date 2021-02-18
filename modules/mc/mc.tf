@@ -110,3 +110,32 @@ resource "helm_release" "starburst-mission-control" {
     }
 
 }
+
+data "kubernetes_service" "mc" {
+  count  = var.create_mc ? 1 : 0
+
+  metadata {
+    name = var.expose_mc_name
+  }
+  depends_on = [helm_release.starburst-mission-control]
+}
+
+# Convoluted logic: If Mission Control is being deployed..
+#  1. If its being deployed as type = LoadBalancer...
+#      a. Check if its IP (GCP/Azure) or Hostname (AWS)
+#      b. Output appropriate value
+#  2. If it is being deployed but not type = LoadBalancer...
+#      a. Nginx is being deployed
+#      b. Output empty string, since Nginx will be the ingress point
+#  3. If it is not being deployed, output an empty string
+output mc_ingress {
+  value = var.create_mc ? (
+      data.kubernetes_service.mc[0].spec[0].type == "LoadBalancer" ? (
+          data.kubernetes_service.mc[0].status[0].load_balancer[0].ingress[0].ip != "" ? (
+              data.kubernetes_service.mc[0].status[0].load_balancer[0].ingress[0].ip
+          ) : (
+              data.kubernetes_service.mc[0].status[0].load_balancer[0].ingress[0].hostname
+          )
+      ) : ""
+  ) : ""
+}

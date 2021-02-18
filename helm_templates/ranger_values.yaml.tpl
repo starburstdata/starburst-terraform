@@ -15,6 +15,8 @@ expose:
     serviceName: ${expose_ranger_name}
     servicePort: 6080
     host: ${ranger_service_prefix}.${dns_zone}
+    path: "/"
+    pathType: Prefix
     tls:
       enabled: true
       secretName: tls-secret-ranger

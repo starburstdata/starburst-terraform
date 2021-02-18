@@ -25,31 +25,32 @@ provider google {
 
 # Provider
 provider "postgresql" {
-    host            = var.create_rds ? module.cloud_sql.public_ip_address : null
-    port            = var.create_rds ? module.cloud_sql.database_port : null
-    database        = var.create_rds ? module.cloud_sql.primary_database : null
-    username        = var.create_rds ? module.cloud_sql.primary_db_user : null
-    password        = var.create_rds ? module.cloud_sql.primary_db_password : null
-    connect_timeout = var.create_rds ? 15 : null
+    host            = module.db.db_ingress
+    port            = module.db.db_port
+    database        = module.db.db_name
+    username        = module.db.primary_db_user
+    password        = module.db.primary_db_password
+    connect_timeout = 15
+    sslmode         = "disable"
 }
 
 data "google_client_config" "default" { }
 
 data "google_container_cluster" "my_cluster" {
-  name     = module.gke.name
+  name     = module.k8s.name
   location = var.zone
 }
 
 provider "kubernetes" {
-    host                   = "https://${module.gke.endpoint}"
+    host                   = "https://${module.k8s.endpoint}"
     token                  = data.google_client_config.default.access_token
-    cluster_ca_certificate = module.gke.cluster_ca_certificate
+    cluster_ca_certificate = module.k8s.cluster_ca_certificate
 }
 
 provider helm {
     kubernetes {
-        host                   = "https://${module.gke.endpoint}"
+        host                   = "https://${module.k8s.endpoint}"
         token                  = data.google_client_config.default.access_token
-        cluster_ca_certificate = module.gke.cluster_ca_certificate
+        cluster_ca_certificate = module.k8s.cluster_ca_certificate
     }
 }

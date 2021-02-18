@@ -80,3 +80,33 @@ resource "helm_release" "trino" {
       type = "string"
     }
 }
+
+
+data "kubernetes_service" "starburst" {
+  count  = var.create_trino ? 1 : 0
+
+  metadata {
+    name = var.expose_sb_name
+  }
+  depends_on = [helm_release.trino]
+}
+
+# Convoluted logic: If Trino is being deployed..
+#  1. If its being deployed as type = LoadBalancer...
+#      a. Check if its IP (GCP/Azure) or Hostname (AWS)
+#      b. Output appropriate value
+#  2. If it is being deployed but not type = LoadBalancer...
+#      a. Nginx is being deployed
+#      b. Output empty string, since Nginx will be the ingress point
+#  3. If it is not being deployed, output an empty string
+output starburst_ingress {
+  value = var.create_trino ? (
+      data.kubernetes_service.starburst[0].spec[0].type == "LoadBalancer" ? (
+          data.kubernetes_service.starburst[0].status[0].load_balancer[0].ingress[0].ip != "" ? (
+              data.kubernetes_service.starburst[0].status[0].load_balancer[0].ingress[0].ip
+          ) : (
+              data.kubernetes_service.starburst[0].status[0].load_balancer[0].ingress[0].hostname
+          )
+      ) : ""
+  ) : ""
+}

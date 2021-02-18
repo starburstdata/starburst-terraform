@@ -32,7 +32,7 @@ module vpc {
     create_vpc        = var.create_vpc
 }
 
-module eks {
+module k8s {
   source  = "terraform-aws-modules/eks/aws"
   version = "13.2.1"
 
@@ -84,49 +84,17 @@ module s3_bucket {
   create_bucket     = var.create_bucket
 }
 
-module db {
-  source                    = "../modules/aws-rds"
-
-  vpc_id                    = module.vpc.vpc_id
-  identifier                = local.db_name  
-  engine                    = "postgres"
-  instance_class            = "db.t2.micro"
-  db_name                   = "postgres"
-  username                  = "awsadmin"
-
-  vpc_security_group_id     = data.aws_security_group.default.id
-  eks_security_groups       = [module.eks.cluster_security_group_id,module.eks.worker_security_group_id]
-  subnet_ids                = module.vpc.public_subnets
-
-  tags                      = local.common_tags
-  create_db_instance        = var.create_rds
-
-  depends_on                = [module.vpc,module.eks]
-}
-
-# Create databases necessary to support the applications
-resource "postgresql_database" "database" {
-    for_each            = var.create_rds ? toset(var.databases) : []
-    
-    name                = each.value
-    connection_limit    = -1
-    allow_connections   = true
-
-    depends_on          = [module.db]
-}
-
 data "aws_availability_zones" "available" { }
 
 data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
+  name = module.k8s.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
+  name = module.k8s.cluster_id
 }
 
 data "aws_security_group" "default" {
   vpc_id = module.vpc.vpc_id
   name   = "default"
 }
-

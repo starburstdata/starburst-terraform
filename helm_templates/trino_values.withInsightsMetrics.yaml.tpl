@@ -17,13 +17,14 @@ expose:
     serviceName: ${expose_sb_name}
     servicePort: 8080
     host: ${presto_service_prefix}.${dns_zone}
+    path: "/"
+    pathType: Prefix
     tls:
       enabled: true
       secretName: tls-secret-presto
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: ${secret_key_ref}
-      nginx.ingress.kubernetes.io/use-regex: "true"
 
 userDatabase:
   enabled: false

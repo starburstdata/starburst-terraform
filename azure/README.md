@@ -1,38 +1,61 @@
-# Starburst-Terraform deployment for AWS
-Deployment scripts built for AWS.
+# Starburst-Terraform deployment for Azure
+Deployment scripts built for Azure.
 
 ### Prerequisites
-Ensure you have [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [helm](https://helm.sh/docs/intro/install/) installed and configured according to the cloud provider's documentation.
+Ensure you have [azure cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [helm](https://helm.sh/docs/intro/install/) installed and configured according to the cloud provider's documentation.
+
+You should have existing user access to an Azure subscription with at least the following base IAM permissions set:
+- `Owner`
+
+OR
+
+- `Contributor` and
+- `User Access Administrator`
 
 ## Set up
-1. Ensure that your `aws cli` has been preconfigured with a user that has the following permissions:
-    - `AdministratorAccess`
-    - `IAMFullAccess`
-    - `AmazonEC2FullAccess`
-    - `AutoScalingFullAccess`
-    - `AmazonS3FullAccess`
-    - `AmazonEKSClusterPolicy`
-    - `AmazonEKSServicePolicy`
+1. Create a Service Principal in Azure for Terraform to work with. You will need the values returned by the create command later:
+```
+az login
+az account set --subscription="<your_subscription_id>"
+az ad sp create-for-rbac --name <your_sp_name> --role="Contributor" --scopes="/subscriptions/<your_subscription_id>"
 
-2. Copy your Starburst license to a local directory
+```
 
-3. Edit the `terraform.tfvars` file for your environment. Pay attention to the following variables, which can be set in this file or as global variables (TF_VAR_*) on your local machine:
+2. Using the values returned in the json file, set the following global variables:
+```
+export ARM_CLIENT_ID=<appId-from-json>
+export ARM_CLIENT_SECRET=<password-from-json>
+export ARM_SUBSCRIPTION_ID=<your-subscription-id>
+export ARM_TENANT_ID=<tenant-from-json>
+
+```
+
+3. Add the `User Access Administrator` IAM permission to the SP at the subscription level:
+```
+az role assignment create --assignee <service_principal_id_or_name> --role "User Access Administrator"
+```
+*Note: Use the SP name or id returned by the create-for-rbac command, not the displayName!*
+
+4. Copy your Starburst license to a local directory on your client machine
+
+5. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
     - `sb_license` *(point to your local file)*
     - `email`
     - `repo_username`
     - `repo_password`
-    - `s3_role`
-    - `map_roles`
+    - `abfs_auth_type`
+    - `abfs_client_id` *(your SP appId)*
+    - `abfs_secret` *(your SP password)*
 
-4. Create a workspace in Terraform for your deployment:
+6. Create a workspace in Terraform for your deployment:
 ```
 terraform workspace new ${your-workspace-name}
 ```
-5. Initialize the Terraform environment:
+7. Initialize the Terraform environment:
 ```
 terraform init
 ```
-6. Deploy your environment:
+8. Deploy your environment:
 ```
 terraform deploy
 ```
@@ -65,17 +88,17 @@ ___
 | create_vpc | Should the cloud vpc/vnet be created? | no | true |
 | databases | Comma-separated list of databases to create when deploying the cloud_sql module | no | ["hive","ranger","mcdemo","demo","event_logger"] |
 | dns_zone | The DNS zone to deploy applications to | no |  |
+| dns_zone_name | the DNS name in Azure | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
-| map_roles | Additional IAM role to attach to the EKS cluster, to allow others access to the resource in AWS | no |  |
-| region | The AWS region | yes |  |
+| presto_version | The version of Starburst that Mission Control will deploy | yes | 350-e.1 |
+| reg_user | Non-Admin user (NOT IN USE) | no | sbuser |
+| region | The Azure location | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |
 | repo_username | Login user for the Harbor repository | yes |  |
-| repo_version | Starburst release to be deployed | yes | 350.1.1 |
+| repo_version | Starburst release to be deployed. This includes all components | yes | 350.1.1 |
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
-| s3_role | S3 permission role which will be attached to the EKS nodes to allow S3 access to these nodes. With the role in place, you do not need to set up S3 access via IAM keys in the Starburst-Hive yaml. | no |  |
 | sb_license | The Starburst license file | yes | N/A |
-| zone | the AWS zone within the region | yes |  |
 ___
 ## Default Yaml Files
 |  Parameter | Description | Required | Default |
@@ -108,6 +131,3 @@ ___
 | wasb_access_key | Storage account access key | no |  |
 | wasb_storage_account | Storage account name | no |  |
 ___
-
-## Known Issues
-The Nginx deployment isn't currently working for AWS

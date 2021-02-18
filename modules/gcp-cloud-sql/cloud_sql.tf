@@ -53,7 +53,6 @@ resource "google_sql_user" "primary_db_user" {
   name     = var.primary_db_user
   instance = google_sql_database_instance.primary_db[0].name
   password = random_string.primary_db_user[0].result
-  deletion_policy = "ABANDON"
 
   depends_on = [google_sql_database_instance.primary_db]
 }

@@ -86,10 +86,18 @@ resource "helm_release" "ranger" {
     }
 }
 
+data "kubernetes_service" "ranger" {
+  count  = var.create_ranger ? 1 : 0
+
+  metadata {
+    name = var.expose_ranger_name
+  }
+  depends_on = [helm_release.ranger]
+}
+
+
 # Random password for the db user
 resource "random_string" "ranger_db_password" {
-  #count               = var.create_ranger ? 1 : 0
-
   # Generate a random password for the Ranger user in the Postgres DB
   length = 16
   upper  = true
@@ -101,8 +109,6 @@ resource "random_string" "ranger_db_password" {
 # Random passwords for the service accounts.
 # Don't need to expose to the end user
 resource "random_password" "service_acc_password1" {
-  #count               = var.create_ranger ? 1 : 0
-
   # Generate a random password for the Ranger user in the Postgres DB
   length = 16
   upper  = true
@@ -112,8 +118,6 @@ resource "random_password" "service_acc_password1" {
 }
 
 resource "random_password" "service_acc_password2" {
-  #count               = var.create_ranger ? 1 : 0
-
   # Generate a random password for the Ranger user in the Postgres DB
   length = 16
   upper  = true
@@ -123,8 +127,6 @@ resource "random_password" "service_acc_password2" {
 }
 
 resource "random_password" "service_acc_password3" {
-  #count               = var.create_ranger ? 1 : 0
-
   # Generate a random password for the Ranger user in the Postgres DB
   length = 16
   upper  = true
@@ -134,8 +136,6 @@ resource "random_password" "service_acc_password3" {
 }
 
 resource "random_password" "service_acc_password4" {
-  #count               = var.create_ranger ? 1 : 0
-
   # Generate a random password for the Ranger user in the Postgres DB
   length = 16
   upper  = true
@@ -145,8 +145,6 @@ resource "random_password" "service_acc_password4" {
 }
 
 resource "random_password" "service_acc_password5" {
-  #count               = var.create_ranger ? 1 : 0
-
   # Generate a random password for the Ranger user in the Postgres DB
   length = 16
   upper  = true
@@ -156,17 +154,37 @@ resource "random_password" "service_acc_password5" {
 }
 
 output ranger_db_user {
-  value = var.ranger_db_user
+  value = var.create_ranger ? var.ranger_db_user : null
 }
 
 output ranger_db_password {
-  value = random_string.ranger_db_password.result
+  value = var.create_ranger ? random_string.ranger_db_password.result : null
 }
 
 output ranger_svc_acc_admin {
-  value = "admin"
+  value = var.create_ranger ? "admin" : null
 }
 
 output ranger_svc_acc_pass {
-  value = random_password.service_acc_password1.result
+  value = var.create_ranger ? random_password.service_acc_password1.result : null
+}
+
+# Convoluted logic: If Ranger is being deployed..
+#  1. If its being deployed as type = LoadBalancer...
+#      a. Check if its IP (GCP/Azure) or Hostname (AWS)
+#      b. Output appropriate value
+#  2. If it is being deployed but not type = LoadBalancer...
+#      a. Nginx is being deployed
+#      b. Output empty string, since Nginx will be the ingress point
+#  3. If it is not being deployed, output an empty string
+output ranger_ingress {
+  value = var.create_ranger ? (
+      data.kubernetes_service.ranger[0].spec[0].type == "LoadBalancer" ? (
+          data.kubernetes_service.ranger[0].status[0].load_balancer[0].ingress[0].ip != "" ? (
+              data.kubernetes_service.ranger[0].status[0].load_balancer[0].ingress[0].ip
+          ) : (
+              data.kubernetes_service.ranger[0].status[0].load_balancer[0].ingress[0].hostname
+          )
+      ) : ""
+  ) : ""
 }

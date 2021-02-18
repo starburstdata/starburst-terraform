@@ -101,17 +101,26 @@ ___
 | ranger_yaml_file | Default values.yaml for `starburst-ranger` Helm chart | yes | ranger_values.yaml.tpl |
 | mc_yaml_file | Default values.yaml for `starburst-mission-control` Helm chart | yes | mission_control.yaml.tpl |
 | operator_yaml_file | Default values.yaml for `starburst-presto-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
+| postgres_yaml_file | Default values.yaml for Bitnami `postgresql` Helm chart | yes | postgresql.yaml.tpl |
 ___
-## Known Issue with the GCP provider
-*Only applies to deployments that include the `cloud_sql` resource.*
 
-When Terraform does a teardown of the applications deployed by the [Helm Provider](https://registry.terraform.io/providers/hashicorp/helm/latest) to `gke`, it doesn't wait for confirmation that the applications have been stopped completely before continuing on to undeploy the `cloud_sql` resource. This can cause an issue where the `event_logger` or `ranger` databases may still be in use by the terminating Kubernetes applications. The [Google Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database) is unable to delete a database with an active connection and this will cause the teardown to fail with an error similar to this:
-```
-Error when reading or editing Database: googleapi: Error 400: Invalid request: failed to delete database "event_logger". Detail: pq: database "event_logger" is being accessed by other users
-```
-If this occurs, just wait a minute for the GKE engine to completely stop these applications and rerun your `terraform destroy` command. It should pick up where you left off and complete the teardown.
-
-You will need to clean up the terraform state by running this command at the end:
-```
-terraform state rm google_sql_database.databases
-```
+## Object Storage parameters for Hive
+|  Parameter | Description | Required | Default |
+|---|---|---|---|
+| gcp_cloud_key_secret | json file containing your Service Account's cloud credentials  | no |  |
+| adl_oauth2_client_id | Azure SP ClientID | no |  |
+| adl_oauth2_credential | Azure SP Password | no |  |
+| adl_oauth2_refresh_url | Azure Oauth2 token refresh URL | no |  |
+| s3_access_key | AWS IAM ACCESS_KEY | no |  |
+| s3_endpoint | S3 endpoint | no |  |
+| s3_region | AWS region to access the S3 endpoint | no |  |
+| s3_secret_key | AWS IAM SECRET_KEY | no |  |
+| abfs_access_key | Storage account access key | no |  |
+| abfs_storage_account | Storage account name | no |  |
+| abfs_auth_type | ABFS access type. Can be `accessKey` or `oauth` | no | oauth |
+| abfs_client_id | Azure SP ClientID | no |  |
+| abfs_endpoint | OAuth2 token refresh endpoint. You can find this in the Azure portal under: `Azure Active Directory > App Registrations > <your-app> > Endpoints` | no |  |
+| abfs_secret | Azure SP Password | no |  |
+| wasb_access_key | Storage account access key | no |  |
+| wasb_storage_account | Storage account name | no |  |
+___

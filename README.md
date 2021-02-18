@@ -38,12 +38,10 @@ Each cloud deployment option will create the following infrastrcuture resources 
 - A storage account (S3, ADLS or GCS)
 - A network VPC or VNet
 - A managed Kubernetes cluster (EKS, GKE or AKS)
-- A cloud SQL/RDS Postgres database instance (**Optional**).
-
-**Note:** The cloud SQL/RDS database install is optional and only needed if you need to persist your Hive metastore, Ranger config and Insights metrics
 
 In addition, the user has the option to deploy these specific applications to the Kubernetes cluster:
 
+- A Postgres database instance
 - Hive metastore
 - Starburst (i.e. the Trino application)
 - Ranger
@@ -55,4 +53,4 @@ Default Helm Charts required for the ootb deployments are located in `./helm_tem
 ### Shared Terraform files
 Located in `./common`, these are configuration files shared by all three cloud provider deployments. The aws, gcp and azure folders should contain symlinks to these files.
 ### Modules
-The `./modules` directory contains the individual Terraform resource deployment modules used across the environment. Some of these are common to all three clouds, others are cloud-specific. The module name will be prefixed with the cloud provider if it is a cloud-specific deployment (e.g. aws-rds)
+The `./modules` directory contains the individual Terraform resource deployment modules used across the environment. Some of these are common to all three clouds, others are cloud-specific. The module name will be prefixed with the cloud provider if it is a cloud-specific deployment (e.g. aws-dns)
