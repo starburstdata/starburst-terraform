@@ -16,7 +16,7 @@ Ensure you have [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/insta
 
 2. Copy your Starburst license to a local directory
 
-3. Edit the `terraform.tfvars` file for your environment. Pay attention to the following variables, which can be set in this file or as global variables (TF_VAR_*) on your local machine:
+3. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
     - `sb_license` *(point to your local file)*
     - `email`
     - `repo_username`

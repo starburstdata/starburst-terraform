@@ -31,7 +31,7 @@ gcloud services enable container.googleapis.com
 
 3. Copy your Starburst license to the same location
 
-4. Edit the `terraform.tfvars` file for your environment. Pay attention to the following variables, which can be set in this file or as global variables (TF_VAR_*) on your local machine:
+4. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
     - `project`
     - `credentials` *(point to your local file)*
     - `sb_license` *(point to your local file)*
