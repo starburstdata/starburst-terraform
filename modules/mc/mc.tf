@@ -13,6 +13,7 @@ variable primary_db_user { }
 variable primary_user_password { }
 variable primary_node_pool { }
 variable create_mc { }
+variable create_rds { }
 variable mc_template_file { }
 variable operator_template_file { }
 variable type { }
@@ -63,6 +64,25 @@ locals {
     )
 }
 
+# Create the MC database
+terraform {
+    required_providers {
+        postgresql = {
+            source = "cyrilgdn/postgresql"
+            version = ">= 1.11.2"
+        }
+    }
+}
+
+resource postgresql_database mc {
+    count               = var.create_mc && var.create_rds ? 1 : 0
+
+    name                = var.primary_db_mc
+    connection_limit    = -1
+    allow_connections   = true
+}
+
+
 # Need to Deploy Presto Operator as well if deploying MC
 resource "helm_release" "presto-operator" {
     # This is how Terraform does conditional logic
@@ -108,7 +128,7 @@ resource "helm_release" "starburst-mission-control" {
       value             = var.primary_node_pool
       type              = "string"
     }
-
+    depends_on          = [postgresql_database.mc]
 }
 
 data "kubernetes_service" "mc" {

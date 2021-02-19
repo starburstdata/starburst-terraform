@@ -22,9 +22,6 @@ gcp_cloud_key_secret = "service-account-key"
 # Admin username to login to Ranger. This user will have full access to all catalogs and objects
 admin_user      = "sbadmin"
 
-# Databases required
-databases       = ["hive","ranger","mcdemo","demo","event_logger"]
-
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"

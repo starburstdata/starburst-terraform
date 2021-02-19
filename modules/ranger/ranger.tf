@@ -23,6 +23,7 @@ variable service_type { }
 variable ranger_template_file { }
 
 variable create_ranger { }
+variable create_rds { }
 
 # Data Sources
 locals {
@@ -64,6 +65,26 @@ locals {
 
 }
 
+# Create the Ranger DB
+terraform {
+    required_providers {
+        postgresql = {
+            source = "cyrilgdn/postgresql"
+            version = ">= 1.11.2"
+        }
+    }
+}
+
+resource postgresql_database ranger {
+    count               = var.create_ranger && var.create_rds ? 1 : 0
+
+    name                = var.primary_db_ranger
+    connection_limit    = -1
+    allow_connections   = true
+}
+
+
+
 resource "helm_release" "ranger" {
     # This is how Terraform does conditional logic
     count               = var.create_ranger ? 1 : 0
@@ -84,6 +105,8 @@ resource "helm_release" "ranger" {
       value = var.primary_node_pool
       type = "string"
     }
+
+    depends_on          = [postgresql_database.ranger]
 }
 
 data "kubernetes_service" "ranger" {

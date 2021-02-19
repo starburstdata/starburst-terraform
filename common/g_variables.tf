@@ -28,9 +28,6 @@ variable mc_yaml_file { }
 variable operator_yaml_file { }
 variable postgres_yaml_file { }
 
-# Databases
-variable databases { }
-
 # Additional tags for resources
 variable ch_cloud { }
 variable ch_org { }

@@ -1,4 +1,8 @@
 # Variables
+variable resource_group { }
+variable dns_rg { }
+variable location { }
+variable public_ip { }
 variable create_nginx { }
 variable presto_service { }
 variable ranger_service { }
@@ -8,7 +12,7 @@ variable dns_zone_name { }
 
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
-  count  = var.create_nginx ? 1 : 0
+  count               = var.create_nginx ? 1 : 0
 
   metadata {
     #name = "nginx-nginx-ingress-controller"
@@ -16,52 +20,56 @@ data "kubernetes_service" "nginx" {
   }
 }
 
-# Add Google DNS Record sets
-resource "google_dns_record_set" "presto" {
-  count = var.create_nginx ? 1 : 0
+# Get the dns zone info
+data "azurerm_dns_zone" "default" {
+  count               = var.create_nginx ? 1 : 0
 
-  name = "${var.presto_service}.${var.dns_zone}."
-  type = "A"
-  ttl  = 3600
-
-  managed_zone = var.dns_zone_name
-
-  rrdatas = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
+  name                = var.dns_zone
+  resource_group_name = var.dns_rg
 }
 
-resource "google_dns_record_set" "ranger" {
-  count = var.create_nginx ? 1 : 0
-  
-  name = "${var.ranger_service}.${var.dns_zone}."
-  type = "A"
-  ttl  = 3600
+# Add Azure DNS Record sets
+resource "azurerm_dns_a_record" "starburst" {
+  count               = var.create_nginx ? 1 : 0
 
-  managed_zone = var.dns_zone_name
-
-  rrdatas = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
+  name                = var.presto_service
+  zone_name           = data.azurerm_dns_zone.default[0].name
+  resource_group_name = var.dns_rg
+  ttl                 = 300
+  records             = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
 }
 
-resource "google_dns_record_set" "mc" {
-  count = var.create_nginx ? 1 : 0
-  
-  name = "${var.mc_service}.${var.dns_zone}."
-  type = "A"
-  ttl  = 3600
+# Add Azure DNS Record sets
+resource "azurerm_dns_a_record" "ranger" {
+  count               = var.create_nginx ? 1 : 0
 
-  managed_zone = var.dns_zone_name
+  name                = var.ranger_service
+  zone_name           = data.azurerm_dns_zone.default[0].name
+  resource_group_name = var.dns_rg
+  ttl                 = 300
+  records             = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
+}
 
-  rrdatas = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
+# Add Azure DNS Record sets
+resource "azurerm_dns_a_record" "mc" {
+  count               = var.create_nginx ? 1 : 0
+
+  name                = var.mc_service
+  zone_name           = data.azurerm_dns_zone.default[0].name
+  resource_group_name = var.dns_rg
+  ttl                 = 300
+  records             = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
 }
 
 
 output starburst_url {
-  value = var.create_nginx ? trimsuffix(google_dns_record_set.presto[0].name,".") : null
+  value = var.create_nginx ? trimsuffix(azurerm_dns_a_record.starburst[0].fqdn,".") : null
 }
 
 output ranger_url {
-  value = var.create_nginx ? trimsuffix(google_dns_record_set.ranger[0].name,".") : null
+  value = var.create_nginx ? trimsuffix(azurerm_dns_a_record.ranger[0].fqdn,".") : null
 }
 
 output mc_url {
-  value = var.create_nginx ? trimsuffix(google_dns_record_set.mc[0].name,".") : null
+  value = var.create_nginx ? trimsuffix(azurerm_dns_a_record.mc[0].fqdn,".") : null
 }

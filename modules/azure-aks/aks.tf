@@ -48,15 +48,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "worker" {
     node_count            = 1
     max_count             = 10
     min_count             = 1
-    priority              = "Spot"
-    eviction_policy       = "Delete"
-
-    spot_max_price        = -1 # note: this is the "maximum" price
-
-    node_labels = {
-        "kubernetes.azure.com/scalesetpriority" = "spot"
-    }
-
     tags = var.tags
 }
 

@@ -22,9 +22,6 @@ map_roles       = [{rolearn    = "arn:aws:iam::188806360106:role/solution_archit
 # Use the admin user to set catalog and object permissions to the regular user in Ranger
 admin_user      = "sbadmin"
 
-# Databases required
-databases       = ["hive","ranger","mcdemo","demo","event_logger"]
-
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"

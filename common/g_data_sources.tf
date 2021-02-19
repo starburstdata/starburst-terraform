@@ -57,15 +57,3 @@ resource "random_string" "admin_pass" {
   number = true
   special = false
 }
-
-# Create databases necessary to support the applications
-resource "postgresql_database" "databases" {
-    for_each            = var.create_rds ? toset(var.databases) : []
-    
-    name                = each.value
-    owner               = module.db.primary_db_user
-    connection_limit    = -1
-    allow_connections   = true
-
-    depends_on          = [module.db]
-}

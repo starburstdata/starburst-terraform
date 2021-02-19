@@ -2,6 +2,10 @@
 module dns {
     source                  = "../modules/azure-dns"
 
+    resource_group          = azurerm_resource_group.default.name
+    dns_rg                  = var.dns_rg
+    location                = var.region
+    public_ip               = local.public_ip
     presto_service          = local.presto_service
     ranger_service          = local.ranger_service
     mc_service              = local.mc_service

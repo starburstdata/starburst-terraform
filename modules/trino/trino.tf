@@ -22,6 +22,7 @@ variable dns_zone { }
 variable service_type { }
 variable trino_template_file { }
 
+variable create_rds { }
 variable create_trino { }
 
 # Data Sources
@@ -59,6 +60,25 @@ locals {
 
 }
 
+# Create the event_logger DB
+terraform {
+    required_providers {
+        postgresql = {
+            source = "cyrilgdn/postgresql"
+            version = ">= 1.11.2"
+        }
+    }
+}
+
+resource postgresql_database event_logger {
+    count               = var.create_trino && var.create_rds ? 1 : 0
+
+    name                = var.primary_db_event_logger
+    connection_limit    = -1
+    allow_connections   = true
+}
+
+
 resource "helm_release" "trino" {
     # This is how Terraform does conditional logic
     count               = var.create_trino ? 1 : 0
@@ -79,6 +99,8 @@ resource "helm_release" "trino" {
       value = var.primary_node_pool
       type = "string"
     }
+
+    depends_on          = [postgresql_database.event_logger]
 }
 
 

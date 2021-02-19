@@ -6,12 +6,12 @@ terraform {
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"
-            version = "~> 2.0.0"
+            version = ">= 2.0.0"
         }
-        helm        = "~> 2.0.1"
+        helm        = ">= 2.0.1"
         postgresql = {
             source = "cyrilgdn/postgresql"
-            version = "1.11.1"
+            version = ">= 1.11.1"
         }
     }
 }

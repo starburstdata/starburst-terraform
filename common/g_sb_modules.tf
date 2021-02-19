@@ -70,8 +70,9 @@ module hive {
 
     # Conditional create logic
     create_hive             = var.create_hive
+    create_rds              = var.create_rds
 
-    depends_on              = [postgresql_database.databases,module.k8s]
+    depends_on              = [module.k8s]
 }
 
 module mc {
@@ -112,8 +113,9 @@ module mc {
 
     # Conditional create logic
     create_mc               = var.create_mc
+    create_rds              = var.create_rds
 
-    depends_on              = [module.nginx,module.dns,postgresql_database.databases,module.k8s]
+    depends_on              = [module.nginx,module.dns,module.k8s]
 }
 
 module ranger {
@@ -157,8 +159,9 @@ module ranger {
 
     # Conditional create logic
     create_ranger           = var.create_ranger
+    create_rds              = var.create_rds
 
-    depends_on              = [module.nginx,module.dns,postgresql_database.databases,module.hive]
+    depends_on              = [module.nginx,module.dns,module.hive]
 }
 
 module trino {
@@ -203,8 +206,9 @@ module trino {
 
     # Conditional create logic
     create_trino            = var.create_trino
+    create_rds              = var.create_rds
 
-    depends_on              = [module.nginx,module.dns,postgresql_database.databases,module.hive]
+    depends_on              = [module.nginx,module.dns,module.hive]
 }
 
 module nginx {

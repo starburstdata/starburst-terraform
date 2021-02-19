@@ -4,7 +4,8 @@
 
 # SB License and DNS zone
 sb_license      = "~/signed_trial.license"
-dns_zone        = "aws.starburstdata.net"
+dns_zone        = "azure.starburstdata.net"
+dns_rg          = "partners"
 region          = "East US"
 
 # email address for certs
@@ -15,9 +16,6 @@ region          = "East US"
 # The admin user has acess to both Trino and Ranger. The regular users only have access to Trino
 # Use the admin user to set catalog and object permissions to the regular user in Ranger
 admin_user      = "sbadmin"
-
-# Databases required
-databases       = ["hive","ranger","mcdemo","demo","event_logger"]
 
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
@@ -50,8 +48,8 @@ create_rds      = true
 create_hive     = true
 create_mc       = false
 create_ranger   = true
-create_trino    = true
-create_nginx    = false
+create_trino    = false
+create_nginx    = true
 
 # Debug flag
 debug_this      = true

@@ -12,6 +12,7 @@ variable primary_user_password { }
 variable primary_db_hive { }
 variable primary_node_pool { }
 variable create_hive { }
+variable create_rds { }
 variable type { }
 variable hive_template_file { }
 # Object storage credentials
@@ -76,13 +77,30 @@ locals {
     )
 }
 
+terraform {
+    required_providers {
+        postgresql = {
+            source = "cyrilgdn/postgresql"
+            version = ">= 1.11.2"
+        }
+    }
+}
+
+resource postgresql_database hive {
+    count               = var.create_hive && var.create_rds ? 1 : 0
+
+    name                = var.primary_db_hive
+    connection_limit    = -1
+    allow_connections   = true
+}
+
 
 # Helm Deployment
 resource "helm_release" "hive" {
     # This is how Terraform does conditional logic
     count               = var.create_hive ? 1 : 0
 
-    name    = "hive"
+    name                = "hive"
 
     repository          = var.repository
     repository_username = var.repo_username
@@ -98,4 +116,10 @@ resource "helm_release" "hive" {
       value             = var.primary_node_pool
       type              = "string"
     }
+
+    depends_on          = [postgresql_database.hive]
+}
+
+output hive_db {
+    value = var.create_hive ? postgresql_database.hive[0].name : ""
 }

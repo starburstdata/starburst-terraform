@@ -2,16 +2,16 @@ terraform {
     required_providers {
         azurerm = {
             source = "hashicorp/azurerm"
-            version = "2.46.1"
+            version = ">= 2.46.1"
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"
-            version = "~> 2.0.0"
+            version = ">= 2.0.0"
         }
-        helm        = "~> 2.0.1"
+        helm        = ">= 2.0.1"
         postgresql = {
             source = "cyrilgdn/postgresql"
-            version = "1.11.1"
+            version = ">= 1.11.2"
         }
     }
 }        
@@ -29,6 +29,7 @@ provider "postgresql" {
     username        = module.db.primary_db_user
     password        = module.db.primary_db_password
     connect_timeout = 15
+    #expected_version = "13"
     sslmode         = "disable"
 }
 
