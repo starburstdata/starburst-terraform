@@ -91,7 +91,6 @@ ___
 | dns_zone_name | the DNS name in Azure | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | presto_version | The version of Starburst that Mission Control will deploy | yes | 350-e.1 |
-| reg_user | Non-Admin user (NOT IN USE) | no | sbuser |
 | region | The Azure location | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |

@@ -48,8 +48,8 @@ create_rds      = true
 create_hive     = true
 create_mc       = false
 create_ranger   = true
-create_trino    = false
-create_nginx    = true
+create_trino    = true
+create_nginx    = false
 
 # Debug flag
 debug_this      = true

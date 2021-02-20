@@ -82,7 +82,6 @@ ___
 | dns_zone_name | the DNS name in GCP | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | project | The GCP Project | yes | N/A |
-| reg_user | Non-Admin user (NOT IN USE) | no | sbuser |
 | region | The GCP region | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |

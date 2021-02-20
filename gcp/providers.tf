@@ -39,18 +39,19 @@ data "google_client_config" "default" { }
 data "google_container_cluster" "my_cluster" {
   name     = module.k8s.name
   location = var.zone
+  project  = var.project
 }
 
 provider "kubernetes" {
     host                   = "https://${module.k8s.endpoint}"
     token                  = data.google_client_config.default.access_token
-    cluster_ca_certificate = module.k8s.cluster_ca_certificate
+    cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
 }
 
 provider helm {
     kubernetes {
         host                   = "https://${module.k8s.endpoint}"
         token                  = data.google_client_config.default.access_token
-        cluster_ca_certificate = module.k8s.cluster_ca_certificate
+        cluster_ca_certificate = base64decode(data.google_container_cluster.my_cluster.master_auth[0].cluster_ca_certificate)
     }
 }
