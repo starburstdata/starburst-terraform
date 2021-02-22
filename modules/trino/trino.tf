@@ -21,6 +21,7 @@ variable expose_sb_name { }
 variable dns_zone { }
 variable service_type { }
 variable trino_template_file { }
+variable demo_db_name { }
 
 variable create_rds { }
 variable create_trino { }
@@ -46,6 +47,7 @@ locals {
         primary_db_password         = var.primary_user_password
         primary_db_event_logger     = var.primary_db_event_logger
         primary_db_ranger           = var.primary_db_ranger
+        demo_db_name                = var.demo_db_name
         primary_node_pool           = var.primary_node_pool
         worker_node_pool            = var.worker_node_pool
         service_type                = var.service_type

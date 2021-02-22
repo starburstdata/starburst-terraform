@@ -186,6 +186,9 @@ module trino {
     trino_template_file     = "${path.root}/../helm_templates/${local.trino_yaml_file}"
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
+    # Demo DB name
+    demo_db_name            = module.db.db_name
+
     # Admin user login user details
     admin_user              = var.admin_user
     admin_pass              = random_string.admin_pass.result

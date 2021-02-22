@@ -130,3 +130,6 @@ ___
 | wasb_access_key | Storage account access key | no |  |
 | wasb_storage_account | Storage account name | no |  |
 ___
+
+## Known Issues
+The Nginx deployment isn't currently working for Azure
