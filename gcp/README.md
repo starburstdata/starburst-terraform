@@ -58,6 +58,7 @@ To delete all resources created in this deployment:
 ```
 terraform destroy
 ```
+*Tip: GKE authentication tokens expire after an hour, so if you are attempting to tear down the infrastructure after a prolonged period of time, rerun: `terraform apply` to refresh the token before you run the destroy command*
 
 ___
 ## Input Parameters
