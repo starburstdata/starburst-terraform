@@ -135,7 +135,7 @@ data "kubernetes_service" "mc" {
   count  = var.create_mc ? 1 : 0
 
   metadata {
-    name = var.expose_mc_name
+    name = "starburst-mission-control" # Need to use this fixed value for the service name
   }
   depends_on = [helm_release.starburst-mission-control]
 }
