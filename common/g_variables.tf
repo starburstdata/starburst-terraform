@@ -20,7 +20,7 @@ variable mc_service {             default = "missioncontrol"}
 variable expose_postgres_name {   default = "postgresql"}
 variable expose_sb_name {         default = "starburst"}
 variable expose_ranger_name {     default = "ranger"}
-variable expose_mc_name {         default = "missioncontrol"}
+variable expose_mc_name {         default = "starburst-mission-control"}
 variable hive_yaml_file { }
 variable trino_yaml_file { }
 variable ranger_yaml_file { }
