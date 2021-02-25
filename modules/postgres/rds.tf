@@ -40,10 +40,10 @@ resource "helm_release" "postgresql" {
 }
 
 # Add small delay to wait for Cloud provider to complete DB LoadBalancer startup
-resource "time_sleep" "wait_20_seconds" {
+resource "time_sleep" "wait_for_postgres" {
   depends_on = [helm_release.postgresql]
 
-  create_duration = "20s"
+  create_duration = "30s"
 }
 
 
@@ -54,7 +54,7 @@ data "kubernetes_service" "postgres" {
     name = var.expose_postgres_name
   }
   #depends_on = [helm_release.postgresql]
-  depends_on = [time_sleep.wait_20_seconds]
+  depends_on = [time_sleep.wait_for_postgres]
 }
 
 # Always generate this pwd, even if the postgres instance is not being deployed

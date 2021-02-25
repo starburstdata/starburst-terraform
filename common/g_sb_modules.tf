@@ -72,7 +72,7 @@ module hive {
     create_hive             = var.create_hive
     create_rds              = var.create_rds
 
-    depends_on              = [module.k8s]
+    depends_on              = [module.k8s,module.db]
 }
 
 module mc {
@@ -115,7 +115,7 @@ module mc {
     create_mc               = var.create_mc
     create_rds              = var.create_rds
 
-    depends_on              = [module.nginx,module.dns,module.k8s]
+    depends_on              = [module.nginx,module.dns,module.k8s,module.db]
 }
 
 module ranger {
@@ -161,7 +161,7 @@ module ranger {
     create_ranger           = var.create_ranger
     create_rds              = var.create_rds
 
-    depends_on              = [module.nginx,module.dns,module.hive]
+    depends_on              = [module.nginx,module.dns,module.hive,module.db]
 }
 
 module trino {
@@ -211,7 +211,7 @@ module trino {
     create_trino            = var.create_trino
     create_rds              = var.create_rds
 
-    depends_on              = [module.nginx,module.dns,module.hive]
+    depends_on              = [module.nginx,module.dns,module.hive,module.db]
 }
 
 module nginx {
