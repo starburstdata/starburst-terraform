@@ -4,8 +4,8 @@
 
 # SB License and DNS zone
 sb_license      = "~/signed_trial.license"
-dns_zone        = "azure.starburstdata.net"
-dns_rg          = "partners"
+dns_zone        = "az.starburstdata.net"
+dns_rg          = "fieldeng" # The RG where the dns zone definition resides
 region          = "East US"
 
 # email address for certs
@@ -52,4 +52,4 @@ create_trino    = true
 create_nginx    = false
 
 # Debug flag
-debug_this      = true
+debug_this      = false
