@@ -54,7 +54,7 @@ database:
 
 datasources:
   - name: starburst-enterprise-presto
-    host: presto-lb
+    host: ${expose_sb_name}
     port: 8080
     username: ${admin_user} 
     password: ${admin_pass}

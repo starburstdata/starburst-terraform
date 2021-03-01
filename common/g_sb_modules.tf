@@ -150,6 +150,7 @@ module ranger {
 
     # Expose this service name
     expose_ranger_name      = var.expose_ranger_name
+    expose_sb_name          = var.expose_sb_name
 
     # DNS Zone for Ranger endpoint
     dns_zone                = var.dns_zone
@@ -203,6 +204,7 @@ module trino {
 
     # Expose this service name
     expose_sb_name          = var.expose_sb_name
+    expose_ranger_name      = var.expose_ranger_name
 
     # DNS Zone for starburst endpoint
     dns_zone                = var.dns_zone

@@ -16,6 +16,7 @@ variable admin_pass { }
 variable ranger_service { }
 variable presto_service { }
 variable expose_ranger_name { }
+variable expose_sb_name { }
 variable dns_zone { }
 variable ranger_db_user { default = "ranger"}
 variable type { }
@@ -38,6 +39,7 @@ locals {
         ranger_service_prefix       = var.ranger_service
         presto_service_prefix       = var.presto_service
         expose_ranger_name          = var.expose_ranger_name
+        expose_sb_name              = var.expose_sb_name
         dns_zone                    = var.dns_zone
         primary_ip_address          = var.primary_ip_address
         primary_db_port             = var.primary_db_port

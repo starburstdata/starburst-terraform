@@ -22,6 +22,7 @@ variable reg_pass2 { }
 variable ranger_service { }
 variable presto_service { }
 variable expose_sb_name { }
+variable expose_ranger_name { }
 variable dns_zone { }
 variable service_type { }
 variable trino_template_file { }
@@ -44,6 +45,7 @@ locals {
         ranger_service_prefix       = var.ranger_service
         presto_service_prefix       = var.presto_service
         expose_sb_name              = var.expose_sb_name
+        expose_ranger_name          = var.expose_ranger_name
         dns_zone                    = var.dns_zone
         primary_ip_address          = var.primary_ip_address
         primary_db_port             = var.primary_db_port

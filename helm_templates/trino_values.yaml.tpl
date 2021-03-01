@@ -52,7 +52,7 @@ coordinator:
       access-control.properties: |
         access-control.name=ranger
         ranger.authentication-type=BASIC
-        ranger.policy-rest-url=http://ranger:6080
+        ranger.policy-rest-url=http://${expose_ranger_name}:6080
         ranger.service-name=starburst-enterprise-presto
         ranger.presto-plugin-username=${admin_user}
         ranger.presto-plugin-password=${admin_pass}
@@ -66,7 +66,7 @@ worker:
       access-control.properties: |
         access-control.name=ranger
         ranger.authentication-type=BASIC
-        ranger.policy-rest-url=http://ranger:6080
+        ranger.policy-rest-url=http://${expose_ranger_name}:6080
         ranger.service-name=starburst-enterprise-presto
         ranger.presto-plugin-username=${admin_user}
         ranger.presto-plugin-password=${admin_pass}

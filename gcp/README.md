@@ -78,7 +78,6 @@ ___
 | create_rds | Should the cloud_sql resource be created? | no | TRUE |
 | create_trino | Should Starburst (Trino) be deployed? | no | TRUE |
 | credentials | The Service Account credentials json file | yes | N/A |
-| databases | Comma-separated list of databases to create when deploying the cloud_sql module | no |  |
 | dns_zone | The DNS zone to deploy applications to | no |  |
 | dns_zone_name | the DNS name in GCP | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |

@@ -63,7 +63,6 @@ ___
 | create_rds | Should the PostgreSQL instance be deployed? | no | true |
 | create_trino | Should Starburst (Trino) be deployed? | no | true |
 | create_vpc | Should the cloud vpc/vnet be created? | no | true |
-| databases | Comma-separated list of databases to create when deploying the cloud_sql module | no | ["hive","ranger","mcdemo","demo","event_logger"] |
 | dns_zone | The DNS zone to deploy applications to | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | map_roles | Additional IAM role to attach to the EKS cluster, to allow others access to the resource in AWS | no |  |
