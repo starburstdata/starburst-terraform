@@ -43,7 +43,7 @@ resource "helm_release" "postgresql" {
 resource "time_sleep" "wait_for_postgres" {
   depends_on = [helm_release.postgresql]
 
-  create_duration = "30s"
+  create_duration = "60s"
 }
 
 

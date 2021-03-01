@@ -27,7 +27,14 @@ expose:
       cert-manager.io/cluster-issuer: ${secret_key_ref}
 
 userDatabase:
-  enabled: false
+  enabled: true
+  users:
+    - username: ${admin_user}
+      password: ${admin_pass}
+    - username: ${reg_user1}
+      password: ${reg_pass1}
+    - username: ${reg_user2}
+      password: ${reg_pass2}
 
 coordinator:
   resources:
@@ -67,6 +74,8 @@ coordinator:
         jdbc.url=jdbc:postgresql://${primary_ip_address}:${primary_db_port}/${primary_db_event_logger}
         jdbc.user=${primary_db_user}
         jdbc.password=${primary_db_password}
+      password-authenticator.properties: |
+        password-authenticator.name=file
   nodeSelector:
     agentpool: ${primary_node_pool}
 

@@ -15,6 +15,10 @@ variable primary_node_pool { }
 variable worker_node_pool { }
 variable admin_user { }
 variable admin_pass { }
+variable reg_user1 { }
+variable reg_pass1 { }
+variable reg_user2 { }
+variable reg_pass2 { }
 variable ranger_service { }
 variable presto_service { }
 variable expose_sb_name { }
@@ -53,6 +57,10 @@ locals {
         service_type                = var.service_type
         admin_user                  = var.admin_user
         admin_pass                  = var.admin_pass
+        reg_user1                   = var.reg_user1
+        reg_pass1                   = var.reg_pass1
+        reg_user2                   = var.reg_user2
+        reg_pass2                   = var.reg_pass2
     }
 
     trino_helm_chart_values = templatefile(

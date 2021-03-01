@@ -51,7 +51,27 @@ locals {
 resource "random_string" "admin_pass" {
 
   # Generate a password to be used in this deployment.
-  length = 16
+  length = 32
+  upper  = true
+  lower  = true
+  number = true
+  special = false
+}
+
+resource "random_string" "user_pass1" {
+
+  # Generate a password to be used in this deployment.
+  length = 32
+  upper  = true
+  lower  = true
+  number = true
+  special = false
+}
+
+resource "random_string" "user_pass2" {
+
+  # Generate a password to be used in this deployment.
+  length = 32
   upper  = true
   lower  = true
   number = true

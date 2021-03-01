@@ -7,8 +7,10 @@ locals {
 
 output user-credentials {
   value = list(
-    "admin_user           = ${var.admin_user}",
-    "admin_pass           = ${random_string.admin_pass.result}"
+    "user / pwd",
+    "${var.admin_user} / ${random_string.admin_pass.result}",
+    "${var.reg_user1} / ${random_string.user_pass1.result}",
+    "${var.reg_user2} / ${random_string.user_pass2.result}"
   )
 }
 

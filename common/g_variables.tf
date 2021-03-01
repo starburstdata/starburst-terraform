@@ -75,7 +75,9 @@ variable wasb_access_key {          default = ""}
 variable wasb_storage_account {     default = ""}
 
 # Ranger/Starburst login users
-variable admin_user { }
+variable admin_user {               default = "sbadmin"}
+variable reg_user1 {                default = "sbuser1"}
+variable reg_user2 {                default = "sbuser2"}
 
 # Control the creation of Cloud Infrastructure Objects
 variable create_bucket {          default = true}

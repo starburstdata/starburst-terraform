@@ -4,7 +4,7 @@
 
 # SB License and DNS zone
 sb_license      = "~/signed_trial.license"
-dns_zone        = "aws.starburstdata.net"
+dns_zone        = "fieldeng.starburstdata.net"
 region          = "us-east-1"
 s3_role         = ["arn:aws:iam::188806360106:policy/EKS-S3-Glue"]
 
@@ -21,6 +21,8 @@ map_roles       = [{rolearn    = "arn:aws:iam::188806360106:role/solution_archit
 # The admin user has acess to both Trino and Ranger. The regular users only have access to Trino
 # Use the admin user to set catalog and object permissions to the regular user in Ranger
 admin_user      = "sbadmin"
+reg_user1       = "engineer"
+reg_user2       = "analyst"
 
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
@@ -53,4 +55,4 @@ create_hive     = true
 create_mc       = false
 create_ranger   = true
 create_trino    = true
-create_nginx    = false
+create_nginx    = true
