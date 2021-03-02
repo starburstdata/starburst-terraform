@@ -49,6 +49,9 @@ ch_team         = "psa"
 ch_project      = "lab"
 #ch_user        = set your user identity. Can be any value you like. Defaults to "starburst"
 
+# Custom delay for AWS
+wait_this_long  = "90s"
+
 # Block creating these resources
 create_rds      = true
 create_hive     = true

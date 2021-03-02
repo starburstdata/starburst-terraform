@@ -8,6 +8,9 @@ variable primary_node_pool { }
 variable worker_node_pool { }
 variable primary_node_vm { }
 variable worker_node_vm { }
+variable primary_pool_size { }
+variable worker_pool_min_size { }
+variable worker_pool_max_size { }
 variable tags { }
 variable create_k8s { }
 
@@ -22,7 +25,7 @@ resource "azurerm_kubernetes_cluster" "default" {
 
     default_node_pool {
         name            = var.primary_node_pool
-        node_count      = 1
+        node_count      = var.primary_pool_size
         vm_size         = var.primary_node_vm
         vnet_subnet_id  = var.subnet_id
     }
@@ -45,9 +48,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "worker" {
 
     vnet_subnet_id        = var.subnet_id
 
-    node_count            = 1
-    max_count             = 10
-    min_count             = 1
+    node_count            = var.worker_pool_min_size
+    max_count             = var.worker_pool_max_size
+    min_count             = var.worker_pool_min_size
     tags = var.tags
 }
 

@@ -17,6 +17,7 @@ module db {
     primary_db_user         = "postgres"
     primary_node_pool       = var.primary_node_pool
     postgres_template_file  = "${path.root}/../helm_templates/${local.postgres_yaml_file}"
+    wait_this_long          = var.wait_this_long
 
     create_rds              = var.create_rds
 

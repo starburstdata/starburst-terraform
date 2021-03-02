@@ -71,25 +71,38 @@ ___
 | ch_project | Tag for cloud resource objects | no |  |
 | ch_team | Tag for cloud resource objects | no |  |
 | ch_user | Tag for cloud resource objects | no |  |
-| create_hive | Should the Hive server resource be deployed? | no | TRUE |
-| create_mc | Should Mission Control be deployed? | no | TRUE |
-| create_nginx | Should the Nginx controller be deployed? | no | TRUE |
-| create_ranger | Should Ranger be deployed? | no | TRUE |
-| create_rds | Should the cloud_sql resource be created? | no | TRUE |
-| create_trino | Should Starburst (Trino) be deployed? | no | TRUE |
-| credentials | The Service Account credentials json file | yes | N/A |
+| create_bucket | Should the cloud storage bucket be created? | no | true |
+| create_hive | Should the Hive server resource be deployed? | no | true |
+| create_k8s | Should the cloud K8s cluster be created? | no | true |
+| create_mc | Should Mission Control be deployed? | no | true |
+| create_nginx | Should the Nginx controller be deployed? | no | true |
+| create_ranger | Should Ranger be deployed? | no | true |
+| create_rds | Should the PostgreSQL instance be deployed? | no | true |
+| create_trino | Should Starburst (Trino) be deployed? | no | true |
+| create_vpc | Should the cloud vpc/vnet be created? | no | true |
+| credentials | The Service Account credentials json file | yes |  |
 | dns_zone | The DNS zone to deploy applications to | no |  |
 | dns_zone_name | the DNS name in GCP | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
-| project | The GCP Project | yes | N/A |
+| preemptible | Should the worker nodes use preemtible VMs? | no | true |
+| presto_version | The version of Starburst that Mission Control will deploy | yes | 350-e.1 |
+| primary_node_type | The VM machine type in the primary pool | no | e2-standard-8 |
+| primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
+| project | The GCP Project | yes |  |
+| reg_user1 | Additional user login to Starburst | yes | sbuser1 |
+| reg_user2 | Additional user login to Starburst | yes | sbuser2 |
 | region | The GCP region | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |
 | repo_username | Login user for the Harbor repository | yes |  |
-| repo_version | Starburst release to be deployed | yes | 350.1.1 |
+| repo_version | Starburst release to be deployed. This includes all components | yes | 350.1.1 |
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
-| sa_name | The Google Service Account name | yes | N/A |
-| sb_license | The Starburst license file | yes | N/A |
+| sa_name | The Google Service Account name | yes |  |
+| sb_license | The Starburst license file | yes |  |
+| wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
+| worker_node_type | The VM machine type in the worker pool | no | e2-standard-4 |
+| worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
+| worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 | zone | the GCP zone within the region | yes |  |
 ___
 ## Default Yaml Files

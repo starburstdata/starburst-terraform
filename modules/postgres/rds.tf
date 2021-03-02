@@ -4,6 +4,7 @@ variable primary_db_user { }
 variable postgres_template_file { }
 variable primary_node_pool { }
 variable expose_postgres_name { }
+variable wait_this_long { }
 
 # Data Sources
 locals {
@@ -43,7 +44,7 @@ resource "helm_release" "postgresql" {
 resource "time_sleep" "wait_for_postgres" {
   depends_on = [helm_release.postgresql]
 
-  create_duration = "60s"
+  create_duration = var.wait_this_long #"60s"
 }
 
 

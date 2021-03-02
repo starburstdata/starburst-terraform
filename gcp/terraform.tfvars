@@ -54,4 +54,4 @@ create_hive     = true
 create_mc       = false
 create_ranger   = true
 create_trino    = true
-create_nginx    = false
+create_nginx    = true

@@ -8,10 +8,14 @@ variable region { }
 variable zone {                   default = ""}
 variable vpc_name {               default = "vpc"}
 variable k8s_name {               default = "k8s"}
+variable k8s_version {            default = "1.18"}
 variable bucket_name {            default = "storage"}
 variable storage_location {       default = "US"}
 variable primary_node_pool {      default = "demobase"}
 variable worker_node_pool {       default = "demopresto"}
+variable primary_pool_size {      default = 1}
+variable worker_pool_min_size {   default = 1}
+variable worker_pool_max_size {   default = 10}
 variable primary_db_instance {    default = "postgres"}
 variable hive_service {           default = "hive"}
 variable presto_service {         default = "presto"}
@@ -21,6 +25,7 @@ variable expose_postgres_name {   default = "postgresql"}
 variable expose_sb_name {         default = "starburst"}
 variable expose_ranger_name {     default = "ranger"}
 variable expose_mc_name {         default = "starburst-mission-control"}
+variable wait_this_long {         default = "60s"} # default wait time to use when waiting on resources 
 variable hive_yaml_file { }
 variable trino_yaml_file { }
 variable ranger_yaml_file { }

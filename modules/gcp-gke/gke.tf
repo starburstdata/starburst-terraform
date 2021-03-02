@@ -5,6 +5,10 @@ variable primary_node_pool { }
 variable worker_node_pool { }
 variable primary_node_vm { }
 variable worker_node_vm { }
+variable primary_pool_size { }
+variable worker_pool_min_size { }
+variable worker_pool_max_size { }
+variable preemptible { }
 variable vpc { }
 
 # Create resources
@@ -34,10 +38,10 @@ resource "google_container_cluster" "primary_gke" {
 
 resource "google_container_node_pool" "primary_nodes" {
 
-  name       = var.primary_node_pool
-  location   = var.location
-  cluster    = google_container_cluster.primary_gke.name
-  initial_node_count = 1
+  name                = var.primary_node_pool
+  location            = var.location
+  cluster             = google_container_cluster.primary_gke.name
+  initial_node_count  = var.primary_pool_size
 
     node_config {
         machine_type = var.primary_node_vm
@@ -61,15 +65,15 @@ resource "google_container_node_pool" "worker_nodes" {
   name               = var.worker_node_pool
   location           = var.location
   cluster            = google_container_cluster.primary_gke.name
-  initial_node_count = 1
+  initial_node_count = var.worker_pool_min_size
 
     autoscaling {
-        min_node_count = 1
-        max_node_count = 10
+        min_node_count = var.worker_pool_min_size
+        max_node_count = var.worker_pool_max_size
     }
 
     node_config {
-        preemptible  = true
+        preemptible  = var.preemptible # true or false
         machine_type = var.worker_node_vm
 
         metadata = {

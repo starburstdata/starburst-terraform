@@ -43,13 +43,12 @@ ch_project      = "lab"
 #ch_user        = set your user identity. Can be any value you like. Defaults to "starburst"
 
 # Block creating these resources
-create_k8s      = true
 create_rds      = true
 create_hive     = true
 create_mc       = false
 create_ranger   = true
 create_trino    = true
-create_nginx    = false
+create_nginx    = true
 
 # Debug flag
 debug_this      = false

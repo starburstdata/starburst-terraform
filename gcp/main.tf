@@ -23,14 +23,18 @@ resource "google_storage_bucket" "bucket" {
 }
 
 module k8s {
-  source            = "../modules/gcp-gke"
-  cluster_name      = local.cluster_name
-  location          = var.zone
-  primary_node_pool = var.primary_node_pool
-  worker_node_pool  = var.worker_node_pool
-  primary_node_vm   = "e2-standard-16"
-  worker_node_vm    = "e2-standard-4"
-  vpc               = module.vpc.vpc_name
+  source                = "../modules/gcp-gke"
+  cluster_name          = local.cluster_name
+  location              = var.zone
+  primary_node_pool     = var.primary_node_pool
+  worker_node_pool      = var.worker_node_pool
+  primary_node_vm       = var.primary_node_type
+  worker_node_vm        = var.worker_node_type
+  primary_pool_size     = var.primary_pool_size
+  worker_pool_min_size  = var.worker_pool_min_size
+  worker_pool_max_size  = var.worker_pool_max_size
+  preemptible           = var.preemptible
+  vpc                   = module.vpc.vpc_name
 
   depends_on        = [module.vpc] 
 }

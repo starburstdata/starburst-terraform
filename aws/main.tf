@@ -37,24 +37,24 @@ module k8s {
   version = "13.2.1"
 
   cluster_name    = local.cluster_name
-  cluster_version = "1.18"
+  cluster_version = var.k8s_version
   subnets         = module.vpc.public_subnets
   vpc_id          = module.vpc.vpc_id
 
   worker_groups = [
     {
-      name                          = "demobase"
-      instance_type                 = "m5.2xlarge"
-      asg_max_size                  = 1
-      kubelet_extra_args            = "--node-labels=agentpool=demobase"
+      name                          = var.primary_node_pool
+      instance_type                 = var.primary_node_type
+      asg_max_size                  = var.primary_pool_size
+      kubelet_extra_args            = "--node-labels=agentpool=${var.primary_node_pool}"
       suspended_processes           = ["AZRebalance"]
     },
     {
-      name                          = "demopresto"
-      instance_type                 = "m5.xlarge"
-      asg_min_size                  = 1
-      asg_max_size                  = 10
-      kubelet_extra_args            = "--node-labels=agentpool=demopresto"
+      name                          = var.worker_node_pool
+      instance_type                 = var.worker_node_type
+      asg_min_size                  = var.worker_pool_min_size
+      asg_max_size                  = var.worker_pool_max_size
+      kubelet_extra_args            = "--node-labels=agentpool=${var.worker_node_pool}"
       suspended_processes           = ["AZRebalance"]
     }
   ]

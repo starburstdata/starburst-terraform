@@ -90,6 +90,10 @@ ___
 | dns_zone_name | the DNS name in Azure | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | presto_version | The version of Starburst that Mission Control will deploy | yes | 350-e.1 |
+| primary_node_type | The VM machine type in the primary pool | no | Standard_D8s_v3 |
+| primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
+| reg_user1 | Additional user login to Starburst | yes | sbuser1 |
+| reg_user2 | Additional user login to Starburst | yes | sbuser2 |
 | region | The Azure location | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |
@@ -97,6 +101,10 @@ ___
 | repo_version | Starburst release to be deployed. This includes all components | yes | 350.1.1 |
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
 | sb_license | The Starburst license file | yes | N/A |
+| wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
+| worker_node_type | The VM machine type in the worker pool | no | Standard_D4s_v3 |
+| worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
+| worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 ___
 ## Default Yaml Files
 |  Parameter | Description | Required | Default |

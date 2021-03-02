@@ -48,17 +48,20 @@ module vnet {
 }
 
 module k8s {
-    source            = "../modules/azure-aks"
+    source                = "../modules/azure-aks"
 
-    resource_group    = azurerm_resource_group.default.name
-    location          = var.region
-    cluster_name      = local.cluster_name
-    dns_prefix        = "aks"
-    subnet_id         = module.vnet.subnet_id[0]
-    primary_node_pool = var.primary_node_pool
-    worker_node_pool  = var.worker_node_pool
-    primary_node_vm   = "Standard_D8s_v3"
-    worker_node_vm    = "Standard_D4s_v3"
+    resource_group        = azurerm_resource_group.default.name
+    location              = var.region
+    cluster_name          = local.cluster_name
+    dns_prefix            = "aks"
+    subnet_id             = module.vnet.subnet_id[0]
+    primary_node_pool     = var.primary_node_pool
+    worker_node_pool      = var.worker_node_pool
+    primary_node_vm       = var.primary_node_type
+    worker_node_vm        = var.worker_node_type
+    primary_pool_size     = var.primary_pool_size
+    worker_pool_min_size  = var.worker_pool_min_size
+    worker_pool_max_size  = var.worker_pool_max_size
 
     tags              = local.common_tags
 

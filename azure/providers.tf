@@ -38,6 +38,8 @@ data "azurerm_client_config" "current" { }
 data "azurerm_kubernetes_cluster" "default" {
   name                = module.k8s.cluster_name
   resource_group_name = azurerm_resource_group.default.name
+
+  depends_on          = [module.k8s]
 }
 
 provider "kubernetes" {

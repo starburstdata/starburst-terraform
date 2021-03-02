@@ -66,6 +66,10 @@ ___
 | dns_zone | The DNS zone to deploy applications to | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | map_roles | Additional IAM role to attach to the EKS cluster, to allow others access to the resource in AWS | no |  |
+| primary_node_type | The EC2 machine type in the primary pool | no | m5.2xlarge |
+| primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
+| reg_user1 | Additional user login to Starburst | yes | sbuser1 |
+| reg_user2 | Additional user login to Starburst | yes | sbuser2 |
 | region | The AWS region | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |
@@ -74,6 +78,10 @@ ___
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
 | s3_role | S3 permission role which will be attached to the EKS nodes to allow S3 access to these nodes. With the role in place, you do not need to set up S3 access via IAM keys in the Starburst-Hive yaml. | no |  |
 | sb_license | The Starburst license file | yes | N/A |
+| wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
+| worker_node_type | The Ec2 machine type in the worker pool | no | m5.xlarge |
+| worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
+| worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 | zone | the AWS zone within the region | yes |  |
 ___
 ## Default Yaml Files
@@ -107,6 +115,3 @@ ___
 | wasb_access_key | Storage account access key | no |  |
 | wasb_storage_account | Storage account name | no |  |
 ___
-
-## Known Issues
-The Nginx deployment isn't currently working for AWS
