@@ -74,9 +74,9 @@ objectStorage:
         storageAccount: ${abfs_storage_account}
       authType: ${abfs_auth_type}
       oauth:
-        clientId: ${abfs_client_id}
-        endpoint: ${abfs_endpoint}
-        secret: ${abfs_secret}
+        clientId: "${abfs_client_id}"
+        endpoint: "${abfs_endpoint}"
+        secret: "${abfs_secret}"
     wasb:
       accessKey: ${wasb_access_key}
       storageAccount: ${wasb_storage_account}

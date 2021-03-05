@@ -33,7 +33,13 @@ admin:
     limits:
       memory: 1Gi
       cpu: 1
-
+  passwords:
+    admin: ${ranger_svc_acc_pwd1}
+    tagsync: ${ranger_svc_acc_pwd2}
+    usersync: ${ranger_svc_acc_pwd3}
+    keyadmin: ${ranger_svc_acc_pwd4}
+    service: ${ranger_svc_acc_pwd5}
+    
 database:
   resources:
     requests:

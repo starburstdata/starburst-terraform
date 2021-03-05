@@ -135,7 +135,7 @@ resource "random_string" "ranger_db_password" {
 # Don't need to expose to the end user
 resource "random_password" "service_acc_password1" {
   # Generate a random password for the Ranger user in the Postgres DB
-  length = 16
+  length = 32
   upper  = true
   lower  = true
   number = true
@@ -144,7 +144,7 @@ resource "random_password" "service_acc_password1" {
 
 resource "random_password" "service_acc_password2" {
   # Generate a random password for the Ranger user in the Postgres DB
-  length = 16
+  length = 32
   upper  = true
   lower  = true
   number = true
@@ -153,7 +153,7 @@ resource "random_password" "service_acc_password2" {
 
 resource "random_password" "service_acc_password3" {
   # Generate a random password for the Ranger user in the Postgres DB
-  length = 16
+  length = 32
   upper  = true
   lower  = true
   number = true
@@ -162,7 +162,7 @@ resource "random_password" "service_acc_password3" {
 
 resource "random_password" "service_acc_password4" {
   # Generate a random password for the Ranger user in the Postgres DB
-  length = 16
+  length = 32
   upper  = true
   lower  = true
   number = true
@@ -171,7 +171,7 @@ resource "random_password" "service_acc_password4" {
 
 resource "random_password" "service_acc_password5" {
   # Generate a random password for the Ranger user in the Postgres DB
-  length = 16
+  length = 32
   upper  = true
   lower  = true
   number = true
