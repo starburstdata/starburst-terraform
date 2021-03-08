@@ -25,6 +25,7 @@ variable ranger_template_file { }
 
 variable create_ranger { }
 variable create_rds { }
+variable create_ranger_db { }
 
 # Data Sources
 locals {
@@ -78,7 +79,7 @@ terraform {
 }
 
 resource postgresql_database ranger {
-    count               = var.create_ranger && var.create_rds ? 1 : 0
+    count               = var.create_ranger && var.create_rds && var.create_ranger_db ? 1 : 0
 
     name                = var.primary_db_ranger
     connection_limit    = -1

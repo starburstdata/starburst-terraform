@@ -34,15 +34,19 @@ module hive {
     repo_username           = var.repo_username
     repo_password           = var.repo_password
     
-    # External Postgres details. If an external postgres DB is not being created, just pass in dummy values
+    # Check if an external Hive DB has been specified and use that, else use whatever is returned from the RDS module
     hive_service            = var.hive_service
-    primary_ip_address      = module.db.db_address
-    primary_db_port         = module.db.db_port
-    primary_db_user         = module.db.primary_db_user
-    primary_user_password   = module.db.primary_db_password
-    primary_db_hive         = "hive"
+    hive_service_type       = var.hive_service_type
+    primary_ip_address      = var.ex_hive_instance != "" ? var.ex_hive_instance : module.db.db_address
+    primary_db_port         = var.ex_hive_instance != "" ? var.ex_hive_port : module.db.db_port
+    primary_db_user         = var.ex_hive_instance != "" ? var.ex_hive_db_user : module.db.primary_db_user
+    primary_user_password   = var.ex_hive_instance != "" ? var.ex_hive_db_password : module.db.primary_db_password
+    primary_db_hive         = var.ex_hive_instance != "" ? var.ex_hive_db : "hive"
     hive_template_file      = "${path.root}/../helm_templates/${local.hive_yaml_file}"
-    type                    = var.create_rds ? "external" : "internal"
+
+    # If I'm not creating an RDS & I'm not specifying an external Hive instance, then this must 
+    # be an internal HMS deployment. All other situations mean an external Hive instance is in play
+    type                    = var.create_rds == false && var.ex_hive_instance == "" ? "internal" : "external"
 
     # Object storage credentials
     # GCS
@@ -70,8 +74,15 @@ module hive {
     primary_node_pool       = var.primary_node_pool
 
     # Conditional create logic
+    # Does the Hive Service need to be created?
     create_hive             = var.create_hive
+    # Was the RDS created - by module.rds
     create_rds              = var.create_rds
+    # Does the HMS DB need to be created? Derived from determining if an external Hive DB has been defined
+    create_hive_db          = var.ex_hive_instance == "" ? true : false
+
+    # External HMS
+    ex_hive_server_url      = var.ex_hive_server_url
 
     depends_on              = [module.k8s,module.db]
 }
@@ -90,14 +101,14 @@ module mc {
     repo_password           = var.repo_password
     
     # External Postgres details
-    primary_ip_address      = module.db.db_address
-    primary_db_port         = module.db.db_port
-    primary_db_user         = module.db.primary_db_user
-    primary_user_password   = module.db.primary_db_password
-    primary_db_mc           = "mcdemo"
+    primary_ip_address      = var.ex_mc_instance != "" ? var.ex_mc_instance : module.db.db_address
+    primary_db_port         = var.ex_mc_instance != "" ? var.ex_mc_port : module.db.db_port
+    primary_db_user         = var.ex_mc_instance != "" ? var.ex_mc_db_user : module.db.primary_db_user
+    primary_user_password   = var.ex_mc_instance != "" ? var.ex_mc_db_password : module.db.primary_db_password
+    primary_db_mc           = var.ex_mc_instance != "" ? var.ex_mc_db : "mcdemo"
     mc_template_file        = "${path.root}/../helm_templates/${local.mc_yaml_file}"
     operator_template_file  = "${path.root}/../helm_templates/${local.operator_yaml_file}"
-    type                    = var.create_rds ? "external" : "internal"
+    type                    = var.create_rds == false && var.ex_mc_instance == "" ? "internal" : "external"
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
     # MC Service Name
@@ -115,6 +126,7 @@ module mc {
     # Conditional create logic
     create_mc               = var.create_mc
     create_rds              = var.create_rds
+    create_mc_db            = var.ex_mc_instance == "" ? true : false
 
     depends_on              = [module.nginx,module.dns,module.k8s,module.db]
 }
@@ -132,13 +144,13 @@ module ranger {
     repo_password           = var.repo_password
 
     # External Postgres details
-    primary_ip_address      = module.db.db_address
-    primary_db_port         = module.db.db_port
-    primary_db_user         = module.db.primary_db_user
-    primary_user_password   = module.db.primary_db_password
-    primary_db_ranger       = "ranger"
+    primary_ip_address      = var.ex_ranger_instance != "" ? var.ex_ranger_instance : module.db.db_address
+    primary_db_port         = var.ex_ranger_instance != "" ? var.ex_ranger_port : module.db.db_port
+    primary_db_user         = var.ex_ranger_instance != "" ? var.ex_ranger_db_user : module.db.primary_db_user
+    primary_user_password   = var.ex_ranger_instance != "" ? var.ex_ranger_db_password : module.db.primary_db_password
+    primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
     ranger_template_file    = "${path.root}/../helm_templates/${local.ranger_yaml_file}"
-    type                    = var.create_rds ? "external" : "internal"
+    type                    = var.create_rds == false && var.ex_ranger_instance == "" ? "internal" : "external"
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
     # Admin user login user details
@@ -162,6 +174,7 @@ module ranger {
     # Conditional create logic
     create_ranger           = var.create_ranger
     create_rds              = var.create_rds
+    create_ranger_db        = var.ex_ranger_instance == "" ? true : false
 
     depends_on              = [module.nginx,module.dns,module.hive,module.db]
 }
@@ -179,12 +192,12 @@ module trino {
     repo_password           = var.repo_password
 
     # External Postgres details
-    primary_ip_address      = module.db.db_address
-    primary_db_port         = module.db.db_port
-    primary_db_user         = module.db.primary_db_user
-    primary_user_password   = module.db.primary_db_password
-    primary_db_event_logger = "event_logger"
-    primary_db_ranger       = "ranger"
+    primary_ip_address      = var.ex_insights_instance != "" ? var.ex_insights_instance : module.db.db_address
+    primary_db_port         = var.ex_insights_instance != "" ? var.ex_insights_port : module.db.db_port
+    primary_db_user         = var.ex_insights_instance != "" ? var.ex_insights_db_user : module.db.primary_db_user
+    primary_user_password   = var.ex_insights_instance != "" ? var.ex_insights_db_password : module.db.primary_db_password
+    primary_db_event_logger = var.ex_insights_instance != "" ? var.ex_insights_db : "event_logger"
+    primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
     trino_template_file     = "${path.root}/../helm_templates/${local.trino_yaml_file}"
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
@@ -203,6 +216,9 @@ module trino {
     ranger_service          = local.ranger_service
     presto_service          = local.presto_service
 
+    # Hive Service URL
+    hive_service_url        = module.hive.hive_url
+
     # Expose this service name
     expose_sb_name          = var.expose_sb_name
     expose_ranger_name      = var.expose_ranger_name
@@ -217,6 +233,7 @@ module trino {
     # Conditional create logic
     create_trino            = var.create_trino
     create_rds              = var.create_rds
+    create_insights_db      = var.ex_insights_instance == "" ? true : false
 
     depends_on              = [module.nginx,module.dns,module.hive,module.db]
 }

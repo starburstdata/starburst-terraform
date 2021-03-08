@@ -18,6 +18,7 @@ variable worker_pool_min_size {   default = 1}
 variable worker_pool_max_size {   default = 10}
 variable primary_db_instance {    default = "postgres"}
 variable hive_service {           default = "hive"}
+variable hive_service_type {      default = "clusterIp"}
 variable presto_service {         default = "presto"}
 variable ranger_service {         default = "ranger"}
 variable mc_service {             default = "missioncontrol"}
@@ -32,6 +33,37 @@ variable ranger_yaml_file { }
 variable mc_yaml_file { }
 variable operator_yaml_file { }
 variable postgres_yaml_file { }
+
+# External Hive RDS
+variable ex_hive_instance {       default = ""} # If this value is set, a database for Hive WILL NOT be created
+variable ex_hive_port {           default = ""}
+variable ex_hive_db {             default = ""}
+variable ex_hive_db_user {        default = ""}
+variable ex_hive_db_password {    default = ""}
+
+# External Ranger RDS
+variable ex_ranger_instance {     default = ""} # If this value is set, a database for Ranger WILL NOT be created
+variable ex_ranger_port {         default = ""}
+variable ex_ranger_db {           default = ""}
+variable ex_ranger_db_user {      default = ""}
+variable ex_ranger_db_password {  default = ""}
+
+# External Mission Control RDS
+variable ex_mc_instance {         default = ""} # If this value is set, a database for MC WILL NOT be created
+variable ex_mc_port {             default = ""}
+variable ex_mc_db {               default = ""}
+variable ex_mc_db_user {          default = ""}
+variable ex_mc_db_password {      default = ""}
+
+# External Insights RDS
+variable ex_insights_instance {    default = ""} # If this value is set, a database for Insights WILL NOT be created
+variable ex_insights_port {        default = ""}
+variable ex_insights_db {          default = ""}
+variable ex_insights_db_user {     default = ""}
+variable ex_insights_db_password { default = ""}
+
+# External HMS
+variable ex_hive_server_url {      default = ""}
 
 # Additional tags for resources
 variable ch_cloud { }

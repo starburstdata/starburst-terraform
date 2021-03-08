@@ -11,7 +11,7 @@ image:
 
 expose:
   clusterIp:
-    name: hive
+    name: ${hive_service}
     ports:
       http:
         port: 9083
@@ -19,20 +19,20 @@ expose:
     annotations: {}
     host: null
     ingressClassName: null
-    ingressName: hive-ingress
+    ingressName: "${hive_service}-ingress"
     path: /
-    serviceName: hive
+    serviceName: ${hive_service}
     servicePort: 9083
     tls:
       enabled: true
       secretName: null
   nodePort:
-    name: hive
+    name: ${hive_service}
     ports:
       http:
         nodePort: 30083
         port: 9083
-  type: clusterIp
+  type: ${hive_service_type}
 
 database:
   # type is internal | external

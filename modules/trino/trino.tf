@@ -21,6 +21,7 @@ variable reg_user2 { }
 variable reg_pass2 { }
 variable ranger_service { }
 variable presto_service { }
+variable hive_service_url { }
 variable expose_sb_name { }
 variable expose_ranger_name { }
 variable dns_zone { }
@@ -30,6 +31,7 @@ variable demo_db_name { }
 
 variable create_rds { }
 variable create_trino { }
+variable create_insights_db { }
 
 # Data Sources
 locals {
@@ -44,6 +46,7 @@ locals {
         ranger_user_sync_tag        = "2.0.24"
         ranger_service_prefix       = var.ranger_service
         presto_service_prefix       = var.presto_service
+        hive_service_url            = var.hive_service_url
         expose_sb_name              = var.expose_sb_name
         expose_ranger_name          = var.expose_ranger_name
         dns_zone                    = var.dns_zone
@@ -83,7 +86,7 @@ terraform {
 }
 
 resource postgresql_database event_logger {
-    count               = var.create_trino && var.create_rds ? 1 : 0
+    count               = var.create_trino && var.create_rds && var.create_insights_db ? 1 : 0
 
     name                = var.primary_db_event_logger
     connection_limit    = -1

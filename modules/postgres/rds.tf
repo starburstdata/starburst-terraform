@@ -42,6 +42,8 @@ resource "helm_release" "postgresql" {
 
 # Add small delay to wait for Cloud provider to complete DB LoadBalancer startup
 resource "time_sleep" "wait_for_postgres" {
+  count           = var.create_rds ? 1 : 0
+
   depends_on = [helm_release.postgresql]
 
   create_duration = var.wait_this_long #"60s"

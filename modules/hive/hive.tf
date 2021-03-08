@@ -5,6 +5,7 @@ variable repo_version { }
 variable repo_username { }
 variable repo_password { }
 variable hive_service { }
+variable hive_service_type { }
 variable primary_ip_address { }
 variable primary_db_port { }
 variable primary_db_user { }
@@ -13,8 +14,11 @@ variable primary_db_hive { }
 variable primary_node_pool { }
 variable create_hive { }
 variable create_rds { }
+variable create_hive_db { }
 variable type { }
 variable hive_template_file { }
+# External Hive Server
+variable ex_hive_server_url {       default = ""}
 # Object storage credentials
 # GCS
 variable gcp_cloud_key_secret { }
@@ -30,7 +34,7 @@ variable s3_secret_key {            default = ""}
 # Azure ADLS
 variable abfs_access_key {          default = ""}
 variable abfs_storage_account {     default = ""}
-variable abfs_auth_type {           default = "accessKey"}
+variable abfs_auth_type {           default = ""}
 variable abfs_client_id {           default = ""}
 variable abfs_endpoint {            default = ""}
 variable abfs_secret {              default = ""}
@@ -44,7 +48,8 @@ locals {
         repo_username               = var.repo_username
         repo_password               = var.repo_password
         repository                  = "${var.registry}/hive"
-        service_prefix              = var.hive_service
+        hive_service                = var.hive_service
+        hive_service_type           = var.hive_service_type
         primary_ip_address          = var.primary_ip_address
         primary_db_port             = var.primary_db_port
         primary_db_user             = var.primary_db_user
@@ -87,7 +92,7 @@ terraform {
 }
 
 resource postgresql_database hive {
-    count               = var.create_hive && var.create_rds ? 1 : 0
+    count               = var.create_hive && var.create_rds && var.create_hive_db ? 1 : 0
 
     name                = var.primary_db_hive
     connection_limit    = -1
@@ -120,6 +125,6 @@ resource "helm_release" "hive" {
     depends_on          = [postgresql_database.hive]
 }
 
-output hive_db {
-    value = var.create_hive ? postgresql_database.hive[0].name : ""
+output hive_url {
+    value = var.ex_hive_server_url != "" ? var.ex_hive_server_url : "thrift://${var.hive_service}:9083"
 }

@@ -93,5 +93,5 @@ catalogs:
   hive: |
     connector.name=hive-hadoop2
     hive.allow-drop-table=true
-    hive.metastore.uri=thrift://hive:9083
+    hive.metastore.uri=${hive_service_url}
 
