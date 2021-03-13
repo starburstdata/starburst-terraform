@@ -8,6 +8,8 @@ This is not part of the core Starburst product and is not covered by Starburst E
 ### Why?
 Getting an environment up and running can be challenging. Successfully repeating it and getting a consistent end result is not guaranteed either. Terraform makes this easier by providing scripting to consistently orchestrate your environment
 ___
+![alt text](overview.jpg)
+___
 ## Prerequisites
 
 The following components should be installed and pre-configured in your local environment:
