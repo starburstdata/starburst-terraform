@@ -4,6 +4,9 @@ variable presto_service { }
 variable ranger_service { }
 variable mc_service { }
 variable dns_zone { }
+variable create_ranger { }
+variable create_trino { }
+variable create_mc { }
 
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
@@ -31,7 +34,7 @@ data aws_elb nginx {
 
 # Add AWS DNS Record sets
 resource "aws_route53_record" "presto" {
-  count  = var.create_nginx ? 1 : 0
+  count  = var.create_nginx && var.create_trino ? 1 : 0
 
   zone_id = data.aws_route53_zone.primary[0].zone_id
   name    = "${var.presto_service}.${var.dns_zone}"
@@ -44,7 +47,7 @@ resource "aws_route53_record" "presto" {
 }
 
 resource "aws_route53_record" "ranger" {
-  count  = var.create_nginx ? 1 : 0
+  count  = var.create_nginx && var.create_ranger ? 1 : 0
 
   zone_id = data.aws_route53_zone.primary[0].zone_id
   name    = "${var.ranger_service}.${var.dns_zone}"
@@ -57,7 +60,7 @@ resource "aws_route53_record" "ranger" {
 }
 
 resource "aws_route53_record" "mc" {
-  count  = var.create_nginx ? 1 : 0
+  count  = var.create_nginx && var.create_mc ? 1 : 0
 
   zone_id = data.aws_route53_zone.primary[0].zone_id
   name    = "${var.mc_service}.${var.dns_zone}"
@@ -71,13 +74,13 @@ resource "aws_route53_record" "mc" {
 
 
 output starburst_url {
-  value = var.create_nginx ? trimsuffix(aws_route53_record.presto[0].name,".") : null
+  value = var.create_nginx && var.create_trino ? trimsuffix(aws_route53_record.presto[0].name,".") : ""
 }
 
 output ranger_url {
-  value = var.create_nginx ? trimsuffix(aws_route53_record.ranger[0].name,".") : null
+  value = var.create_nginx && var.create_ranger ? trimsuffix(aws_route53_record.ranger[0].name,".") : ""
 }
 
 output mc_url {
-  value = var.create_nginx ? trimsuffix(aws_route53_record.mc[0].name,".") : null
+  value = var.create_nginx && var.create_mc ? trimsuffix(aws_route53_record.mc[0].name,".") : ""
 }

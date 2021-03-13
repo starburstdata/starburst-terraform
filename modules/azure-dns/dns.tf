@@ -9,6 +9,9 @@ variable ranger_service { }
 variable mc_service { }
 variable dns_zone { }
 variable dns_zone_name { }
+variable create_ranger { }
+variable create_trino { }
+variable create_mc { }
 
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
@@ -30,7 +33,7 @@ data "azurerm_dns_zone" "default" {
 
 # Add Azure DNS Record sets
 resource "azurerm_dns_a_record" "starburst" {
-  count               = var.create_nginx ? 1 : 0
+  count               = var.create_nginx && var.create_trino ? 1 : 0
 
   name                = var.presto_service
   zone_name           = data.azurerm_dns_zone.default[0].name
@@ -41,7 +44,7 @@ resource "azurerm_dns_a_record" "starburst" {
 
 # Add Azure DNS Record sets
 resource "azurerm_dns_a_record" "ranger" {
-  count               = var.create_nginx ? 1 : 0
+  count               = var.create_nginx && var.create_ranger ? 1 : 0
 
   name                = var.ranger_service
   zone_name           = data.azurerm_dns_zone.default[0].name
@@ -52,7 +55,7 @@ resource "azurerm_dns_a_record" "ranger" {
 
 # Add Azure DNS Record sets
 resource "azurerm_dns_a_record" "mc" {
-  count               = var.create_nginx ? 1 : 0
+  count               = var.create_nginx && var.create_mc ? 1 : 0
 
   name                = var.mc_service
   zone_name           = data.azurerm_dns_zone.default[0].name
@@ -63,13 +66,13 @@ resource "azurerm_dns_a_record" "mc" {
 
 
 output starburst_url {
-  value = var.create_nginx ? trimsuffix(azurerm_dns_a_record.starburst[0].fqdn,".") : null
+  value = var.create_nginx && var.create_trino ? trimsuffix(azurerm_dns_a_record.starburst[0].fqdn,".") : ""
 }
 
 output ranger_url {
-  value = var.create_nginx ? trimsuffix(azurerm_dns_a_record.ranger[0].fqdn,".") : null
+  value = var.create_nginx && var.create_ranger ? trimsuffix(azurerm_dns_a_record.ranger[0].fqdn,".") : ""
 }
 
 output mc_url {
-  value = var.create_nginx ? trimsuffix(azurerm_dns_a_record.mc[0].fqdn,".") : null
+  value = var.create_nginx && var.create_mc ? trimsuffix(azurerm_dns_a_record.mc[0].fqdn,".") : ""
 }

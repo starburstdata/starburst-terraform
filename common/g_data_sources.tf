@@ -16,17 +16,17 @@ locals {
     mc_service          = "${var.prefix}-${local.env}-${var.mc_service}-${random_id.deployment.hex}"
 
     hive_yaml_file      = var.hive_yaml_file
-    trino_yaml_file     = var.create_rds ? var.trino_yaml_file[1] : var.trino_yaml_file[0]
+    trino_yaml_file     = var.create_rds == false && var.ex_insights_instance == "" ? var.trino_yaml_file[0] : var.trino_yaml_file[1]
     ranger_yaml_file    = var.ranger_yaml_file
     mc_yaml_file        = var.mc_yaml_file
     operator_yaml_file  = var.operator_yaml_file
     postgres_yaml_file  = var.postgres_yaml_file
 
-    hms_version         = var.hms_version != null ? var.hms_version : var.repo_version
-    sb_version          = var.sb_version != null  ? var.sb_version : var.repo_version
-    ranger_version      = var.ranger_version != null  ? var.ranger_version : var.repo_version
-    mc_version          = var.mc_version != null  ? var.mc_version : var.repo_version
-    operator_version    = var.operator_version != null  ? var.operator_version : var.repo_version
+    hms_version         = var.hms_version       != null ? var.hms_version : var.repo_version
+    sb_version          = var.sb_version        != null ? var.sb_version : var.repo_version
+    ranger_version      = var.ranger_version    != null ? var.ranger_version : var.repo_version
+    mc_version          = var.mc_version        != null ? var.mc_version : var.repo_version
+    operator_version    = var.operator_version  != null ? var.operator_version : var.repo_version
     
     common_tags = {
         ch_cloud        = var.ch_cloud

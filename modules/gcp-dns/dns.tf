@@ -5,6 +5,9 @@ variable ranger_service { }
 variable mc_service { }
 variable dns_zone { }
 variable dns_zone_name { }
+variable create_ranger { }
+variable create_trino { }
+variable create_mc { }
 
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
@@ -18,7 +21,7 @@ data "kubernetes_service" "nginx" {
 
 # Add Google DNS Record sets
 resource "google_dns_record_set" "presto" {
-  count = var.create_nginx ? 1 : 0
+  count = var.create_nginx && var.create_trino ? 1 : 0
 
   name = "${var.presto_service}.${var.dns_zone}."
   type = "A"
@@ -30,7 +33,7 @@ resource "google_dns_record_set" "presto" {
 }
 
 resource "google_dns_record_set" "ranger" {
-  count = var.create_nginx ? 1 : 0
+  count = var.create_nginx && var.create_ranger ? 1 : 0
   
   name = "${var.ranger_service}.${var.dns_zone}."
   type = "A"
@@ -42,7 +45,7 @@ resource "google_dns_record_set" "ranger" {
 }
 
 resource "google_dns_record_set" "mc" {
-  count = var.create_nginx ? 1 : 0
+  count = var.create_nginx && var.create_mc ? 1 : 0
   
   name = "${var.mc_service}.${var.dns_zone}."
   type = "A"
@@ -55,13 +58,13 @@ resource "google_dns_record_set" "mc" {
 
 
 output starburst_url {
-  value = var.create_nginx ? trimsuffix(google_dns_record_set.presto[0].name,".") : null
+  value = var.create_nginx && var.create_trino ? trimsuffix(google_dns_record_set.presto[0].name,".") : ""
 }
 
 output ranger_url {
-  value = var.create_nginx ? trimsuffix(google_dns_record_set.ranger[0].name,".") : null
+  value = var.create_nginx && var.create_ranger ? trimsuffix(google_dns_record_set.ranger[0].name,".") : ""
 }
 
 output mc_url {
-  value = var.create_nginx ? trimsuffix(google_dns_record_set.mc[0].name,".") : null
+  value = var.create_nginx && var.create_mc ? trimsuffix(google_dns_record_set.mc[0].name,".") : ""
 }

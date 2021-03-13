@@ -11,10 +11,15 @@
 module vpc {
   source      = "../modules/gcp-vpc"
   vpc_name    = local.vpc_name
+  ex_vpc_id   = var.ex_vpc_id
   region      = var.region
+
+  create_vpc  = var.create_vpc
 }
 
 resource "google_storage_bucket" "bucket" {
+  count         = var.create_bucket ? 1 : 0
+
   name          = local.bucket_name
   location      = var.storage_location
   force_destroy = true
@@ -36,7 +41,9 @@ module k8s {
   preemptible           = var.preemptible
   vpc                   = module.vpc.vpc_name
 
-  depends_on        = [module.vpc] 
+  create_k8s            = var.create_k8s
+
+  depends_on            = [module.vpc] 
 }
 
 # Save SA credentials as a secret in Kubernetes. Needed for GCS/BigQuery access

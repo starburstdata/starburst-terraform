@@ -10,6 +10,10 @@ variable primary_db_port { }
 variable primary_db_ranger { }
 variable primary_db_user { }
 variable primary_user_password { }
+variable ranger_db_user { }
+variable ex_ranger_db_password { }
+variable ex_ranger_admin_password { }
+variable ex_ranger_svc_password { }
 variable primary_node_pool { }
 variable admin_user { }
 variable admin_pass { }
@@ -18,7 +22,6 @@ variable presto_service { }
 variable expose_ranger_name { }
 variable expose_sb_name { }
 variable dns_zone { }
-variable ranger_db_user { default = "ranger"}
 variable type { }
 variable service_type { }
 variable ranger_template_file { }
@@ -48,11 +51,11 @@ locals {
         primary_db_password         = var.primary_user_password
         primary_db_ranger           = var.primary_db_ranger
         ranger_db_user              = var.ranger_db_user
-        ranger_db_password          = random_string.ranger_db_password.result
+        ranger_db_password          = var.ex_ranger_db_password != "" ? var.ex_ranger_db_password : random_string.ranger_db_password.result
         primary_node_pool           = var.primary_node_pool
         admin_user                  = var.admin_user
-        admin_pass                  = var.admin_pass
-        ranger_svc_acc_pwd1         = random_password.service_acc_password1.result
+        admin_pass                  = var.ex_ranger_admin_password != "" ? var.ex_ranger_admin_password : var.admin_pass
+        ranger_svc_acc_pwd1         = var.ex_ranger_svc_password != "" ? var.ex_ranger_svc_password : random_password.service_acc_password1.result
         ranger_svc_acc_pwd2         = random_password.service_acc_password2.result
         ranger_svc_acc_pwd3         = random_password.service_acc_password3.result
         ranger_svc_acc_pwd4         = random_password.service_acc_password4.result
@@ -184,15 +187,7 @@ output ranger_db_user {
 }
 
 output ranger_db_password {
-  value = var.create_ranger ? random_string.ranger_db_password.result : null
-}
-
-output ranger_svc_acc_admin {
-  value = var.create_ranger ? "admin" : null
-}
-
-output ranger_svc_acc_pass {
-  value = var.create_ranger ? random_password.service_acc_password1.result : null
+  value = var.create_ranger && var.ex_ranger_db_password == "" ? random_string.ranger_db_password.result : var.ex_ranger_db_password
 }
 
 # Convoluted logic: If Ranger is being deployed..

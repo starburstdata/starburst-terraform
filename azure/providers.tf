@@ -2,13 +2,13 @@ terraform {
     required_providers {
         azurerm = {
             source = "hashicorp/azurerm"
-            version = ">= 2.46.1"
+            version = ">= 2.50.0"
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"
-            version = ">= 2.0.0"
+            version = ">= 2.0.2"
         }
-        helm        = ">= 2.0.1"
+        helm        = ">= 2.0.2"
         postgresql = {
             source = "cyrilgdn/postgresql"
             version = ">= 1.11.2"

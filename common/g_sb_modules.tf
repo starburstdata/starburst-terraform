@@ -146,9 +146,13 @@ module ranger {
     # External Postgres details
     primary_ip_address      = var.ex_ranger_instance != "" ? var.ex_ranger_instance : module.db.db_address
     primary_db_port         = var.ex_ranger_instance != "" ? var.ex_ranger_port : module.db.db_port
-    primary_db_user         = var.ex_ranger_instance != "" ? var.ex_ranger_db_user : module.db.primary_db_user
-    primary_user_password   = var.ex_ranger_instance != "" ? var.ex_ranger_db_password : module.db.primary_db_password
+    primary_db_user         = var.ex_ranger_instance != "" ? var.ex_ranger_root_user : module.db.primary_db_user
+    primary_user_password   = var.ex_ranger_instance != "" ? var.ex_ranger_root_password : module.db.primary_db_password
     primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
+    ranger_db_user          = var.ex_ranger_instance != "" ? var.ex_ranger_db_user : "ranger"
+    ex_ranger_db_password   = var.ex_ranger_db_password
+    ex_ranger_admin_password = var.ex_ranger_admin_password
+    ex_ranger_svc_password  = var.ex_ranger_svc_password
     ranger_template_file    = "${path.root}/../helm_templates/${local.ranger_yaml_file}"
     type                    = var.create_rds == false && var.ex_ranger_instance == "" ? "internal" : "external"
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"

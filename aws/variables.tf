@@ -1,6 +1,7 @@
 # EC2 Node types
 variable primary_node_type {            default="m5.2xlarge"}
 variable worker_node_type {             default="m5.xlarge"}
+variable capacity_type {                default="SPOT"} #SPOT or ON_DEMAND
 
 # AWS roles to attach to EKS & node pools
 variable s3_role { }

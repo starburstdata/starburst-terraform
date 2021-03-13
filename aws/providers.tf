@@ -2,7 +2,7 @@ terraform {
     required_providers {
         aws = {
             source  = "hashicorp/aws"
-            version = ">= 3.0"
+            version = ">= 3.10"
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"
@@ -33,8 +33,8 @@ provider "postgresql" {
 }
 
 provider "kubernetes" {
-    host                   = data.aws_eks_cluster.cluster.endpoint
-    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+    host                   = data.aws_eks_cluster.cluster[0].endpoint
+    cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster[0].certificate_authority.0.data)
     #token                  = data.aws_eks_cluster_auth.cluster.token
     exec {
         api_version = "client.authentication.k8s.io/v1alpha1"
@@ -45,8 +45,8 @@ provider "kubernetes" {
 
 provider helm {
     kubernetes {
-        host                   = data.aws_eks_cluster.cluster.endpoint
-        cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
+        host                   = data.aws_eks_cluster.cluster[0].endpoint
+        cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster[0].certificate_authority.0.data)
         #token                  = data.aws_eks_cluster_auth.cluster.token
         exec {
             api_version = "client.authentication.k8s.io/v1alpha1"

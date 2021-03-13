@@ -10,7 +10,7 @@
 
 module vpc {
     source  = "terraform-aws-modules/vpc/aws"
-    version = "2.66.0"
+    version = "2.70.0"
 
     name                 = local.vpc_name
     cidr                 = "172.31.0.0/16"
@@ -34,31 +34,58 @@ module vpc {
 
 module k8s {
   source  = "terraform-aws-modules/eks/aws"
-  version = "13.2.1"
+  version = "14.0.0"
 
   cluster_name    = local.cluster_name
   cluster_version = var.k8s_version
-  subnets         = module.vpc.public_subnets
-  vpc_id          = module.vpc.vpc_id
+  subnets         = var.create_vpc ? module.vpc.public_subnets : data.aws_subnet_ids.subnet[0].ids
+  vpc_id          = var.create_vpc ? module.vpc.vpc_id : var.ex_vpc_id
 
-  worker_groups = [
-    {
-      name                          = var.primary_node_pool
-      instance_type                 = var.primary_node_type
-      asg_max_size                  = var.primary_pool_size
-      kubelet_extra_args            = "--node-labels=agentpool=${var.primary_node_pool}"
-      suspended_processes           = ["AZRebalance"]
+  # worker_groups = [
+  #   {
+  #     name                          = var.primary_node_pool
+  #     instance_type                 = var.primary_node_type
+  #     asg_max_size                  = var.primary_pool_size
+  #     kubelet_extra_args            = "--node-labels=agentpool=${var.primary_node_pool}"
+  #     suspended_processes           = ["AZRebalance"]
+  #   },
+  #   {
+  #     name                          = var.worker_node_pool
+  #     instance_type                 = var.worker_node_type
+  #     asg_min_size                  = var.worker_pool_min_size
+  #     asg_max_size                  = var.worker_pool_max_size
+  #     kubelet_extra_args            = "--node-labels=agentpool=${var.worker_node_pool}"
+  #     suspended_processes           = ["AZRebalance"]
+  #   }
+  # ]
+
+  node_groups = {
+    demobase = {
+      desired_capacity = var.primary_pool_size
+      max_capacity     = var.primary_pool_size
+      min_capacity     = var.primary_pool_size
+
+      instance_types = [var.primary_node_type]
+      k8s_labels = {
+        agentpool = var.primary_node_pool
+      }
     },
-    {
-      name                          = var.worker_node_pool
-      instance_type                 = var.worker_node_type
-      asg_min_size                  = var.worker_pool_min_size
-      asg_max_size                  = var.worker_pool_max_size
-      kubelet_extra_args            = "--node-labels=agentpool=${var.worker_node_pool}"
-      suspended_processes           = ["AZRebalance"]
-    }
-  ]
+    demopresto = {
+      desired_capacity = var.worker_pool_min_size
+      max_capacity     = var.worker_pool_max_size
+      min_capacity     = var.worker_pool_min_size
 
+      instance_types = [var.worker_node_type]
+      capacity_type  = var.capacity_type
+      k8s_labels = {
+        agentpool = var.worker_node_pool
+      }
+      additional_tags = {
+        ExtraTag = "example"
+      }
+    }
+
+  }
   # Attach S3 policy to allow worker nodes to interact with Glue/S3
   workers_additional_policies = var.s3_role
 
@@ -70,7 +97,7 @@ module k8s {
   tags              = local.common_tags
   create_eks        = var.create_k8s
 
-  depends_on        = [module.vpc]
+  depends_on        = [module.vpc,data.aws_subnet_ids.subnet]
 }
 
 module s3_bucket {
@@ -87,14 +114,22 @@ module s3_bucket {
 data "aws_availability_zones" "available" { }
 
 data "aws_eks_cluster" "cluster" {
+  count = var.create_k8s ? 1 : 0
   name = module.k8s.cluster_id
 }
 
 data "aws_eks_cluster_auth" "cluster" {
+  count = var.create_k8s ? 1 : 0
   name = module.k8s.cluster_id
 }
 
-data "aws_security_group" "default" {
-  vpc_id = module.vpc.vpc_id
-  name   = "default"
+data aws_subnet_ids subnet {
+  count = var.ex_vpc_id != "" ? 1 : 0
+  vpc_id = var.ex_vpc_id
 }
+
+# data "aws_security_group" "default" {
+#   #vpc_id = module.vpc.vpc_id
+#   vcp_id = var.ex_vpc_id != "" ? data.aws_vpc.new_vpc.id : data.aws_vpc.default_vpc
+#   name   = "default"
+# }

@@ -115,3 +115,32 @@ ___
 | wasb_access_key | Storage account access key | no |  |
 | wasb_storage_account | Storage account name | no |  |
 ___
+
+## External RDS overrides
+*If you have existing databases for these components, you can point to them with these override input parameters. Can be overridden on an individual basis.*
+|  Parameter | Description | Required | Default |
+|---|---|---|---|
+| ex_hive_instance | Existing RDS instance to point your Hive Server to | no |  |
+| ex_hive_port | Hive Database instance port | no |  |
+| ex_hive_db | Hive database name (usually `hive` or `hms`) | no |  |
+| ex_hive_db_user | User that can connect to the Hive Database | no |  |
+| ex_hive_db_password | Password for the `ex_hive_db_user` | no |  |
+| ex_mc_instance | Existing RDS instance to point Mission Control to | no |  |
+| ex_mc_port | Mission Control Database instance port | no |  |
+| ex_mc_db | Mission Control database name (usually `mcdemo`) | no |  |
+| ex_mc_db_user | User that can connect to the Mission Control Database | no |  |
+| ex_mc_db_password | Password for the `ex_mc_db_user` | no |  |
+| ex_ranger_instance | Existing RDS instance to point Ranger to | no |  |
+| ex_ranger_port | Ranger Database instance port | no |  |
+| ex_ranger_db | Ranger database name (usually `ranger`) | no |  |
+| ex_ranger_root_user | Database admin user that can connect to the Ranger Database. This should be the `postgres` user or a suitable sysadmin user with the same privileges | no |  |
+| ex_ranger_root_password | Password for the `ex_ranger_root_user` | no |  |
+| ex_ranger_db_user | The database user that the Ranger application will use (default is `ranger`) | no |  |
+| ex_ranger_db_password | Password for `ex_ranger_db_user` | no |  |
+| ex_ranger_admin_password | Password to the admin user that Starburst creates for Ranger. By default this is the same admin user used to login to Starburst (`sbadmin`)  | no |  |
+| ex_ranger_svc_password | Password for the admin service account that Ranger creates internally (Ranger refers to this as the `admin` user) | no |  |
+| ex_insights_instance | Existing RDS instance to point Starburst Insights to | no |  |
+| ex_insights_port | Insights Database instance port | no |  |
+| ex_insights_db | Insights database name (usually `event_logger`) | no |  |
+| ex_insights_db_user | User that can connect to the Starburst Insights Database | no |  |
+| ex_insights_db_password | Password for the `ex_insights_db_user` | no |  |

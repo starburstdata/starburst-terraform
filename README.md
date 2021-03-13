@@ -33,10 +33,10 @@ Terraform should be run from within these individual folders.
 ___
 ## Environment and Deployment Details
 
-Each cloud deployment option will create the following infrastrcuture resources which are required to support the deployment:
+Each cloud deployment option will create the following infrastructure resources which are required to support the deployment:
 
 - A storage account (S3, ADLS or GCS)
-- A network VPC or VNet
+- A network VPC or VNet (On AWS & GCP you can turn this off and BYO VPC to the deployment)
 - A managed Kubernetes cluster (EKS, GKE or AKS)
 
 In addition, the user has the option to deploy these specific applications to the Kubernetes cluster:
@@ -47,6 +47,15 @@ In addition, the user has the option to deploy these specific applications to th
 - Ranger
 - Mission Control
 - Nginx (if you need an https ingress for your applications)
+
+Lastly, the user has the option to point any of these components to an existing external database:
+
+- Hive
+- Ranger
+- Starburst Insights
+- Mission Control
+
+**Note:** Instructions on how to point to an existing database to support these components can be found in the cloud-specific directories.
 
 ### Helm Charts
 Default Helm Charts required for the ootb deployments are located in `./helm_templates`. They can be customized to suit your needs, but be aware of the existing variables used in these files.

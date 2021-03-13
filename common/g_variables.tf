@@ -42,11 +42,15 @@ variable ex_hive_db_user {        default = ""}
 variable ex_hive_db_password {    default = ""}
 
 # External Ranger RDS
-variable ex_ranger_instance {     default = ""} # If this value is set, a database for Ranger WILL NOT be created
-variable ex_ranger_port {         default = ""}
-variable ex_ranger_db {           default = ""}
-variable ex_ranger_db_user {      default = ""}
-variable ex_ranger_db_password {  default = ""}
+variable ex_ranger_instance {       default = ""} # If this value is set, a database for Ranger WILL NOT be created
+variable ex_ranger_port {           default = ""}
+variable ex_ranger_db {             default = ""}
+variable ex_ranger_root_user {      default = ""}
+variable ex_ranger_root_password {  default = ""}
+variable ex_ranger_db_user {        default = ""}
+variable ex_ranger_db_password {    default = ""}
+variable ex_ranger_admin_password { default = ""}
+variable ex_ranger_svc_password {   default = ""}
 
 # External Mission Control RDS
 variable ex_mc_instance {         default = ""} # If this value is set, a database for MC WILL NOT be created
@@ -64,6 +68,9 @@ variable ex_insights_db_password { default = ""}
 
 # External HMS
 variable ex_hive_server_url {      default = ""}
+
+# External VPC/VNET
+variable ex_vpc_id {               default=""}
 
 # Additional tags for resources
 variable ch_cloud { }
