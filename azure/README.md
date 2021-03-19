@@ -57,7 +57,7 @@ terraform init
 ```
 8. Deploy your environment:
 ```
-terraform deploy
+terraform apply
 ```
 
 ## Undeploy
