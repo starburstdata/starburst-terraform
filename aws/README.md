@@ -48,6 +48,7 @@ ___
 |  Parameter | Description | Required | Default |
 |---|---|---|---|
 | admin_user | Admin login credentials for Ranger | yes | sbadmin |
+| capacity_type | EC2 type in the worker node pool: can select either `SPOT` or `ON_DEMAND` depending on preference | no | `SPOT`
 | ch_cloud | Tag for cloud resource objects | no |  |
 | ch_environment | Tag for cloud resource objects | no |  |
 | ch_org | Tag for cloud resource objects | no |  |
