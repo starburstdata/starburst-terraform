@@ -22,10 +22,12 @@ variable hive_service_type {      default = "clusterIp"}
 variable presto_service {         default = "presto"}
 variable ranger_service {         default = "ranger"}
 variable mc_service {             default = "missioncontrol"}
+variable cloudbeaver_service {    default = "cloudbeaver"}
 variable expose_postgres_name {   default = "postgresql"}
 variable expose_sb_name {         default = "starburst"}
 variable expose_ranger_name {     default = "ranger"}
 variable expose_mc_name {         default = "starburst-mission-control"}
+variable expose_cloudbeaver_name {default = "cloudbeaver"}
 variable wait_this_long {         default = "60s"} # default wait time to use when waiting on resources 
 variable hive_yaml_file { }
 variable trino_yaml_file { }
@@ -33,6 +35,7 @@ variable ranger_yaml_file { }
 variable mc_yaml_file { }
 variable operator_yaml_file { }
 variable postgres_yaml_file { }
+variable cloudbeaver_yaml_file { }
 
 # External Hive RDS
 variable ex_hive_instance {       default = ""} # If this value is set, a database for Hive WILL NOT be created
@@ -136,6 +139,7 @@ variable create_ranger {          default = true}
 variable create_trino {           default = true}
 variable create_demo {            default = true}
 variable create_nginx {           default = true}
+variable create_cloudbeaver {     default = true}
 
 # debug flag
 variable debug_this {             default = false}

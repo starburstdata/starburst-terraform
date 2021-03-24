@@ -3,6 +3,7 @@ locals {
   insights_endpoint = var.create_nginx ? "https://${module.dns.starburst_url}/ui/insights" : var.create_trino ? "http://${module.trino.starburst_ingress}:8080/ui/insights" : null
   ranger_endpoint   = var.create_nginx ? "https://${module.dns.ranger_url}" : var.create_ranger ? "http://${module.ranger.ranger_ingress}:6080" : null
   mc_endpoint       = var.create_nginx ? "https://${module.dns.mc_url}" : var.create_mc ? "http://${module.mc.mc_ingress}:5042" : null
+  cloudbeaver_endpoint = var.create_nginx ? "https://${module.dns.cloudbeaver_url}" : var.create_cloudbeaver ? "http://${module.cloudbeaver.cloudbeaver_ingress}:8978" : null
 }
 
 output user-credentials {
@@ -29,9 +30,10 @@ output postgres-details {
 
 output starburst-endpoints {
   value = list(
-    var.create_trino ?  "starburst-trino      = ${local.trino_endpoint}" : "Starburst-trino not deployed",
-    var.create_trino ?  "starburst-insights   = ${local.insights_endpoint}" : "Starburst-insights not deployed",
-    var.create_ranger ? "ranger               = ${local.ranger_endpoint}" : "Starburst-Ranger not deployed",
-    var.create_mc ?     "Mission Control      = ${local.mc_endpoint}" : "Starburst-MissionControl not deployed"
+    var.create_trino ?        "starburst-trino      = ${local.trino_endpoint}" : "Starburst-trino not deployed",
+    var.create_trino ?        "starburst-insights   = ${local.insights_endpoint}" : "Starburst-insights not deployed",
+    var.create_ranger ?       "ranger               = ${local.ranger_endpoint}" : "Starburst-Ranger not deployed",
+    var.create_mc ?           "Mission Control      = ${local.mc_endpoint}" : "Starburst-MissionControl not deployed",
+    var.create_cloudbeaver ?  "CloudBeaver          = ${local.cloudbeaver_endpoint}" : "CloudBeaver not deployed"
   )
 }

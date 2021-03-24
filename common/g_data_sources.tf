@@ -14,6 +14,7 @@ locals {
     presto_service      = "${var.prefix}-${local.env}-${var.presto_service}-${random_id.deployment.hex}"
     ranger_service      = "${var.prefix}-${local.env}-${var.ranger_service}-${random_id.deployment.hex}"
     mc_service          = "${var.prefix}-${local.env}-${var.mc_service}-${random_id.deployment.hex}"
+    cloudbeaver_service = "${var.prefix}-${local.env}-${var.cloudbeaver_service}-${random_id.deployment.hex}"
 
     hive_yaml_file      = var.hive_yaml_file
     trino_yaml_file     = var.create_rds == false && var.ex_insights_instance == "" ? var.trino_yaml_file[0] : var.trino_yaml_file[1]
@@ -21,6 +22,7 @@ locals {
     mc_yaml_file        = var.mc_yaml_file
     operator_yaml_file  = var.operator_yaml_file
     postgres_yaml_file  = var.postgres_yaml_file
+    cloudbeaver_yaml_file  = var.cloudbeaver_yaml_file
 
     hms_version         = var.hms_version       != null ? var.hms_version : var.repo_version
     sb_version          = var.sb_version        != null ? var.sb_version : var.repo_version

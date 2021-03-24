@@ -33,6 +33,7 @@ ranger_yaml_file    = "ranger_values.yaml.tpl"
 mc_yaml_file        = "mission_control.yaml.tpl"
 operator_yaml_file  = "operator_values.yaml.tpl"
 postgres_yaml_file  = "postgresql.yaml.tpl"
+cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
 
 # Resource tagging variables
 ch_cloud        = "azure"
@@ -42,13 +43,17 @@ ch_team         = "psa"
 ch_project      = "lab"
 #ch_user        = set your user identity. Can be any value you like. Defaults to "starburst"
 
-# Block creating these resources
+# Infrastructure control
 create_rds      = true
-create_hive     = true
-create_mc       = false
-create_ranger   = true
-create_trino    = true
-create_nginx    = true
+
+# K8s applications control
+create_hive         = true
+create_mc           = false
+create_ranger       = true
+create_trino        = true
+create_cloudbeaver  = true
+
+create_nginx        = true
 
 # Debug flag
 debug_this      = false

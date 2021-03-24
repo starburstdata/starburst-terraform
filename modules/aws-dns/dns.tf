@@ -2,11 +2,13 @@
 variable create_nginx { }
 variable presto_service { }
 variable ranger_service { }
+variable cloudbeaver_service { }
 variable mc_service { }
 variable dns_zone { }
 variable create_ranger { }
 variable create_trino { }
 variable create_mc { }
+variable create_cloudbeaver { }
 
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
@@ -72,6 +74,19 @@ resource "aws_route53_record" "mc" {
   }
 }
 
+resource "aws_route53_record" "cloudbeaver" {
+  count  = var.create_nginx && var.create_cloudbeaver ? 1 : 0
+
+  zone_id = data.aws_route53_zone.primary[0].zone_id
+  name    = "${var.cloudbeaver_service}.${var.dns_zone}"
+  type    = "A"
+  alias {
+    name    = data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].hostname
+    zone_id = data.aws_elb.nginx[0].zone_id
+    evaluate_target_health = true
+  }
+}
+
 
 output starburst_url {
   value = var.create_nginx && var.create_trino ? trimsuffix(aws_route53_record.presto[0].name,".") : ""
@@ -83,4 +98,8 @@ output ranger_url {
 
 output mc_url {
   value = var.create_nginx && var.create_mc ? trimsuffix(aws_route53_record.mc[0].name,".") : ""
+}
+
+output cloudbeaver_url {
+  value = var.create_nginx && var.create_cloudbeaver ? trimsuffix(aws_route53_record.cloudbeaver[0].name,".") : ""
 }

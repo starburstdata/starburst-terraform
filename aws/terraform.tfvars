@@ -40,6 +40,7 @@ ranger_yaml_file    = "ranger_values.yaml.tpl"
 mc_yaml_file        = "mission_control.yaml.tpl"
 operator_yaml_file  = "operator_values.yaml.tpl"
 postgres_yaml_file  = "postgresql.yaml.tpl"
+cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
 
 # Resource tagging variables
 ch_cloud        = "aws"
@@ -52,10 +53,20 @@ ch_project      = "lab"
 # Custom delay for AWS
 wait_this_long  = "90s"
 
-# Block creating these resources
+# Infra overrides - need to set corresponding create_* value to false for this to work correctly
+ex_vpc_id       = "vpc-d823bca2"
+
+# Infrastructure control
 create_rds      = true
-create_hive     = true
-create_mc       = false
-create_ranger   = true
-create_trino    = true
-create_nginx    = true
+create_k8s      = true
+create_vpc      = true
+create_bucket   = true
+
+# K8s applications control
+create_hive         = true
+create_mc           = false
+create_ranger       = true
+create_trino        = true
+create_cloudbeaver  = true
+
+create_nginx        = true

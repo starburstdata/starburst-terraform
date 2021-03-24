@@ -7,11 +7,13 @@ variable create_nginx { }
 variable presto_service { }
 variable ranger_service { }
 variable mc_service { }
+variable cloudbeaver_service { }
 variable dns_zone { }
 variable dns_zone_name { }
 variable create_ranger { }
 variable create_trino { }
 variable create_mc { }
+variable create_cloudbeaver { }
 
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
@@ -64,6 +66,17 @@ resource "azurerm_dns_a_record" "mc" {
   records             = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
 }
 
+# Add Azure DNS Record sets
+resource "azurerm_dns_a_record" "cloudbeaver" {
+  count               = var.create_nginx && var.create_cloudbeaver ? 1 : 0
+
+  name                = var.cloudbeaver_service
+  zone_name           = data.azurerm_dns_zone.default[0].name
+  resource_group_name = var.dns_rg
+  ttl                 = 300
+  records             = [data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].ip]
+}
+
 
 output starburst_url {
   value = var.create_nginx && var.create_trino ? trimsuffix(azurerm_dns_a_record.starburst[0].fqdn,".") : ""
@@ -75,4 +88,8 @@ output ranger_url {
 
 output mc_url {
   value = var.create_nginx && var.create_mc ? trimsuffix(azurerm_dns_a_record.mc[0].fqdn,".") : ""
+}
+
+output cloudbeaver_url {
+  value = var.create_nginx && var.create_cloudbeaver ? trimsuffix(azurerm_dns_a_record.cloudbeaver[0].fqdn,".") : ""
 }

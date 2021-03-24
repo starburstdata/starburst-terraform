@@ -253,3 +253,31 @@ module nginx {
 
     depends_on              = [module.k8s]
 }
+
+module cloudbeaver {
+    source                  = "../modules/cloudbeaver"
+
+    environment             = local.env
+
+    # Helm Chart Repo
+    repository              = "dbeaver/cloudbeaver"
+
+    cloudbeaver_service     = local.cloudbeaver_service
+    cloudbeaver_yaml_file   = "${path.root}/../helm_templates/${local.cloudbeaver_yaml_file}"
+    service_type            = var.create_nginx ? "ClusterIP" : "loadBalancer"
+    enable_ingress          = var.create_nginx ? "true" : "false"
+
+    # Expose this service name
+    expose_cloudbeaver_name = var.expose_cloudbeaver_name
+
+    # DNS Zone for starburst endpoint
+    dns_zone                = var.dns_zone
+    
+    # Node pools to deploy to
+    primary_node_pool       = var.primary_node_pool
+
+    # Conditional create logic
+    create_cloudbeaver      = var.create_cloudbeaver
+
+    depends_on              = [module.nginx,module.dns,module.hive,module.db]
+}

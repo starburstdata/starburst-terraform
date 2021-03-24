@@ -72,6 +72,7 @@ ___
 | ch_team | Tag for cloud resource objects | no |  |
 | ch_user | Tag for cloud resource objects | no |  |
 | create_bucket | Should the cloud storage bucket be created? | no | true |
+| create_cloudbeaver | Should CloudBeaver be deployed? (https://cloudbeaver.io/) | no | true
 | create_hive | Should the Hive server resource be deployed? | no | true |
 | create_k8s | Should the cloud K8s cluster be created? | no | true |
 | create_mc | Should Mission Control be deployed? | no | true |
