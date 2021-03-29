@@ -1,6 +1,6 @@
 # Variables
 variable create_nginx { }
-variable presto_service { }
+variable starburst_service { }
 variable ranger_service { }
 variable mc_service { }
 variable cloudbeaver_service { }
@@ -23,10 +23,10 @@ data "kubernetes_service" "nginx" {
 }
 
 # Add Google DNS Record sets
-resource "google_dns_record_set" "presto" {
+resource "google_dns_record_set" "starburst" {
   count = var.create_nginx && var.create_trino ? 1 : 0
 
-  name = "${var.presto_service}.${var.dns_zone}."
+  name = "${var.starburst_service}.${var.dns_zone}."
   type = "A"
   ttl  = 3600
 
@@ -73,7 +73,7 @@ resource "google_dns_record_set" "cloudbeaver" {
 
 
 output starburst_url {
-  value = var.create_nginx && var.create_trino ? trimsuffix(google_dns_record_set.presto[0].name,".") : ""
+  value = var.create_nginx && var.create_trino ? trimsuffix(google_dns_record_set.starburst[0].name,".") : ""
 }
 
 output ranger_url {

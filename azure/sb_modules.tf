@@ -6,7 +6,7 @@ module dns {
     dns_rg                  = var.dns_rg
     location                = var.region
     public_ip               = local.public_ip
-    presto_service          = local.presto_service
+    starburst_service       = local.starburst_service
     ranger_service          = local.ranger_service
     mc_service              = local.mc_service
     cloudbeaver_service     = local.cloudbeaver_service

@@ -3,7 +3,7 @@ variable environment { }
 variable registry { }
 variable repository { }
 variable repo_version { }
-variable presto_version { }
+variable starburst_version { }
 variable repo_username { }
 variable repo_password { }
 variable primary_ip_address { }
@@ -43,7 +43,7 @@ locals {
         expose_mc_name              = var.expose_mc_name
         dns_zone                    = var.dns_zone
         charts_version              = var.repo_version
-        presto_version              = var.presto_version
+        starburst_version              = var.starburst_version
     }
 
     # Keep these charts in a directory under the root folder
@@ -52,16 +52,16 @@ locals {
         local.mc_template_vars
     )
 
-    presto_operator_vars = {
+    starburst_operator_vars = {
         registry                    = var.registry
         repo_username               = var.repo_username
         repo_password               = var.repo_password
-        repository                  = "${var.registry}/presto-helm-operator"
+        repository                  = "${var.registry}/starburst-enterprise-helm-operator"
     }
 
-    presto_operator_values = templatefile(
+    starburst_operator_values = templatefile(
         var.operator_template_file,
-        local.presto_operator_vars
+        local.starburst_operator_vars
     )
 }
 
@@ -84,21 +84,21 @@ resource postgresql_database mc {
 }
 
 
-# Need to Deploy Presto Operator as well if deploying MC
-resource "helm_release" "presto-operator" {
+# Need to Deploy starburst Operator as well if deploying MC
+resource "helm_release" "starburst-operator" {
     # This is how Terraform does conditional logic
     count               = var.create_mc ? 1 : 0
 
-    name                = "starburst-presto-helm-operator"
+    name                = "starburst-starburst-helm-operator"
 
     repository          = var.repository
     repository_username = var.repo_username
     repository_password = var.repo_password
 
-    chart               = "starburst-presto-helm-operator"
+    chart               = "starburst-starburst-helm-operator"
     version             = var.repo_version
 
-    values              = [local.presto_operator_values]
+    values              = [local.starburst_operator_values]
 
     set {
       name              = "nodeSelector\\.agentpool"

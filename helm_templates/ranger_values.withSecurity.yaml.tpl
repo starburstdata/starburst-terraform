@@ -37,7 +37,7 @@ admin:
     limits:
       memory: 1Gi
       cpu: 1
-  serviceUser: presto_service
+  serviceUser: starburst_service
   passwords:
     admin: ${ranger_svc_acc_pwd1}
     tagsync: ${ranger_svc_acc_pwd2}
@@ -59,12 +59,12 @@ database:
     databasePassword: ${ranger_db_password}
     databaseRootUser: ${primary_db_user}
     databaseRootPassword: ${primary_db_password}
-# datasources - list of Presto datasources to configure Ranger
+# datasources - list of starburst datasources to configure Ranger
 # services. It is mounted as file /config/datasources.yaml inside
 # container and processed by init script.
 datasources:
-  - name: starburst-enterprise-presto
-    host: "${presto_service_prefix}-ingress"
+  - name: starburst-enterprise
+    host: "${starburst_service_prefix}-ingress"
     port: 8080
     username: ${ranger_usr} 
     password: ${ranger_pwd}

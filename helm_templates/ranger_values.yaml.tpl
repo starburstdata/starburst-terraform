@@ -59,7 +59,7 @@ database:
     databaseRootPassword: ${primary_db_password}
 
 datasources:
-  - name: starburst-enterprise-presto
+  - name: starburst-enterprise
     host: ${expose_sb_name}
     port: 8080
     username: ${admin_user} 

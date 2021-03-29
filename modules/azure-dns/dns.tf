@@ -4,7 +4,7 @@ variable dns_rg { }
 variable location { }
 variable public_ip { }
 variable create_nginx { }
-variable presto_service { }
+variable starburst_service { }
 variable ranger_service { }
 variable mc_service { }
 variable cloudbeaver_service { }
@@ -37,7 +37,7 @@ data "azurerm_dns_zone" "default" {
 resource "azurerm_dns_a_record" "starburst" {
   count               = var.create_nginx && var.create_trino ? 1 : 0
 
-  name                = var.presto_service
+  name                = var.starburst_service
   zone_name           = data.azurerm_dns_zone.default[0].name
   resource_group_name = var.dns_rg
   ttl                 = 300

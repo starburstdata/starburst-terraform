@@ -16,12 +16,12 @@ expose:
   ingress:
     serviceName: ${expose_sb_name}
     servicePort: 8080
-    host: ${presto_service_prefix}.${dns_zone}
+    host: ${starburst_service_prefix}.${dns_zone}
     path: "/"
     pathType: Prefix
     tls:
       enabled: true
-      secretName: tls-secret-presto
+      secretName: tls-secret-starburst
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: ${secret_key_ref}
@@ -53,7 +53,7 @@ coordinator:
         access-control.name=ranger
         ranger.authentication-type=BASIC
         ranger.policy-rest-url=http://${expose_ranger_name}:6080
-        ranger.service-name=starburst-enterprise-presto
+        ranger.service-name=starburst-enterprise
         ranger.presto-plugin-username=${admin_user}
         ranger.presto-plugin-password=${admin_pass}
         ranger.policy-refresh-interval=10s
@@ -67,7 +67,7 @@ worker:
         access-control.name=ranger
         ranger.authentication-type=BASIC
         ranger.policy-rest-url=http://${expose_ranger_name}:6080
-        ranger.service-name=starburst-enterprise-presto
+        ranger.service-name=starburst-enterprise
         ranger.presto-plugin-username=${admin_user}
         ranger.presto-plugin-password=${admin_pass}
         ranger.policy-refresh-interval=10s

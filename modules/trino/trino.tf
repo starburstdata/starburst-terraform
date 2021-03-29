@@ -20,7 +20,7 @@ variable reg_pass1 { }
 variable reg_user2 { }
 variable reg_pass2 { }
 variable ranger_service { }
-variable presto_service { }
+variable starburst_service { }
 variable hive_service_url { }
 variable expose_sb_name { }
 variable expose_ranger_name { }
@@ -45,7 +45,7 @@ locals {
         ranger_user_sync_repo       = "${var.registry}/ranger-usersync"
         ranger_user_sync_tag        = "2.0.24"
         ranger_service_prefix       = var.ranger_service
-        presto_service_prefix       = var.presto_service
+        starburst_service_prefix    = var.starburst_service
         hive_service_url            = var.hive_service_url
         expose_sb_name              = var.expose_sb_name
         expose_ranger_name          = var.expose_ranger_name
@@ -98,13 +98,13 @@ resource "helm_release" "trino" {
     # This is how Terraform does conditional logic
     count               = var.create_trino ? 1 : 0
 
-    name    = "presto"
+    name    = "starburst"
 
     repository          = var.repository
     repository_username = var.repo_username
     repository_password = var.repo_password
 
-    chart   = "starburst-presto"
+    chart   = "starburst-enterprise"
     version = var.repo_version
 
     values = [local.trino_helm_chart_values]

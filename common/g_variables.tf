@@ -12,14 +12,14 @@ variable k8s_version {            default = "1.18"}
 variable bucket_name {            default = "storage"}
 variable storage_location {       default = "US"}
 variable primary_node_pool {      default = "demobase"}
-variable worker_node_pool {       default = "demopresto"}
+variable worker_node_pool {       default = "demoworkers"}
 variable primary_pool_size {      default = 1}
 variable worker_pool_min_size {   default = 1}
 variable worker_pool_max_size {   default = 10}
 variable primary_db_instance {    default = "postgres"}
 variable hive_service {           default = "hive"}
 variable hive_service_type {      default = "clusterIp"}
-variable presto_service {         default = "presto"}
+variable starburst_service {      default = "starburst"}
 variable ranger_service {         default = "ranger"}
 variable mc_service {             default = "missioncontrol"}
 variable cloudbeaver_service {    default = "cloudbeaver"}
@@ -97,7 +97,7 @@ variable mc_version {             default = null}
 variable operator_version {       default = null}
 
 # Starburst-Trino versions
-variable presto_version { }
+variable starburst_version { }
 
 # Object storage credentials
 # GCS

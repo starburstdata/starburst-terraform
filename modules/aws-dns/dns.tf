@@ -1,6 +1,6 @@
 # Variables
 variable create_nginx { }
-variable presto_service { }
+variable starburst_service { }
 variable ranger_service { }
 variable cloudbeaver_service { }
 variable mc_service { }
@@ -35,11 +35,11 @@ data aws_elb nginx {
 }
 
 # Add AWS DNS Record sets
-resource "aws_route53_record" "presto" {
+resource "aws_route53_record" "starburst" {
   count  = var.create_nginx && var.create_trino ? 1 : 0
 
   zone_id = data.aws_route53_zone.primary[0].zone_id
-  name    = "${var.presto_service}.${var.dns_zone}"
+  name    = "${var.starburst_service}.${var.dns_zone}"
   type    = "A"
   alias {
     name    = data.kubernetes_service.nginx[0].status[0].load_balancer[0].ingress[0].hostname
@@ -89,7 +89,7 @@ resource "aws_route53_record" "cloudbeaver" {
 
 
 output starburst_url {
-  value = var.create_nginx && var.create_trino ? trimsuffix(aws_route53_record.presto[0].name,".") : ""
+  value = var.create_nginx && var.create_trino ? trimsuffix(aws_route53_record.starburst[0].name,".") : ""
 }
 
 output ranger_url {

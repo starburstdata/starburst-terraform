@@ -18,7 +18,7 @@ variable primary_node_pool { }
 variable admin_user { }
 variable admin_pass { }
 variable ranger_service { }
-variable presto_service { }
+variable starburst_service { }
 variable expose_ranger_name { }
 variable expose_sb_name { }
 variable dns_zone { }
@@ -41,7 +41,7 @@ locals {
         ranger_user_sync_repo       = "${var.registry}/ranger-usersync"
         ranger_user_sync_tag        = "2.0.24"
         ranger_service_prefix       = var.ranger_service
-        presto_service_prefix       = var.presto_service
+        starburst_service_prefix    = var.starburst_service
         expose_ranger_name          = var.expose_ranger_name
         expose_sb_name              = var.expose_sb_name
         dns_zone                    = var.dns_zone

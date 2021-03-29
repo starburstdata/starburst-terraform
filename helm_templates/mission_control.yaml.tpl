@@ -70,7 +70,7 @@ missioncontrol:
   memoryAllocation: 1G
 nodeSelector: {}
 port: 5042
-prestoVersion: ${presto_version}
+prestoVersion: ${starburst_version}
 registryCredentials:
   enabled: true
   registry: ${registry}

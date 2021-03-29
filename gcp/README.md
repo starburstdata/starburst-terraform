@@ -86,7 +86,6 @@ ___
 | dns_zone_name | the DNS name in GCP | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | preemptible | Should the worker nodes use preemtible VMs? | no | true |
-| presto_version | The version of Starburst that Mission Control will deploy | yes | 350-e.1 |
 | primary_node_type | The VM machine type in the primary pool | no | e2-standard-8 |
 | primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
 | project | The GCP Project | yes |  |
@@ -96,10 +95,11 @@ ___
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |
 | repo_username | Login user for the Harbor repository | yes |  |
-| repo_version | Starburst release to be deployed. This includes all components | yes | 350.1.1 |
+| repo_version | Starburst release to be deployed. This includes all components | yes | 354.0.0 |
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
 | sa_name | The Google Service Account name | yes |  |
 | sb_license | The Starburst license file | yes |  |
+| starburst_version | The version of Starburst that Mission Control will deploy | yes | 354-e |
 | wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
 | worker_node_type | The VM machine type in the worker pool | no | e2-standard-4 |
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
@@ -110,10 +110,10 @@ ___
 |  Parameter | Description | Required | Default |
 |---|---|---|---|
 | hive_yaml_file | Default values.yaml for `starburst-hive` Helm chart | yes | hms_values.yaml.tpl |
-| trino_yaml_file | Default values.yaml for `starburst-presto` Helm chart. Note that there are two default files for this chart; one for when an external RDS is deployed and Insights metrics and event log data is being collected. The second, for when an RDS is not deployed and no event logging or insights metrics are being collected | yes | ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"] |
+| trino_yaml_file | Default values.yaml for `starburst-enterprise` Helm chart. Note that there are two default files for this chart; one for when an external RDS is deployed and Insights metrics and event log data is being collected. The second, for when an RDS is not deployed and no event logging or insights metrics are being collected | yes | ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"] |
 | ranger_yaml_file | Default values.yaml for `starburst-ranger` Helm chart | yes | ranger_values.yaml.tpl |
 | mc_yaml_file | Default values.yaml for `starburst-mission-control` Helm chart | yes | mission_control.yaml.tpl |
-| operator_yaml_file | Default values.yaml for `starburst-presto-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
+| operator_yaml_file | Default values.yaml for `starburst-enterprise-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
 | postgres_yaml_file | Default values.yaml for Bitnami `postgresql` Helm chart | yes | postgresql.yaml.tpl |
 ___
 

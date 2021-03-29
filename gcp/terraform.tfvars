@@ -27,8 +27,8 @@ repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"
 #repo_username   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
 #repo_password   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
-repo_version    = "350.1.1"
-presto_version  = "350-e.1"
+repo_version        = "354.0.0"
+starburst_version   = "354-e"
 
 # Yaml files for Helm deployments. Terraform logic will deal with situations where more than one
 # yaml file has been specified - as is the case with Trino below

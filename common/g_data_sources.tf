@@ -11,7 +11,7 @@ locals {
     db_name             = "${var.prefix}-${local.env}-${var.primary_db_instance}-${random_id.deployment.hex}"
     bucket_name         = "${var.prefix}-${local.env}-${var.bucket_name}-${random_id.deployment.hex}"
     hive_service        = "${var.prefix}-${local.env}-${var.hive_service}"
-    presto_service      = "${var.prefix}-${local.env}-${var.presto_service}-${random_id.deployment.hex}"
+    starburst_service   = "${var.prefix}-${local.env}-${var.starburst_service}-${random_id.deployment.hex}"
     ranger_service      = "${var.prefix}-${local.env}-${var.ranger_service}-${random_id.deployment.hex}"
     mc_service          = "${var.prefix}-${local.env}-${var.mc_service}-${random_id.deployment.hex}"
     cloudbeaver_service = "${var.prefix}-${local.env}-${var.cloudbeaver_service}-${random_id.deployment.hex}"
@@ -48,7 +48,7 @@ locals {
     }
 }
 
-# Generate some visible random passwords the user can use to connect to Presto & Ranger
+# Generate some visible random passwords the user can use to connect to starburst & Ranger
 # NOTE: the "admin_user" is used for both Ranger & Trino logins and will have full access to all
 resource "random_string" "admin_pass" {
 

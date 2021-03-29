@@ -70,7 +70,7 @@ module k8s {
         agentpool = var.primary_node_pool
       }
     },
-    demopresto = {
+    demoworkers = {
       desired_capacity = var.worker_pool_min_size
       max_capacity     = var.worker_pool_max_size
       min_capacity     = var.worker_pool_min_size

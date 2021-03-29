@@ -96,7 +96,7 @@ module mc {
     registry                = var.registry
     repository              = var.repository
     repo_version            = local.mc_version
-    presto_version          = var.presto_version
+    starburst_version       = var.starburst_version
     repo_username           = var.repo_username
     repo_password           = var.repo_password
     
@@ -161,9 +161,9 @@ module ranger {
     admin_user              = var.admin_user
     admin_pass              = random_string.admin_pass.result
 
-    # Ranger & Presto Service names
+    # Ranger & starburst Service names
     ranger_service          = local.ranger_service
-    presto_service          = local.presto_service
+    starburst_service       = local.starburst_service
 
     # Expose this service name
     expose_ranger_name      = var.expose_ranger_name
@@ -216,9 +216,9 @@ module trino {
     reg_user2               = var.reg_user2
     reg_pass2               = random_string.user_pass2.result
 
-    # Ranger & Presto Service names
+    # Ranger & starburst Service names
     ranger_service          = local.ranger_service
-    presto_service          = local.presto_service
+    starburst_service       = local.starburst_service
 
     # Hive Service URL
     hive_service_url        = module.hive.hive_url
