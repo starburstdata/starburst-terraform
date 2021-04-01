@@ -234,6 +234,9 @@ module trino {
     primary_node_pool       = var.primary_node_pool
     worker_node_pool        = var.worker_node_pool
 
+    # Node taint for spot/preemptible
+    node_taint_key          = var.node_taint_key
+
     # Conditional create logic
     create_trino            = var.create_trino
     create_rds              = var.create_rds

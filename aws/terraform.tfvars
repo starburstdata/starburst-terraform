@@ -43,12 +43,12 @@ postgres_yaml_file  = "postgresql.yaml.tpl"
 cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
 
 # Resource tagging variables
-ch_cloud        = "aws"
-#ch_environment = automatically set to the Terraform workspace name
-ch_org          = "bizdev"
-ch_team         = "psa"
-ch_project      = "lab"
-#ch_user        = set your user identity. Can be any value you like. Defaults to "starburst"
+cloud        = "az"         # aws | gcp | az
+environment  = "demo"       # prod | dev | test | demo | debug
+org          = "partner"    # cs | sales | enablement | partner
+team         = "partner"    # tam |  cse | sa | partner
+#project     = automatically set to the Terraform workspace name
+#user        = set your user identity. Can be any value you like. Defaults to "starburst"
 
 # Custom delay for AWS
 wait_this_long  = "90s"

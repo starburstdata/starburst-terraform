@@ -3,6 +3,10 @@ variable primary_node_type {            default="m5.2xlarge"}
 variable worker_node_type {             default="m5.xlarge"}
 variable capacity_type {                default="SPOT"} #SPOT or ON_DEMAND
 
+# AWS "NoSchedule" node taint tags
+variable node_taint_key {           default="kubernetes.io/nodetype"}
+variable node_taint_value {         default="spot"}
+
 # AWS roles to attach to EKS & node pools
 variable s3_role { }
 variable map_roles {

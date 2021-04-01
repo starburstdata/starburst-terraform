@@ -15,6 +15,11 @@ variable create_trino { }
 variable create_mc { }
 variable create_cloudbeaver { }
 
+# Proxy config
+provider "azurerm" {
+    alias               = "dns"
+}
+
 # Get the Nginx service details
 data "kubernetes_service" "nginx" {
   count               = var.create_nginx ? 1 : 0
@@ -29,6 +34,7 @@ data "kubernetes_service" "nginx" {
 data "azurerm_dns_zone" "default" {
   count               = var.create_nginx ? 1 : 0
 
+  provider            = azurerm.dns
   name                = var.dns_zone
   resource_group_name = var.dns_rg
 }
@@ -37,6 +43,7 @@ data "azurerm_dns_zone" "default" {
 resource "azurerm_dns_a_record" "starburst" {
   count               = var.create_nginx && var.create_trino ? 1 : 0
 
+  provider            = azurerm.dns
   name                = var.starburst_service
   zone_name           = data.azurerm_dns_zone.default[0].name
   resource_group_name = var.dns_rg
@@ -48,6 +55,7 @@ resource "azurerm_dns_a_record" "starburst" {
 resource "azurerm_dns_a_record" "ranger" {
   count               = var.create_nginx && var.create_ranger ? 1 : 0
 
+  provider            = azurerm.dns
   name                = var.ranger_service
   zone_name           = data.azurerm_dns_zone.default[0].name
   resource_group_name = var.dns_rg
@@ -59,6 +67,7 @@ resource "azurerm_dns_a_record" "ranger" {
 resource "azurerm_dns_a_record" "mc" {
   count               = var.create_nginx && var.create_mc ? 1 : 0
 
+  provider            = azurerm.dns
   name                = var.mc_service
   zone_name           = data.azurerm_dns_zone.default[0].name
   resource_group_name = var.dns_rg
@@ -70,6 +79,7 @@ resource "azurerm_dns_a_record" "mc" {
 resource "azurerm_dns_a_record" "cloudbeaver" {
   count               = var.create_nginx && var.create_cloudbeaver ? 1 : 0
 
+  provider            = azurerm.dns
   name                = var.cloudbeaver_service
   zone_name           = data.azurerm_dns_zone.default[0].name
   resource_group_name = var.dns_rg

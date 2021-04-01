@@ -2,6 +2,11 @@
 module dns {
     source                  = "../modules/azure-dns"
 
+    providers = {
+      azurerm = azurerm,
+      azurerm.dns = azurerm.dns
+    }
+
     resource_group          = azurerm_resource_group.default.name
     dns_rg                  = var.dns_rg
     location                = var.region

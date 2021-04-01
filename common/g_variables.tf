@@ -11,8 +11,8 @@ variable k8s_name {               default = "k8s"}
 variable k8s_version {            default = "1.18"}
 variable bucket_name {            default = "storage"}
 variable storage_location {       default = "US"}
-variable primary_node_pool {      default = "demobase"}
-variable worker_node_pool {       default = "demoworkers"}
+variable primary_node_pool {      default = "base"}
+variable worker_node_pool {       default = "worker"}
 variable primary_pool_size {      default = 1}
 variable worker_pool_min_size {   default = 1}
 variable worker_pool_max_size {   default = 10}
@@ -76,11 +76,11 @@ variable ex_hive_server_url {      default = ""}
 variable ex_vpc_id {               default=""}
 
 # Additional tags for resources
-variable ch_cloud { }
-variable ch_org { }
-variable ch_team { }
-variable ch_project { }
-variable ch_user {                default = "starburst"}
+variable cloud { }
+variable environment { }
+variable org { }
+variable team { }
+variable user { }
 
 # Harbor details
 variable repository { }

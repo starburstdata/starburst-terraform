@@ -65,6 +65,12 @@ module k8s {
 
     tags              = local.common_tags
 
+    # Node pool flags
+    use_ondemand      = var.use_ondemand
+    use_spot          = var.use_spot
+    node_taint_key    = var.node_taint_key
+    node_taint_value  = var.node_taint_value
+
     create_k8s        = var.create_k8s
 
     depends_on        = [module.vnet]
@@ -78,7 +84,7 @@ resource "null_resource" "configure_kubectl" {
   count           = var.create_k8s ? 1 : 0
 
   provisioner "local-exec" {
-    command = "az aks get-credentials --resource-group ${azurerm_resource_group.default.name} --name ${module.k8s.cluster_name} --overwrite-existing"
+    command = "az aks get-credentials --subscription ${var.subscription} --resource-group ${azurerm_resource_group.default.name} --name ${module.k8s.cluster_name} --overwrite-existing"
     interpreter = ["bash","-c"]
   }
 

@@ -2,23 +2,31 @@ terraform {
     required_providers {
         azurerm = {
             source = "hashicorp/azurerm"
-            version = ">= 2.50.0"
+            version = "= 2.50.0"
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"
-            version = ">= 2.0.2"
+            version = "= 2.0.2"
         }
-        helm        = ">= 2.0.2"
+        helm        = "= 2.0.2"
         postgresql = {
             source = "cyrilgdn/postgresql"
-            version = ">= 1.11.2"
+            version = "= 1.11.2"
         }
     }
 }        
 
-# Configure the Azure Provider
+# Configure the Azure Provider with your current default subscription
 provider "azurerm" {
   features {}
+}
+
+# Configure a second Azure Provider to match the subscription where your DNS zone is configured
+# Note that if the user doesn't set this, the current default subscription is used
+provider "azurerm" {
+    features {}
+    alias               = "dns"
+    subscription_id     = var.dns_sub != "" ? var.dns_sub : var.subscription
 }
 
 # Provider

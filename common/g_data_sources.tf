@@ -31,12 +31,12 @@ locals {
     operator_version    = var.operator_version  != null ? var.operator_version : var.repo_version
     
     common_tags = {
-        ch_cloud        = var.ch_cloud
-        ch_environment  = local.env
-        ch_org          = var.ch_org
-        ch_team         = var.ch_team
-        ch_project      = var.ch_project
-        ch_user         = var.ch_user
+        cloud           = var.cloud
+        environment     = var.environment
+        org             = var.org
+        team            = var.team
+        project         = local.env
+        user            = var.user
     }
 
     primary_node_tags = {

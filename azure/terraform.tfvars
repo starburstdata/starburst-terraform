@@ -3,10 +3,12 @@
 #       in this directory if it does not already exist
 
 # SB License and DNS zone
-sb_license      = "~/signed_trial.license"
+sb_license      = "~/Downloads/signed_trial.license"
 dns_zone        = "az.starburstdata.net"
 dns_rg          = "fieldeng" # The RG where the dns zone definition resides
+#dns_sub        = The subscription where the dns zone resides. set in sensitive.auto.tfvars or in environment variable: $TF_VAR_dns_sub
 region          = "East US"
+#subscription   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_subscription
 
 # email address for certs
 #email           = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_email
@@ -16,6 +18,8 @@ region          = "East US"
 # The admin user has acess to both Trino and Ranger. The regular users only have access to Trino
 # Use the admin user to set catalog and object permissions to the regular user in Ranger
 admin_user      = "sbadmin"
+reg_user1       = "engineer"
+reg_user2       = "analyst"
 
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
@@ -36,15 +40,16 @@ postgres_yaml_file  = "postgresql.yaml.tpl"
 cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
 
 # Resource tagging variables
-ch_cloud        = "azure"
-#ch_environment = automatically set to the Terraform workspace name
-ch_org          = "bizdev"
-ch_team         = "psa"
-ch_project      = "lab"
-#ch_user        = set your user identity. Can be any value you like. Defaults to "starburst"
+cloud        = "az"         # aws | gcp | az
+environment  = "demo"       # prod | dev | test | demo | debug
+org          = "partner"    # cs | sales | enablement | partner
+team         = "partner"    # tam |  cse | sa | partner
+#project     = automatically set to the Terraform workspace name
+#user        = set your user identity. Can be any value you like. Defaults to "starburst"
 
 # Infrastructure control
 create_rds      = true
+use_spot        = true
 
 # K8s applications control
 create_hive         = true

@@ -28,6 +28,7 @@ variable dns_zone { }
 variable service_type { }
 variable trino_template_file { }
 variable demo_db_name { }
+variable node_taint_key { }
 
 variable create_rds { }
 variable create_trino { }
@@ -66,6 +67,7 @@ locals {
         reg_pass1                   = var.reg_pass1
         reg_user2                   = var.reg_user2
         reg_pass2                   = var.reg_pass2
+        node_taint_key              = var.node_taint_key
     }
 
     trino_helm_chart_values = templatefile(

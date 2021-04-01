@@ -39,6 +39,11 @@ resource helm_release issuer {
 
   create_namespace = true
 
+  set {
+    name              = "nodeSelector\\.agentpool"
+    value             = var.primary_node_pool
+  }
+
   values = [local.certs_helm_chart_values]
 }
 
@@ -78,4 +83,10 @@ resource helm_release ingress {
   force_update = true
 
   cleanup_on_fail = true
+
+  set {
+    name              = "nodeSelector\\.agentpool"
+    value             = var.primary_node_pool
+  }
+
 }

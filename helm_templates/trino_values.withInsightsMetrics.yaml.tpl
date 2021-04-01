@@ -39,11 +39,11 @@ userDatabase:
 coordinator:
   resources:
     requests:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
     limits:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
   etcFiles:
     properties:
       config.properties: |
@@ -101,13 +101,17 @@ worker:
     maxReplicas: 10
   resources:
     requests:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
     limits:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
   nodeSelector:
     agentpool: ${worker_node_pool}
+  tolerations:
+    - key: "${node_taint_key}"
+      operator: "Exists"
+      effect: "NoSchedule"
 
 catalogs:
   tpcds: |
