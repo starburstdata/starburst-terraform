@@ -51,17 +51,28 @@ data "azurerm_kubernetes_cluster" "default" {
 }
 
 provider "kubernetes" {
-  host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-  client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
+  #host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
+  #config_path = "~/.kube/config"
+  #client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
+  #client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
+  #cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
+  host                   = module.k8s.endpoint
+  client_certificate     = base64decode(module.k8s.client_cert)
+  client_key             = base64decode(module.k8s.client_key)
+  cluster_ca_certificate = base64decode(module.k8s.ca_cert)
+
 }
 
 provider helm {
     kubernetes {
-        host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-        client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-        client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-        cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
+        #host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
+        #config_path = "~/.kube/config"
+        #client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
+        #client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
+        #cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
+        host                   = module.k8s.endpoint
+        client_certificate     = base64decode(module.k8s.client_cert)
+        client_key             = base64decode(module.k8s.client_key)
+        cluster_ca_certificate = base64decode(module.k8s.ca_cert)
     }
 }
