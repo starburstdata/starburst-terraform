@@ -61,6 +61,7 @@ coordinator:
         insights.jdbc.url=jdbc:postgresql://${primary_ip_address}:${primary_db_port}/${primary_db_event_logger}
         insights.jdbc.user=${primary_db_user}
         insights.jdbc.password=${primary_db_password}
+        insights.authorized-users=${admin_user}
       access-control.properties: |
         access-control.name=ranger
         ranger.authentication-type=BASIC

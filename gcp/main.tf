@@ -43,6 +43,8 @@ module k8s {
 
   create_k8s            = var.create_k8s
 
+  tags                  = local.common_tags
+
   depends_on            = [module.vpc] 
 }
 

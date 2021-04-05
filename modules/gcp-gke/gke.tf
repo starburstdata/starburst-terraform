@@ -11,6 +11,7 @@ variable worker_pool_max_size { }
 variable preemptible { }
 variable vpc { }
 variable create_k8s { }
+variable tags { }
 
 # Create resources
 resource "google_container_cluster" "primary_gke" {
@@ -25,6 +26,8 @@ resource "google_container_cluster" "primary_gke" {
   remove_default_node_pool = true
   initial_node_count       = 1
   network                  = var.vpc
+  
+  resource_labels          = var.tags
   
   ip_allocation_policy {
   }

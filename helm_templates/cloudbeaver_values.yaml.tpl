@@ -56,8 +56,8 @@ ingress:
           servicePort: 8978
   tls:
     - secretName: tls-secret-cloudbeaver
-  #    hosts:
-  #      - chart-example.local
+      hosts:
+        - ${cloudbeaver_service_prefix}.${dns_zone}
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
