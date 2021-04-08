@@ -42,13 +42,15 @@ operator_yaml_file  = "operator_values.yaml.tpl"
 postgres_yaml_file  = "postgresql.yaml.tpl"
 cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
 
-# Resource tagging variables
-cloud        = "az"         # aws | gcp | az
-environment  = "demo"       # prod | dev | test | demo | debug
-org          = "partner"    # cs | sales | enablement | partner
-team         = "partner"    # tam |  cse | sa | partner
-#project     = automatically set to the Terraform workspace name
-#user        = set your user identity. Can be any value you like. Defaults to "starburst"
+# Optional tagging for cloud resources. Defined as a map of keys and values
+# Replace with your own keys and values, or delete this if not needed
+tags         = {cloud        = "aws",
+                environment  = "demo",
+                org          = "partner",
+                team         = "partner",
+                project      = "training",
+                user         = "dummyuser"
+                }
 
 # Custom delay for AWS
 wait_this_long  = "90s"

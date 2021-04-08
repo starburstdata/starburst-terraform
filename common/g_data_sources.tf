@@ -30,14 +30,7 @@ locals {
     mc_version          = var.mc_version        != null ? var.mc_version : var.repo_version
     operator_version    = var.operator_version  != null ? var.operator_version : var.repo_version
     
-    common_tags = {
-        cloud           = var.cloud
-        environment     = var.environment
-        org             = var.org
-        team            = var.team
-        project         = local.env
-        user            = var.user
-    }
+    common_tags = var.tags
 
     primary_node_tags = {
         agentpool       = var.primary_node_pool

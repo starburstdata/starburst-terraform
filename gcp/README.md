@@ -65,14 +65,8 @@ ___
 |  Parameter | Description | Required | Default |
 |---|---|---|---|
 | admin_user | Admin login credentials for Ranger | yes | sbadmin |
-| ch_cloud | Tag for cloud resource objects | no |  |
-| ch_environment | Tag for cloud resource objects | no |  |
-| ch_org | Tag for cloud resource objects | no |  |
-| ch_project | Tag for cloud resource objects | no |  |
-| ch_team | Tag for cloud resource objects | no |  |
-| ch_user | Tag for cloud resource objects | no |  |
 | create_bucket | Should the cloud storage bucket be created? | no | true |
-| create_cloudbeaver | Should CloudBeaver be deployed? (https://cloudbeaver.io/) | no | true
+| create_cloudbeaver | Should CloudBeaver be deployed? (https://cloudbeaver.io/) | no | true |
 | create_hive | Should the Hive server resource be deployed? | no | true |
 | create_k8s | Should the cloud K8s cluster be created? | no | true |
 | create_mc | Should Mission Control be deployed? | no | true |
@@ -85,6 +79,8 @@ ___
 | dns_zone | The DNS zone to deploy applications to | no |  |
 | dns_zone_name | the DNS name in GCP | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
+| ex_hive_server_url | An existing Hive Server to point your configuration to? | no |  |
+| ex_vpc_id | An existing VPC to deploy into | no |  |
 | preemptible | Should the worker nodes use preemtible VMs? | no | true |
 | primary_node_type | The VM machine type in the primary pool | no | e2-standard-8 |
 | primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
@@ -100,9 +96,12 @@ ___
 | sa_name | The Google Service Account name | yes |  |
 | sb_license | The Starburst license file | yes |  |
 | starburst_version | The version of Starburst that Mission Control will deploy | yes | 354-e |
+| tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
 | wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
 | worker_node_type | The VM machine type in the worker pool | no | e2-standard-4 |
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
+| worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
+| worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 | worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 | zone | the GCP zone within the region | yes |  |
 ___

@@ -39,26 +39,29 @@ operator_yaml_file  = "operator_values.yaml.tpl"
 postgres_yaml_file  = "postgresql.yaml.tpl"
 cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
 
-# Resource tagging variables
-cloud        = "az"         # aws | gcp | az
-environment  = "demo"       # prod | dev | test | demo | debug
-org          = "partner"    # cs | sales | enablement | partner
-team         = "partner"    # tam |  cse | sa | partner
-#project     = automatically set to the Terraform workspace name
-#user        = set your user identity. Can be any value you like. Defaults to "starburst"
+# Optional tagging for cloud resources. Defined as a map of keys and values
+# Replace with your own keys and values, or delete this if not needed
+tags         = {cloud        = "az",
+                environment  = "demo",
+                org          = "partner",
+                team         = "partner",
+                project      = "training",
+                user         = "dummyuser"
+                }
+
+# Worker Pool autoscaling limits
+worker_autoscaling_min_size    = 2
+worker_autoscaling_max_size    = 20
 
 # Infrastructure control
 create_rds      = true
-use_spot        = true
+use_spot        = true  # If set, a dedicated SPOT node pool will be created. 
 
 # K8s applications control
 create_hive         = true
 create_mc           = false
 create_ranger       = true
 create_trino        = true
-create_cloudbeaver  = true
+create_cloudbeaver  = false
 
-create_nginx        = true
-
-# Debug flag
-debug_this      = false
+create_nginx        = false

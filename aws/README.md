@@ -48,15 +48,9 @@ ___
 |  Parameter | Description | Required | Default |
 |---|---|---|---|
 | admin_user | Admin login credentials for Ranger | yes | sbadmin |
-| capacity_type | EC2 type in the worker node pool: can select either `SPOT` or `ON_DEMAND` depending on preference | no | `SPOT`
-| ch_cloud | Tag for cloud resource objects | no |  |
-| ch_environment | Tag for cloud resource objects | no |  |
-| ch_org | Tag for cloud resource objects | no |  |
-| ch_project | Tag for cloud resource objects | no |  |
-| ch_team | Tag for cloud resource objects | no |  |
-| ch_user | Tag for cloud resource objects | no |  |
+| capacity_type | EC2 type in the worker node pool: can select either `SPOT` or `ON_DEMAND` depending on preference | no | SPOT |
 | create_bucket | Should the cloud storage bucket be created? | no | true |
-| create_cloudbeaver | Should CloudBeaver be deployed? (https://cloudbeaver.io/) | no | true
+| create_cloudbeaver | Should CloudBeaver be deployed? (https://cloudbeaver.io/) | no | true |
 | create_hive | Should the Hive server resource be deployed? | no | true |
 | create_k8s | Should the cloud K8s cluster be created? | no | true |
 | create_mc | Should Mission Control be deployed? | no | true |
@@ -67,6 +61,8 @@ ___
 | create_vpc | Should the cloud vpc/vnet be created? | no | true |
 | dns_zone | The DNS zone to deploy applications to | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
+| ex_hive_server_url | An existing Hive Server to point your configuration to? | no |  |
+| ex_vpc_id | An existing VPC to deploy into | no |  |
 | map_roles | Additional IAM role to attach to the EKS cluster, to allow others access to the resource in AWS | no |  |
 | primary_node_type | The EC2 machine type in the primary pool | no | m5.2xlarge |
 | primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
@@ -81,8 +77,11 @@ ___
 | s3_role | S3 permission role which will be attached to the EKS nodes to allow S3 access to these nodes. With the role in place, you do not need to set up S3 access via IAM keys in the Starburst-Hive yaml. | no |  |
 | sb_license | The Starburst license file | yes | N/A |
 | starburst_version | The version of Starburst that Mission Control will deploy | yes | 354-e |
+| tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
 | wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
-| worker_node_type | The Ec2 machine type in the worker pool | no | m5.xlarge |
+| worker_autoscaling_max_size | Maximum size of the Starburst worker replicas. Value corresponds to `maxReplicas` in yaml | no | 10 |
+| worker_autoscaling_min_size | Minimum size of the Starburst worker replicas. Value corresponds to `minReplicas` in yaml | no | 1 |
+| worker_node_type | The EC2 machine type in the worker pool | no | m5.xlarge |
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
 | worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 | zone | the AWS zone within the region | yes |  |
@@ -147,3 +146,4 @@ ___
 | ex_insights_db | Insights database name (usually `event_logger`) | no |  |
 | ex_insights_db_user | User that can connect to the Starburst Insights Database | no |  |
 | ex_insights_db_password | Password for the `ex_insights_db_user` | no |  |
+___

@@ -78,11 +78,7 @@ variable ex_hive_server_url {      default = ""}
 variable ex_vpc_id {               default=""}
 
 # Additional tags for resources
-variable cloud { }
-variable environment { }
-variable org { }
-variable team { }
-variable user { }
+variable tags {                    default={manager = "starburst-terraform"}}
 
 # Harbor details
 variable repository { }
