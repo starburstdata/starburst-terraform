@@ -13,6 +13,8 @@ variable primary_db_user { }
 variable primary_user_password { }
 variable primary_node_pool { }
 variable worker_node_pool { }
+variable worker_autoscaling_min_size { }
+variable worker_autoscaling_max_size { }
 variable admin_user { }
 variable admin_pass { }
 variable reg_user1 { }
@@ -60,6 +62,8 @@ locals {
         demo_db_name                = var.demo_db_name
         primary_node_pool           = var.primary_node_pool
         worker_node_pool            = var.worker_node_pool
+        worker_autoscaling_min_size = var.worker_autoscaling_min_size
+        worker_autoscaling_max_size = var.worker_autoscaling_max_size
         service_type                = var.service_type
         admin_user                  = var.admin_user
         admin_pass                  = var.admin_pass
@@ -112,7 +116,7 @@ resource "helm_release" "trino" {
     values = [local.trino_helm_chart_values]
 
     set {
-      name = "nodeSelector\\.agentpool"
+      name = "nodeSelector\\.starburstpool"
       value = var.primary_node_pool
       type = "string"
     }

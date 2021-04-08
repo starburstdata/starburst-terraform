@@ -19,6 +19,8 @@ terraform {
 # Configure the Azure Provider with your current default subscription
 provider "azurerm" {
   features {}
+  # For usage attribution tracking
+  partner_id          = var.partner_id
 }
 
 # Configure a second Azure Provider to match the subscription where your DNS zone is configured
@@ -27,6 +29,8 @@ provider "azurerm" {
     features {}
     alias               = "dns"
     subscription_id     = var.dns_sub != "" ? var.dns_sub : var.subscription
+    # For usage attribution tracking
+    partner_id          = var.partner_id
 }
 
 # Provider

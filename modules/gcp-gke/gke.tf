@@ -58,7 +58,7 @@ resource "google_container_node_pool" "primary_nodes" {
         }
 
         labels = {
-            agentpool = var.primary_node_pool
+            starburstpool = var.primary_node_pool
         }
 
         oauth_scopes = [
@@ -89,7 +89,7 @@ resource "google_container_node_pool" "worker_nodes" {
         }
 
         labels = {
-            agentpool = var.worker_node_pool
+            starburstpool = var.worker_node_pool
         }
 
         oauth_scopes = [

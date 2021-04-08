@@ -34,7 +34,7 @@ resource "helm_release" "postgresql" {
     values          = [local.postgres_helm_chart_values]
 
     set {
-        name        = "nodeSelector\\.agentpool"
+        name        = "nodeSelector\\.starburstpool"
         value       = var.primary_node_pool
         type        = "string"
     }

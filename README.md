@@ -48,7 +48,8 @@ In addition, the user has the option to deploy these specific applications to th
 - Starburst (i.e. the Trino application)
 - Ranger
 - Mission Control
-- Nginx (if you need an https ingress for your applications)
+- [CloudBeaver](https://cloudbeaver.io/)
+- [Nginx](https://github.com/kubernetes/ingress-nginx) (if you need an https ingress for your applications)
 
 Lastly, the user has the option to point any of these components to an existing external database:
 

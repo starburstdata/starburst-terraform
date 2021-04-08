@@ -5,6 +5,7 @@ variable subscription { }
 variable dns_sub {                  default=""} # If left as the default empty string, then value of "subscription" is used
 variable rg_name {                  default="rg"}
 variable dns_rg { }
+variable partner_id {               default="eafd5cfa-bcd1-4d3e-98e0-f97508a02cae"}
 
 # AKS Node pools
 # Not mutually exclusive. If both are set to true, you will have 2 worker node pools. If both are set to false,

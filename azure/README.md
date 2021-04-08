@@ -66,6 +66,14 @@ To delete all resources created in this deployment:
 terraform destroy
 ```
 
+## Important Info
+AKS authentication tokens expire after an hour, so if you are attempting to tear down the infrastructure or apply any changes to it after a prolonged period of time, run:
+```
+terraform apply -target=module.k8s
+```
+to refresh the token beforehand.
+
+
 ___
 ## Input Parameters
 |  Parameter | Description | Required | Default |

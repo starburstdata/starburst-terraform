@@ -79,7 +79,7 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector:
-  agentpool: ${primary_node_pool}
+  starburstpool: ${primary_node_pool}
 
 tolerations: []
 

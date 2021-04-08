@@ -46,7 +46,7 @@ module k8s {
   #     name                          = var.primary_node_pool
   #     instance_type                 = var.primary_node_type
   #     asg_max_size                  = var.primary_pool_size
-  #     kubelet_extra_args            = "--node-labels=agentpool=${var.primary_node_pool}"
+  #     kubelet_extra_args            = "--node-labels=starburstpool=${var.primary_node_pool}"
   #     suspended_processes           = ["AZRebalance"]
   #   },
   #   {
@@ -54,23 +54,23 @@ module k8s {
   #     instance_type                 = var.worker_node_type
   #     asg_min_size                  = var.worker_pool_min_size
   #     asg_max_size                  = var.worker_pool_max_size
-  #     kubelet_extra_args            = "--node-labels=agentpool=${var.worker_node_pool}"
+  #     kubelet_extra_args            = "--node-labels=starburstpool=${var.worker_node_pool}"
   #     suspended_processes           = ["AZRebalance"]
   #   }
   # ]
 
   node_groups = {
-    demobase = {
+    (var.primary_node_pool) = {
       desired_capacity = var.primary_pool_size
       max_capacity     = var.primary_pool_size
       min_capacity     = var.primary_pool_size
 
       instance_types = [var.primary_node_type]
       k8s_labels = {
-        agentpool = var.primary_node_pool
+        starburstpool = var.primary_node_pool
       }
     },
-    demoworkers = {
+    (var.worker_node_pool) = {
       desired_capacity = var.worker_pool_min_size
       max_capacity     = var.worker_pool_max_size
       min_capacity     = var.worker_pool_min_size
@@ -78,7 +78,7 @@ module k8s {
       instance_types = [var.worker_node_type]
       capacity_type  = var.capacity_type
       k8s_labels = {
-        agentpool = var.worker_node_pool
+        starburstpool = var.worker_node_pool
       }
       additional_tags = {
         ExtraTag = "example"

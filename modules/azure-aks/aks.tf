@@ -28,10 +28,13 @@ resource "azurerm_kubernetes_cluster" "default" {
     dns_prefix          = var.dns_prefix
 
     default_node_pool {
-        name            = var.primary_node_pool
-        node_count      = var.primary_pool_size
-        vm_size         = var.primary_node_vm
-        vnet_subnet_id  = var.subnet_id
+        name                = var.primary_node_pool
+        node_count          = var.primary_pool_size
+        vm_size             = var.primary_node_vm
+        vnet_subnet_id      = var.subnet_id
+        node_labels = {
+            "starburstpool" = var.primary_node_pool
+        }
     }
 
     identity {
@@ -51,6 +54,10 @@ resource "azurerm_kubernetes_cluster_node_pool" "workerOnDemand" {
     enable_auto_scaling   = true
 
     vnet_subnet_id        = var.subnet_id
+
+    node_labels = {
+        "starburstpool"      = var.worker_node_pool
+    }
 
     node_count            = var.worker_pool_min_size
     max_count             = var.worker_pool_max_size
@@ -73,7 +80,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "workerSpot" {
     eviction_policy       = "Delete"
     spot_max_price        = -1 # i.e. the current on-demand price
     node_labels = {
-        "agentpool"             = var.worker_node_pool,
+        "starburstpool"             = var.worker_node_pool,
         (var.node_taint_key) = var.node_taint_value
     }
     node_taints = [

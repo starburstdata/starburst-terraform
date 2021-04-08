@@ -78,7 +78,7 @@ coordinator:
       password-authenticator.properties: |
         password-authenticator.name=file
   nodeSelector:
-    agentpool: ${primary_node_pool}
+    starburstpool: ${primary_node_pool}
 
 worker:
   etcFiles:
@@ -98,8 +98,8 @@ worker:
         jdbc.password=${primary_db_password}
   autoscaling:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
+    minReplicas: ${worker_autoscaling_min_size}
+    maxReplicas: ${worker_autoscaling_max_size}
   resources:
     requests:
       memory: "12Gi"
@@ -108,7 +108,7 @@ worker:
       memory: "12Gi"
       cpu: 2
   nodeSelector:
-    agentpool: ${worker_node_pool}
+    starburstpool: ${worker_node_pool}
   tolerations:
     - key: "${node_taint_key}"
       operator: "Exists"

@@ -101,7 +101,7 @@ resource "helm_release" "starburst-operator" {
     values              = [local.starburst_operator_values]
 
     set {
-      name              = "nodeSelector\\.agentpool"
+      name              = "nodeSelector\\.starburstpool"
       value             = var.primary_node_pool
       type              = "string"
     }
@@ -125,7 +125,7 @@ resource "helm_release" "starburst-mission-control" {
     values              = [local.mc_chart_values]
 
     set {
-      name              = "nodeSelector\\.agentpool"
+      name              = "nodeSelector\\.starburstpool"
       value             = var.primary_node_pool
       type              = "string"
     }

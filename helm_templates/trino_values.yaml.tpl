@@ -58,7 +58,7 @@ coordinator:
         ranger.presto-plugin-password=${admin_pass}
         ranger.policy-refresh-interval=10s
   nodeSelector:
-    agentpool: ${primary_node_pool}
+    starburstpool: ${primary_node_pool}
 
 worker:
   etcFiles:
@@ -73,8 +73,8 @@ worker:
         ranger.policy-refresh-interval=10s
   autoscaling:
     enabled: true
-    minReplicas: 1
-    maxReplicas: 10
+    minReplicas: ${worker_autoscaling_min_size}
+    maxReplicas: ${worker_autoscaling_max_size}
   resources:
     requests:
       memory: "10Gi"
@@ -83,7 +83,7 @@ worker:
       memory: "10Gi"
       cpu: 1
   nodeSelector:
-    agentpool: ${worker_node_pool}
+    starburstpool: ${worker_node_pool}
 
 catalogs:
   tpcds: |

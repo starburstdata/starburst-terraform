@@ -25,4 +25,4 @@ spec:
           podTemplate:
             spec:
               nodeSelector:
-                "agentpool": {{ .Values.certs.primaryNodePool }}
+                "starburstpool": {{ .Values.certs.primaryNodePool }}

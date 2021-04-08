@@ -234,6 +234,10 @@ module trino {
     primary_node_pool       = var.primary_node_pool
     worker_node_pool        = var.worker_node_pool
 
+    # Worker pool autoscaling
+    worker_autoscaling_min_size    = var.worker_autoscaling_min_size
+    worker_autoscaling_max_size    = var.worker_autoscaling_max_size
+
     # Node taint for spot/preemptible
     node_taint_key          = var.node_taint_key
 

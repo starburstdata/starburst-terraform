@@ -117,7 +117,7 @@ resource "helm_release" "hive" {
     values              = [local.hive_helm_chart_values]
 
     set {
-      name              = "nodeSelector\\.agentpool"
+      name              = "nodeSelector\\.starburstpool"
       value             = var.primary_node_pool
       type              = "string"
     }
