@@ -8,7 +8,8 @@ variable worker_node_vm { }
 variable primary_pool_size { }
 variable worker_pool_min_size { }
 variable worker_pool_max_size { }
-variable preemptible { }
+variable use_ondemand { }
+variable use_preemptible { }
 variable vpc { }
 variable create_k8s { }
 variable tags { }
@@ -67,8 +68,8 @@ resource "google_container_node_pool" "primary_nodes" {
     }
 }
 
-resource "google_container_node_pool" "worker_nodes" {
-  count    = var.create_k8s ? 1 : 0
+resource "google_container_node_pool" "workers_ondemand" {
+  count    = var.create_k8s && var.use_ondemand ? 1 : 0
   
   name               = var.worker_node_pool
   location           = var.location
@@ -81,7 +82,6 @@ resource "google_container_node_pool" "worker_nodes" {
     }
 
     node_config {
-        preemptible  = var.preemptible # true or false
         machine_type = var.worker_node_vm
 
         metadata = {
@@ -98,6 +98,36 @@ resource "google_container_node_pool" "worker_nodes" {
     }
 }
 
+resource "google_container_node_pool" "workers_preemptible" {
+  count    = var.create_k8s && var.use_preemptible ? 1 : 0
+  
+  name               = "${var.worker_node_pool}prmt"
+  location           = var.location
+  cluster            = google_container_cluster.primary_gke[0].name
+  initial_node_count = var.worker_pool_min_size
+
+    autoscaling {
+        min_node_count = var.worker_pool_min_size
+        max_node_count = var.worker_pool_max_size
+    }
+
+    node_config {
+        preemptible  = var.use_preemptible # true or false
+        machine_type = var.worker_node_vm
+
+        metadata = {
+            disable-legacy-endpoints = "true"
+        }
+
+        labels = {
+            starburstpool = var.worker_node_pool
+        }
+
+        oauth_scopes = [
+            "https://www.googleapis.com/auth/cloud-platform"
+        ]
+    }
+}
 
 # Outputs
 output name {

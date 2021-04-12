@@ -5,7 +5,7 @@
 # GCP Cloud credentials, Service Account Name, Project and DNS zone
 project         = "cogent-summer-299514"
 credentials     = "~/key.json"
-sb_license      = "~/signed_trial.license"
+sb_license      = "~/Downloads/signed_trial.license"
 sa_name         = "partner-demo"
 dns_zone        = "gcp.starburstdata.net"
 dns_zone_name   = "gcp"
@@ -32,16 +32,6 @@ registry        = "harbor.starburstdata.net/starburstdata"
 repo_version        = "354.0.0"
 starburst_version   = "354-e"
 
-# Yaml files for Helm deployments. Terraform logic will deal with situations where more than one
-# yaml file has been specified - as is the case with Trino below
-hive_yaml_file          = "hms_values.yaml.tpl"
-trino_yaml_file         = ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"]
-ranger_yaml_file        = "ranger_values.yaml.tpl"
-mc_yaml_file            = "mission_control.yaml.tpl"
-operator_yaml_file      = "operator_values.yaml.tpl"
-postgres_yaml_file      = "postgresql.yaml.tpl"
-cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
-
 # Optional tagging for cloud resources. Defined as a map of keys and values
 # Replace with your own keys and values, or delete this if not needed
 tags         = {cloud        = "gcp",
@@ -49,11 +39,12 @@ tags         = {cloud        = "gcp",
                 org          = "partner",
                 team         = "partner",
                 project      = "training",
-                user         = "dummyuser"
+                user         = "starburst"
                 }
 
 # Infrastructure control
 create_rds          = true
+use_ondemand        = false # If set, a dedicated ON_DEMAND node pool will be created
 
 # K8s applications control
 create_hive         = true

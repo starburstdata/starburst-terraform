@@ -17,12 +17,19 @@ locals {
     cloudbeaver_service = "${var.prefix}-${local.env}-${var.cloudbeaver_service}-${random_id.deployment.hex}"
 
     hive_yaml_file      = var.hive_yaml_file
-    trino_yaml_file     = var.create_rds == false && var.ex_insights_instance == "" ? var.trino_yaml_file[0] : var.trino_yaml_file[1]
+    #trino_yaml_file     = var.create_rds == false && var.ex_insights_instance == "" ? var.trino_yaml_file[0] : var.trino_yaml_file[1]
     ranger_yaml_file    = var.ranger_yaml_file
     mc_yaml_file        = var.mc_yaml_file
     operator_yaml_file  = var.operator_yaml_file
     postgres_yaml_file  = var.postgres_yaml_file
     cloudbeaver_yaml_file  = var.cloudbeaver_yaml_file
+
+    trino_yaml_files    = compact(["${path.root}/../helm_templates/trino_values.01.base.tpl",
+                            "${path.root}/../helm_templates/trino_values.02.auth.tpl",
+                            var.create_ranger ? "" : "${path.root}/../helm_templates/trino_values.03.ranger.tpl",
+                            var.create_rds == false && var.ex_insights_instance == "" ? "" : "${path.root}/../helm_templates/trino_values.04.insights.tpl",
+                            "${path.root}/../helm_templates/trino_values.05.catalogs.tpl",
+                            var.custom_trino_yaml_file])
 
     hms_version         = var.hms_version       != null ? var.hms_version : var.repo_version
     sb_version          = var.sb_version        != null ? var.sb_version : var.repo_version

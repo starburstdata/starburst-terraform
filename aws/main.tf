@@ -80,9 +80,6 @@ module k8s {
       k8s_labels = {
         starburstpool = var.worker_node_pool
       }
-      additional_tags = {
-        ExtraTag = "example"
-      }
     }
 
   }

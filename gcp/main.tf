@@ -38,7 +38,8 @@ module k8s {
   primary_pool_size     = var.primary_pool_size
   worker_pool_min_size  = var.worker_pool_min_size
   worker_pool_max_size  = var.worker_pool_max_size
-  preemptible           = var.preemptible
+  use_ondemand          = var.use_ondemand
+  use_preemptible       = var.use_preemptible
   vpc                   = module.vpc.vpc_name
 
   create_k8s            = var.create_k8s

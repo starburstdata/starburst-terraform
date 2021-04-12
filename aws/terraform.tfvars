@@ -32,16 +32,6 @@ registry        = "harbor.starburstdata.net/starburstdata"
 repo_version        = "354.0.0" # For Trino, Ranger & Hive
 starburst_version   = "354-e" # For Mission Control & starburst Operator
 
-# Yaml files for Helm deployments. Terraform logic will deal with situations where more than one
-# yaml file has been specified - as is the case with Trino below
-hive_yaml_file      = "hms_values.yaml.tpl"
-trino_yaml_file     = ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"]
-ranger_yaml_file    = "ranger_values.yaml.tpl"
-mc_yaml_file        = "mission_control.yaml.tpl"
-operator_yaml_file  = "operator_values.yaml.tpl"
-postgres_yaml_file  = "postgresql.yaml.tpl"
-cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
-
 # Optional tagging for cloud resources. Defined as a map of keys and values
 # Replace with your own keys and values, or delete this if not needed
 tags         = {cloud        = "aws",
@@ -49,14 +39,11 @@ tags         = {cloud        = "aws",
                 org          = "partner",
                 team         = "partner",
                 project      = "training",
-                user         = "dummyuser"
+                user         = "starburst"
                 }
 
 # Custom delay for AWS
 wait_this_long  = "90s"
-
-# Infra overrides - need to set corresponding create_* value to false for this to work correctly
-ex_vpc_id       = "vpc-d823bca2"
 
 # Infrastructure control
 create_rds      = true

@@ -81,7 +81,6 @@ ___
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | ex_hive_server_url | An existing Hive Server to point your configuration to? | no |  |
 | ex_vpc_id | An existing VPC to deploy into | no |  |
-| preemptible | Should the worker nodes use preemtible VMs? | no | true |
 | primary_node_type | The VM machine type in the primary pool | no | e2-standard-8 |
 | primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
 | project | The GCP Project | yes |  |
@@ -97,6 +96,8 @@ ___
 | sb_license | The Starburst license file | yes |  |
 | starburst_version | The version of Starburst that Mission Control will deploy | yes | 354-e |
 | tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
+| use_ondemand | Should Terraform provision a on-demand instance worker node pool? | no | true |
+| use_preemptible | Should Terraform provision a preemptible instance worker node pool? | no | true |
 | wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
 | worker_node_type | The VM machine type in the worker pool | no | e2-standard-4 |
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
@@ -109,11 +110,13 @@ ___
 |  Parameter | Description | Required | Default |
 |---|---|---|---|
 | hive_yaml_file | Default values.yaml for `starburst-hive` Helm chart | yes | hms_values.yaml.tpl |
-| trino_yaml_file | Default values.yaml for `starburst-enterprise` Helm chart. Note that there are two default files for this chart; one for when an external RDS is deployed and Insights metrics and event log data is being collected. The second, for when an RDS is not deployed and no event logging or insights metrics are being collected | yes | ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"] |
+| trino_yaml_files | Default values.yaml for `starburst-enterprise` Helm chart. Note that there are multiple yaml files for this chart, broken out by related components. The application determines which files to layer onto the deployment based on the user's configuration selection criteria. e.g. if Ranger is not being deployed, then `trino_values.03.ranger.tpl` will be omitted. Note: that each file's configuration is successively applied - meaning that values in the later files will overwrite the same value in the previous files. The full path to the file should be included with the name. | yes | ["trino_values.01.base.tpl", "trino_values.02.auth.tpl", "trino_values.03.ranger.tpl", "trino_values.04.insights.tpl", "trino_values.05.catalogs.tpl", `custom_trino_yaml_file`] |
 | ranger_yaml_file | Default values.yaml for `starburst-ranger` Helm chart | yes | ranger_values.yaml.tpl |
 | mc_yaml_file | Default values.yaml for `starburst-mission-control` Helm chart | yes | mission_control.yaml.tpl |
-| operator_yaml_file | Default values.yaml for `starburst-enterprise-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
+| operator_yaml_file | Default values.yaml for `starburst-presto-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
 | postgres_yaml_file | Default values.yaml for Bitnami `postgresql` Helm chart | yes | postgresql.yaml.tpl |
+| cloudbeaver_values.yaml.tpl | Default values.yaml for `CloudBeaver` Helm chart | yes | cloudbeaver_values.yaml.tpl |
+| custom_trino_yaml_file | An optional user-defined yaml file for the Starburst-Enterprise deployment. Use this to override any of the default cluster configuration or to add additional data catalogs for your environment | no |  |
 ___
 
 ## Object Storage parameters for Hive

@@ -40,6 +40,8 @@ data "google_container_cluster" "my_cluster" {
   name     = module.k8s.name
   location = var.zone
   project  = var.project
+
+  depends_on = [module.k8s]
 }
 
 provider "kubernetes" {

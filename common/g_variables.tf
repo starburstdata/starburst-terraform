@@ -31,13 +31,14 @@ variable expose_ranger_name {     default = "ranger"}
 variable expose_mc_name {         default = "starburst-mission-control"}
 variable expose_cloudbeaver_name {default = "cloudbeaver"}
 variable wait_this_long {         default = "60s"} # default wait time to use when waiting on resources 
-variable hive_yaml_file { }
-variable trino_yaml_file { }
-variable ranger_yaml_file { }
-variable mc_yaml_file { }
-variable operator_yaml_file { }
-variable postgres_yaml_file { }
-variable cloudbeaver_yaml_file { }
+variable hive_yaml_file {           default = "hms_values.yaml.tpl"}
+variable trino_yaml_file {          default = ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"]}
+variable ranger_yaml_file {         default = "ranger_values.yaml.tpl"}
+variable mc_yaml_file {             default = "mission_control.yaml.tpl"}
+variable operator_yaml_file {       default = "operator_values.yaml.tpl"}
+variable postgres_yaml_file {       default = "postgresql.yaml.tpl"}
+variable cloudbeaver_yaml_file {    default = "cloudbeaver_values.yaml.tpl"}
+variable custom_trino_yaml_file {   default = ""}
 
 # External Hive RDS
 variable ex_hive_instance {       default = ""} # If this value is set, a database for Hive WILL NOT be created
@@ -76,6 +77,12 @@ variable ex_hive_server_url {      default = ""}
 
 # External VPC/VNET
 variable ex_vpc_id {               default=""}
+
+# AKS Node pools
+# Not mutually exclusive. If both are set to true, you will have 2 worker node pools. If both are set to false,
+# you won't have any worker pools
+variable use_ondemand {             default=true}
+variable use_spot {                 default=false}
 
 # Additional tags for resources
 variable tags {                    default={manager = "starburst-terraform"}}

@@ -202,7 +202,7 @@ module trino {
     primary_user_password   = var.ex_insights_instance != "" ? var.ex_insights_db_password : module.db.primary_db_password
     primary_db_event_logger = var.ex_insights_instance != "" ? var.ex_insights_db : "event_logger"
     primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
-    trino_template_file     = "${path.root}/../helm_templates/${local.trino_yaml_file}"
+    trino_yaml_files        = local.trino_yaml_files
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
     # Demo DB name

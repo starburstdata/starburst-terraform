@@ -29,16 +29,6 @@ registry        = "harbor.starburstdata.net/starburstdata"
 repo_version        = "354.0.0"
 starburst_version   = "354-e"
 
-# Yaml files for Helm deployments. Terraform logic will deal with situations where more than one
-# yaml file has been specified - as is the case with Trino below
-hive_yaml_file      = "hms_values.yaml.tpl"
-trino_yaml_file     = ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"]
-ranger_yaml_file    = "ranger_values.yaml.tpl"
-mc_yaml_file        = "mission_control.yaml.tpl"
-operator_yaml_file  = "operator_values.yaml.tpl"
-postgres_yaml_file  = "postgresql.yaml.tpl"
-cloudbeaver_yaml_file   = "cloudbeaver_values.yaml.tpl"
-
 # Optional tagging for cloud resources. Defined as a map of keys and values
 # Replace with your own keys and values, or delete this if not needed
 tags         = {cloud        = "az",
@@ -46,22 +36,19 @@ tags         = {cloud        = "az",
                 org          = "partner",
                 team         = "partner",
                 project      = "training",
-                user         = "dummyuser"
+                user         = "starburst"
                 }
-
-# Worker Pool autoscaling limits
-worker_autoscaling_min_size    = 2
-worker_autoscaling_max_size    = 20
 
 # Infrastructure control
 create_rds      = true
-use_spot        = true  # If set, a dedicated SPOT node pool will be created. 
+use_spot        = true  # If set, a dedicated SPOT node pool will be created.
+use_ondemand    = false # If set, a dedicated ON_DEMAND node pool will be created
 
 # K8s applications control
 create_hive         = true
 create_mc           = false
 create_ranger       = true
 create_trino        = true
-create_cloudbeaver  = false
+create_cloudbeaver  = true
 
-create_nginx        = false
+create_nginx        = true

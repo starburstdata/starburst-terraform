@@ -14,7 +14,7 @@ resource "google_compute_network" "vpc" {
 resource "google_compute_firewall" "allow_ssh" {
   count                   = var.create_vpc ? 1 : 0
 
-  name        = "allow-ssh"
+  name        = "${var.vpc_name}-allow-ssh"
   network     = google_compute_network.vpc[0].name
   direction   = "INGRESS"
   allow {
@@ -27,7 +27,7 @@ resource "google_compute_firewall" "allow_ssh" {
 resource "google_compute_global_address" "private_ip_address" {
   count                   = var.create_vpc ? 1 : 0
 
-  name          = "private-ip-address"
+  name          = "${var.vpc_name}-private-ip-address"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   ip_version    = "IPV4"

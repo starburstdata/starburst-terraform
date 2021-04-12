@@ -26,17 +26,14 @@ expose:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: ${secret_key_ref}
 
-userDatabase:
-  enabled: false
-
 coordinator:
   resources:
     requests:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
     limits:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
   etcFiles:
     properties:
       config.properties: |
@@ -49,49 +46,26 @@ coordinator:
         http-server.authentication.allow-insecure-over-http=true
         web-ui.enabled=true
         http-server.process-forwarded=true
-      access-control.properties: |
-        access-control.name=ranger
-        ranger.authentication-type=BASIC
-        ranger.policy-rest-url=http://${expose_ranger_name}:6080
-        ranger.service-name=starburst-enterprise
-        ranger.presto-plugin-username=${admin_user}
-        ranger.presto-plugin-password=${admin_pass}
-        ranger.policy-refresh-interval=10s
   nodeSelector:
     starburstpool: ${primary_node_pool}
 
 worker:
   etcFiles:
     properties:
-      access-control.properties: |
-        access-control.name=ranger
-        ranger.authentication-type=BASIC
-        ranger.policy-rest-url=http://${expose_ranger_name}:6080
-        ranger.service-name=starburst-enterprise
-        ranger.presto-plugin-username=${admin_user}
-        ranger.presto-plugin-password=${admin_pass}
-        ranger.policy-refresh-interval=10s
   autoscaling:
     enabled: true
     minReplicas: ${worker_autoscaling_min_size}
     maxReplicas: ${worker_autoscaling_max_size}
   resources:
     requests:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
     limits:
-      memory: "10Gi"
-      cpu: 1
+      memory: "12Gi"
+      cpu: 2
   nodeSelector:
     starburstpool: ${worker_node_pool}
-
-catalogs:
-  tpcds: |
-    connector.name=tpcds
-  jmx: |
-    connector.name=jmx
-  hive: |
-    connector.name=hive-hadoop2
-    hive.allow-drop-table=true
-    hive.metastore.uri=${hive_service_url}
-
+  tolerations:
+    - key: "${node_taint_key}"
+      operator: "Exists"
+      effect: "NoSchedule"

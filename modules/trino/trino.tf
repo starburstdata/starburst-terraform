@@ -28,7 +28,9 @@ variable expose_sb_name { }
 variable expose_ranger_name { }
 variable dns_zone { }
 variable service_type { }
-variable trino_template_file { }
+variable trino_yaml_files {
+    type    = list(string)
+    }
 variable demo_db_name { }
 variable node_taint_key { }
 
@@ -74,11 +76,15 @@ locals {
         node_taint_key              = var.node_taint_key
     }
 
-    trino_helm_chart_values = templatefile(
-        var.trino_template_file,
-        local.trino_template_vars
-    )
+#    trino_helm_chart_values = templatefile(
+#        var.trino_template_file,
+#        local.trino_template_vars
+#    )
 
+    trino_helm_chart_values = [for n in var.trino_yaml_files : templatefile(
+                    n,
+                    local.trino_template_vars)]
+    
 }
 
 # Create the event_logger DB
@@ -113,7 +119,9 @@ resource "helm_release" "trino" {
     chart   = "starburst-enterprise"
     version = var.repo_version
 
-    values = [local.trino_helm_chart_values]
+    values = local.trino_helm_chart_values
+
+    timeout = 600
 
     set {
       name = "nodeSelector\\.starburstpool"

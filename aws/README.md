@@ -90,11 +90,13 @@ ___
 |  Parameter | Description | Required | Default |
 |---|---|---|---|
 | hive_yaml_file | Default values.yaml for `starburst-hive` Helm chart | yes | hms_values.yaml.tpl |
-| trino_yaml_file | Default values.yaml for `starburst-enterprise` Helm chart. Note that there are two default files for this chart; one for when an external RDS is deployed and Insights metrics and event log data is being collected. The second, for when an RDS is not deployed and no event logging or insights metrics are being collected | yes | ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"] |
+| trino_yaml_files | Default values.yaml for `starburst-enterprise` Helm chart. Note that there are multiple yaml files for this chart, broken out by related components. The application determines which files to layer onto the deployment based on the user's configuration selection criteria. e.g. if Ranger is not being deployed, then `trino_values.03.ranger.tpl` will be omitted. Note: that each file's configuration is successively applied - meaning that values in the later files will overwrite the same value in the previous files. The full path to the file should be included with the name. | yes | ["trino_values.01.base.tpl", "trino_values.02.auth.tpl", "trino_values.03.ranger.tpl", "trino_values.04.insights.tpl", "trino_values.05.catalogs.tpl", `custom_trino_yaml_file`] |
 | ranger_yaml_file | Default values.yaml for `starburst-ranger` Helm chart | yes | ranger_values.yaml.tpl |
 | mc_yaml_file | Default values.yaml for `starburst-mission-control` Helm chart | yes | mission_control.yaml.tpl |
-| operator_yaml_file | Default values.yaml for `starburst-enterprise-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
+| operator_yaml_file | Default values.yaml for `starburst-presto-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
 | postgres_yaml_file | Default values.yaml for Bitnami `postgresql` Helm chart | yes | postgresql.yaml.tpl |
+| cloudbeaver_values.yaml.tpl | Default values.yaml for `CloudBeaver` Helm chart | yes | cloudbeaver_values.yaml.tpl |
+| custom_trino_yaml_file | An optional user-defined yaml file for the Starburst-Enterprise deployment. Use this to override any of the default cluster configuration or to add additional data catalogs for your environment | no |  |
 ___
 
 ## Object Storage parameters for Hive
