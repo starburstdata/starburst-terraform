@@ -14,7 +14,7 @@ Getting an environment up and running can be challenging. Successfully repeating
 
 The following components should be installed and pre-configured in your local environment:
 
-- [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+- [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli) **NOTE: Currently not compatible with Terraform v0.15**
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 - [gcloud cli](https://cloud.google.com/sdk/docs/install)
 - [azure cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)

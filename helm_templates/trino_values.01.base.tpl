@@ -56,6 +56,8 @@ worker:
     enabled: true
     minReplicas: ${worker_autoscaling_min_size}
     maxReplicas: ${worker_autoscaling_max_size}
+  deploymentTerminationGracePeriodSeconds: 60 # default is 300; it is actually how long the graceful shutdown waits after it receives the SIGTERM
+  prestoWorkerShutdownGracePeriodSeconds: 120 # default is 120
   resources:
     requests:
       memory: "12Gi"

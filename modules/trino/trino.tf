@@ -121,7 +121,7 @@ resource "helm_release" "trino" {
 
     values = local.trino_helm_chart_values
 
-    timeout = 600
+    timeout = 420
 
     set {
       name = "nodeSelector\\.starburstpool"
