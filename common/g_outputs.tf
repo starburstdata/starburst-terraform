@@ -7,16 +7,16 @@ locals {
 }
 
 output user-credentials {
-  value = list(
+  value = tolist([
     "user / pwd",
     "${var.admin_user} / ${random_string.admin_pass.result}",
     "${var.reg_user1} / ${random_string.user_pass1.result}",
     "${var.reg_user2} / ${random_string.user_pass2.result}"
-  )
+  ])
 }
 
 output postgres-details {
-  value = var.create_rds ? list(
+  value = var.create_rds ? tolist([
     "db_engine:version    = ${module.db.db_engine}:${module.db.db_version}",
     "db_local_address     = ${module.db.db_address}",
     "db_ingress           = ${module.db.db_ingress}",
@@ -25,15 +25,15 @@ output postgres-details {
     "primary_db_password  = ${module.db.primary_db_password}"
     #"ranger_db_user       = ${module.ranger.ranger_db_user}",
     #"ranger_db_password   = ${module.ranger.ranger_db_password}"
-  ) : ["No external RDS was specified in this deployment"]
+  ]) : ["No external RDS was specified in this deployment"]
 }
 
 output starburst-endpoints {
-  value = list(
+  value = tolist([
     var.create_trino ?        "starburst-trino      = ${local.trino_endpoint}" : "Starburst-trino not deployed",
     var.create_trino ?        "starburst-insights   = ${local.insights_endpoint}" : "Starburst-insights not deployed",
     var.create_ranger ?       "ranger               = ${local.ranger_endpoint}" : "Starburst-Ranger not deployed",
     var.create_mc ?           "Mission Control      = ${local.mc_endpoint}" : "Starburst-MissionControl not deployed",
     var.create_cloudbeaver ?  "CloudBeaver          = ${local.cloudbeaver_endpoint}" : "CloudBeaver not deployed"
-  )
+  ])
 }

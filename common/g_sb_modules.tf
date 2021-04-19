@@ -271,7 +271,7 @@ module cloudbeaver {
 
     cloudbeaver_service     = local.cloudbeaver_service
     cloudbeaver_yaml_file   = "${path.root}/../helm_templates/${local.cloudbeaver_yaml_file}"
-    service_type            = var.create_nginx ? "ClusterIP" : "loadBalancer"
+    service_type            = var.create_nginx ? "ClusterIP" : "LoadBalancer"
     enable_ingress          = var.create_nginx ? "true" : "false"
 
     # Expose this service name

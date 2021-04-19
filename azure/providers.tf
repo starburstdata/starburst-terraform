@@ -3,6 +3,7 @@ terraform {
         azurerm = {
             source = "hashicorp/azurerm"
             version = "= 2.50.0"
+            configuration_aliases = [ azurerm.dns ]
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"

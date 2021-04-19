@@ -7,7 +7,7 @@ variable primary_node_type {          default="e2-standard-8"}
 variable worker_node_type {           default="e2-standard-4"}
 
 # Preemtible flag for worker nodes
-variable use_preemptible {            default=false}
+variable use_preemptible {            default=true}
 
 # GCP "NoSchedule" node taint tags
 variable node_taint_key {           default="kubernetes.io/nodetype"}
