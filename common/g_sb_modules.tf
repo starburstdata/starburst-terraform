@@ -215,9 +215,9 @@ module trino {
     admin_user              = var.admin_user
     admin_pass              = local.admin_pass
     reg_user1               = var.reg_user1
-    reg_pass1               = random_string.user_pass1.result
+    reg_pass1               = local.reg_pass1
     reg_user2               = var.reg_user2
-    reg_pass2               = random_string.user_pass2.result
+    reg_pass2               = local.reg_pass2
 
     # Ranger & starburst Service names
     ranger_service          = local.ranger_service

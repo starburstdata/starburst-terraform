@@ -43,8 +43,8 @@ locals {
 
     # Password overrides
     admin_pass          = var.admin_pass != "" ? var.admin_pass : random_string.admin_pass.result
-    reg_pass1           = var.reg_pass1 != "" ? var.reg_pass1 : random_string.admin_pass.result
-    reg_pass2           = var.reg_pass2 != "" ? var.reg_pass2 : random_string.admin_pass.result
+    reg_pass1           = var.reg_pass1 != "" ? var.reg_pass1 : random_string.user_pass1.result
+    reg_pass2           = var.reg_pass2 != "" ? var.reg_pass2 : random_string.user_pass2.result
 
     primary_node_tags = {
         agentpool       = var.primary_node_pool
