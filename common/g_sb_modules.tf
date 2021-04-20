@@ -42,7 +42,7 @@ module hive {
     primary_db_user         = var.ex_hive_instance != "" ? var.ex_hive_db_user : module.db.primary_db_user
     primary_user_password   = var.ex_hive_instance != "" ? var.ex_hive_db_password : module.db.primary_db_password
     primary_db_hive         = var.ex_hive_instance != "" ? var.ex_hive_db : "hive"
-    hive_template_file      = "${path.root}/../helm_templates/${local.hive_yaml_file}"
+    hive_yaml_files         = local.hive_yaml_files
 
     # If I'm not creating an RDS & I'm not specifying an external Hive instance, then this must 
     # be an internal HMS deployment. All other situations mean an external Hive instance is in play
@@ -151,15 +151,18 @@ module ranger {
     primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
     ranger_db_user          = var.ex_ranger_instance != "" ? var.ex_ranger_db_user : "ranger"
     ex_ranger_db_password   = var.ex_ranger_db_password
-    ex_ranger_admin_password = var.ex_ranger_admin_password
-    ex_ranger_svc_password  = var.ex_ranger_svc_password
-    ranger_template_file    = "${path.root}/../helm_templates/${local.ranger_yaml_file}"
+    ex_ranger_admin_pwd     = var.ex_ranger_admin_pwd
+    ex_ranger_keyadmin_pwd  = var.ex_ranger_keyadmin_pwd
+    ex_ranger_service_pwd   = var.ex_ranger_service_pwd
+    ex_ranger_tagsync_pwd   = var.ex_ranger_tagsync_pwd
+    ex_ranger_usersync_pwd  = var.ex_ranger_usersync_pwd
+    ranger_yaml_files       = local.ranger_yaml_files
     type                    = var.create_rds == false && var.ex_ranger_instance == "" ? "internal" : "external"
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
     # Admin user login user details
     admin_user              = var.admin_user
-    admin_pass              = random_string.admin_pass.result
+    admin_pass              = local.admin_pass
 
     # Ranger & starburst Service names
     ranger_service          = local.ranger_service
@@ -210,7 +213,7 @@ module trino {
 
     # Admin & Regular user login user details
     admin_user              = var.admin_user
-    admin_pass              = random_string.admin_pass.result
+    admin_pass              = local.admin_pass
     reg_user1               = var.reg_user1
     reg_pass1               = random_string.user_pass1.result
     reg_user2               = var.reg_user2

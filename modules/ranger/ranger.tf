@@ -12,8 +12,11 @@ variable primary_db_user { }
 variable primary_user_password { }
 variable ranger_db_user { }
 variable ex_ranger_db_password { }
-variable ex_ranger_admin_password { }
-variable ex_ranger_svc_password { }
+variable ex_ranger_admin_pwd { }
+variable ex_ranger_keyadmin_pwd { }
+variable ex_ranger_service_pwd { }
+variable ex_ranger_tagsync_pwd { }
+variable ex_ranger_usersync_pwd { }
 variable primary_node_pool { }
 variable admin_user { }
 variable admin_pass { }
@@ -24,7 +27,9 @@ variable expose_sb_name { }
 variable dns_zone { }
 variable type { }
 variable service_type { }
-variable ranger_template_file { }
+variable ranger_yaml_files {
+    type    = list(string)
+    }
 
 variable create_ranger { }
 variable create_rds { }
@@ -54,20 +59,19 @@ locals {
         ranger_db_password          = var.ex_ranger_db_password != "" ? var.ex_ranger_db_password : random_string.ranger_db_password.result
         primary_node_pool           = var.primary_node_pool
         admin_user                  = var.admin_user
-        admin_pass                  = var.ex_ranger_admin_password != "" ? var.ex_ranger_admin_password : var.admin_pass
-        ranger_svc_acc_pwd1         = var.ex_ranger_svc_password != "" ? var.ex_ranger_svc_password : random_password.service_acc_password1.result
-        ranger_svc_acc_pwd2         = random_password.service_acc_password2.result
-        ranger_svc_acc_pwd3         = random_password.service_acc_password3.result
-        ranger_svc_acc_pwd4         = random_password.service_acc_password4.result
-        ranger_svc_acc_pwd5         = random_password.service_acc_password5.result
+        admin_pass                  = var.admin_pass
+        ranger_svc_acc_pwd1         = var.ex_ranger_admin_pwd != "" ? var.ex_ranger_admin_pwd : random_password.service_acc_password1.result
+        ranger_svc_acc_pwd2         = var.ex_ranger_keyadmin_pwd != "" ? var.ex_ranger_keyadmin_pwd : random_password.service_acc_password2.result
+        ranger_svc_acc_pwd3         = var.ex_ranger_service_pwd != "" ? var.ex_ranger_service_pwd : random_password.service_acc_password3.result
+        ranger_svc_acc_pwd4         = var.ex_ranger_tagsync_pwd != "" ? var.ex_ranger_tagsync_pwd : random_password.service_acc_password4.result
+        ranger_svc_acc_pwd5         = var.ex_ranger_usersync_pwd != "" ? var.ex_ranger_usersync_pwd : random_password.service_acc_password5.result
         type                        = var.type
         service_type                = var.service_type
     }
 
-    ranger_helm_chart_values = templatefile(
-        var.ranger_template_file,
-        local.ranger_template_vars
-    )
+    ranger_helm_chart_values = [for n in var.ranger_yaml_files : templatefile(
+                    n,
+                    local.ranger_template_vars)]
 
 }
 
@@ -104,7 +108,7 @@ resource "helm_release" "ranger" {
     chart   = "starburst-ranger"
     version = var.repo_version
 
-    values = [local.ranger_helm_chart_values]
+    values = local.ranger_helm_chart_values
 
     set {
       name = "nodeSelector\\.starburstpool"

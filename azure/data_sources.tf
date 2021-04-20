@@ -1,7 +1,7 @@
 locals {
-    azure_rg        = "${var.prefix}-${local.env}-${var.rg_name}-${random_id.deployment.hex}"
-    storage_name    = "${var.prefix}${local.env}${random_id.deployment.hex}"
-    public_ip       = "${var.prefix}-${local.env}-publicIP-${random_id.deployment.hex}"
+    azure_rg        = "${var.prefix}-${local.env}-${var.rg_name}-${local.deployment_id}"
+    storage_name    = "${var.prefix}${local.env}${local.deployment_id}"
+    public_ip       = "${var.prefix}-${local.env}-publicIP-${local.deployment_id}"
 
     # Object storage credentials
     # GCS

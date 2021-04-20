@@ -9,9 +9,9 @@ locals {
 output user-credentials {
   value = tolist([
     "user / pwd",
-    "${var.admin_user} / ${random_string.admin_pass.result}",
-    "${var.reg_user1} / ${random_string.user_pass1.result}",
-    "${var.reg_user2} / ${random_string.user_pass2.result}"
+    "${var.admin_user} / ${local.admin_pass}",
+    "${var.reg_user1} / ${local.reg_pass1}",
+    "${var.reg_user2} / ${local.reg_pass2}"
   ])
 }
 
@@ -25,7 +25,7 @@ output postgres-details {
     "primary_db_password  = ${module.db.primary_db_password}"
     #"ranger_db_user       = ${module.ranger.ranger_db_user}",
     #"ranger_db_password   = ${module.ranger.ranger_db_password}"
-  ]) : ["No external RDS was specified in this deployment"]
+  ]) : ["No RDS was built for this deployment"]
 }
 
 output starburst-endpoints {

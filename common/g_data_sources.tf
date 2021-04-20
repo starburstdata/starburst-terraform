@@ -5,20 +5,22 @@ resource "random_id" "deployment" {
 
 locals {
     env                 = terraform.workspace
+    deployment_id       = var.deployment_id == "" ? random_id.deployment.hex : var.deployment_id
 
-    vpc_name            = "${var.prefix}-${local.env}-${var.vpc_name}-${random_id.deployment.hex}"
-    cluster_name        = "${var.prefix}-${local.env}-${var.k8s_name}-${random_id.deployment.hex}"
-    db_name             = "${var.prefix}-${local.env}-${var.primary_db_instance}-${random_id.deployment.hex}"
-    bucket_name         = "${var.prefix}-${local.env}-${var.bucket_name}-${random_id.deployment.hex}"
+    vpc_name            = "${var.prefix}-${local.env}-${var.vpc_name}-${local.deployment_id}"
+    cluster_name        = "${var.prefix}-${local.env}-${var.k8s_name}-${local.deployment_id}"
+    db_name             = "${var.prefix}-${local.env}-${var.primary_db_instance}-${local.deployment_id}"
+    bucket_name         = "${var.prefix}-${local.env}-${var.bucket_name}-${local.deployment_id}"
     hive_service        = "${var.prefix}-${local.env}-${var.hive_service}"
-    starburst_service   = "${var.prefix}-${local.env}-${var.starburst_service}-${random_id.deployment.hex}"
-    ranger_service      = "${var.prefix}-${local.env}-${var.ranger_service}-${random_id.deployment.hex}"
-    mc_service          = "${var.prefix}-${local.env}-${var.mc_service}-${random_id.deployment.hex}"
-    cloudbeaver_service = "${var.prefix}-${local.env}-${var.cloudbeaver_service}-${random_id.deployment.hex}"
+    starburst_service   = "${var.prefix}-${local.env}-${var.starburst_service}-${local.deployment_id}"
+    ranger_service      = "${var.prefix}-${local.env}-${var.ranger_service}-${local.deployment_id}"
+    mc_service          = "${var.prefix}-${local.env}-${var.mc_service}-${local.deployment_id}"
+    cloudbeaver_service = "${var.prefix}-${local.env}-${var.cloudbeaver_service}-${local.deployment_id}"
 
-    hive_yaml_file      = var.hive_yaml_file
-    #trino_yaml_file     = var.create_rds == false && var.ex_insights_instance == "" ? var.trino_yaml_file[0] : var.trino_yaml_file[1]
-    ranger_yaml_file    = var.ranger_yaml_file
+    hive_yaml_files     = compact(["${path.root}/../helm_templates/${var.hive_yaml_file}",
+                            var.custom_hive_yaml_file])
+    ranger_yaml_files   = compact(["${path.root}/../helm_templates/${var.ranger_yaml_file}",
+                            var.custom_ranger_yaml_file])
     mc_yaml_file        = var.mc_yaml_file
     operator_yaml_file  = var.operator_yaml_file
     postgres_yaml_file  = var.postgres_yaml_file
@@ -38,6 +40,11 @@ locals {
     operator_version    = var.operator_version  != null ? var.operator_version : var.repo_version
     
     common_tags = var.tags
+
+    # Password overrides
+    admin_pass          = var.admin_pass != "" ? var.admin_pass : random_string.admin_pass.result
+    reg_pass1           = var.reg_pass1 != "" ? var.reg_pass1 : random_string.admin_pass.result
+    reg_pass2           = var.reg_pass2 != "" ? var.reg_pass2 : random_string.admin_pass.result
 
     primary_node_tags = {
         agentpool       = var.primary_node_pool

@@ -15,3 +15,9 @@ output debug-infrastructure {
         var.create_bucket ? "storage_account    = ${module.storage.storage_account_id}" : ""
     ]) : null
 }
+
+output kubectl-profile {
+  value = tolist([
+    "az aks get-credentials --subscription ${var.subscription} --resource-group ${local.azure_rg} --name ${module.k8s.cluster_id} --overwrite-existing"
+  ])
+}

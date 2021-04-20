@@ -16,7 +16,9 @@ variable create_hive { }
 variable create_rds { }
 variable create_hive_db { }
 variable type { }
-variable hive_template_file { }
+variable hive_yaml_files {
+    type    = list(string)
+    }
 # External Hive Server
 variable ex_hive_server_url {       default = ""}
 # Object storage credentials
@@ -75,11 +77,10 @@ locals {
         wasb_storage_account        = var.wasb_storage_account
     }
 
-    # Keep these charts in a directory under the root folder
-    hive_helm_chart_values = templatefile(
-        var.hive_template_file,
-        local.hive_template_vars
-    )
+    hive_helm_chart_values = [for n in var.hive_yaml_files : templatefile(
+                    n,
+                    local.hive_template_vars)]
+
 }
 
 terraform {
@@ -114,7 +115,7 @@ resource "helm_release" "hive" {
     chart               = "starburst-hive"
     version             = var.repo_version
 
-    values              = [local.hive_helm_chart_values]
+    values              = local.hive_helm_chart_values
 
     set {
       name              = "nodeSelector\\.starburstpool"

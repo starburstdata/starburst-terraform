@@ -5,3 +5,9 @@ output gcp-infrastructure-details {
     var.create_bucket ? "gcs_bucket        = ${google_storage_bucket.bucket[0].name}" : "No new GCS bucket deployed"
   ])
 }
+
+output kubectl-profile {
+  value = tolist([
+    "gcloud container clusters get-credentials ${module.k8s.name} --zone ${var.zone}"
+  ])
+}

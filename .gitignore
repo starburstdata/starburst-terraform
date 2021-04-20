@@ -3,3 +3,6 @@
 */sensitive.auto.tfvars
 */kubeconfig*
 */terraform.tfvars
+*/*.custom.yaml
+*/.DS_Store
+.DS_Store

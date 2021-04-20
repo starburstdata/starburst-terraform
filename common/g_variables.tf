@@ -2,7 +2,7 @@ variable sb_license { }
 variable dns_zone { }
 variable dns_zone_name {          default = ""}
 variable email { }
-
+variable deployment_id {          default = ""} # Override the randomly generated deployment ID with a fixed value
 variable prefix {                 default = "sb"}
 variable region { }
 variable zone {                   default = ""}
@@ -32,13 +32,14 @@ variable expose_mc_name {         default = "starburst-mission-control"}
 variable expose_cloudbeaver_name {default = "cloudbeaver"}
 variable wait_this_long {         default = "60s"} # default wait time to use when waiting on resources 
 variable hive_yaml_file {           default = "hms_values.yaml.tpl"}
-variable trino_yaml_file {          default = ["trino_values.yaml.tpl","trino_values.withInsightsMetrics.yaml.tpl"]}
 variable ranger_yaml_file {         default = "ranger_values.yaml.tpl"}
 variable mc_yaml_file {             default = "mission_control.yaml.tpl"}
 variable operator_yaml_file {       default = "operator_values.yaml.tpl"}
 variable postgres_yaml_file {       default = "postgresql.yaml.tpl"}
 variable cloudbeaver_yaml_file {    default = "cloudbeaver_values.yaml.tpl"}
 variable custom_trino_yaml_file {   default = ""}
+variable custom_ranger_yaml_file {  default = ""}
+variable custom_hive_yaml_file {    default = ""}
 
 # External Hive RDS
 variable ex_hive_instance {       default = ""} # If this value is set, a database for Hive WILL NOT be created
@@ -48,15 +49,20 @@ variable ex_hive_db_user {        default = ""}
 variable ex_hive_db_password {    default = ""}
 
 # External Ranger RDS
-variable ex_ranger_instance {       default = ""} # If this value is set, a database for Ranger WILL NOT be created
-variable ex_ranger_port {           default = ""}
-variable ex_ranger_db {             default = ""}
-variable ex_ranger_root_user {      default = ""}
-variable ex_ranger_root_password {  default = ""}
-variable ex_ranger_db_user {        default = ""}
-variable ex_ranger_db_password {    default = ""}
-variable ex_ranger_admin_password { default = ""}
-variable ex_ranger_svc_password {   default = ""}
+variable ex_ranger_instance {           default = ""} # If this value is set, a database for Ranger WILL NOT be created
+variable ex_ranger_port {               default = ""}
+variable ex_ranger_db {                 default = ""}
+variable ex_ranger_root_user {          default = ""}
+variable ex_ranger_root_password {      default = ""}
+variable ex_ranger_db_user {            default = ""}
+variable ex_ranger_db_password {        default = ""}
+variable ex_ranger_sbadmin_password {   default = ""}
+# Ranger internal users:
+variable ex_ranger_admin_pwd {          default = ""}
+variable ex_ranger_keyadmin_pwd {       default = ""}
+variable ex_ranger_service_pwd {        default = ""}
+variable ex_ranger_tagsync_pwd {        default = ""}
+variable ex_ranger_usersync_pwd {       default = ""}
 
 # External Mission Control RDS
 variable ex_mc_instance {         default = ""} # If this value is set, a database for MC WILL NOT be created
@@ -128,8 +134,11 @@ variable wasb_storage_account {     default = ""}
 
 # Ranger/Starburst login users
 variable admin_user {               default = "sbadmin"}
+variable admin_pass {               default = ""}
 variable reg_user1 {                default = "sbuser1"}
+variable reg_pass1 {                default = ""}
 variable reg_user2 {                default = "sbuser2"}
+variable reg_pass2 {                default = ""}
 
 # Control the creation of Cloud Infrastructure Objects
 variable create_bucket {          default = true}
