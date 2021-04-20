@@ -2,3 +2,4 @@
 */terraform.tfstate*
 */sensitive.auto.tfvars
 */kubeconfig*
+*/terraform.tfvars
