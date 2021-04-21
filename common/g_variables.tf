@@ -56,7 +56,6 @@ variable ex_ranger_root_user {          default = ""}
 variable ex_ranger_root_password {      default = ""}
 variable ex_ranger_db_user {            default = ""}
 variable ex_ranger_db_password {        default = ""}
-variable ex_ranger_sbadmin_password {   default = ""}
 # Ranger internal users:
 variable ex_ranger_admin_pwd {          default = ""}
 variable ex_ranger_keyadmin_pwd {       default = ""}
