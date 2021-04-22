@@ -34,6 +34,10 @@ variable trino_yaml_files {
 variable demo_db_name { }
 variable node_taint_key { }
 
+variable abfs_client_id { }
+variable abfs_endpoint { }
+variable abfs_secret { }
+
 variable create_rds { }
 variable create_trino { }
 variable create_insights_db { }

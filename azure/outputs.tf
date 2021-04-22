@@ -18,6 +18,6 @@ output debug-infrastructure {
 
 output kubectl-profile {
   value = tolist([
-    "az aks get-credentials --subscription ${local.subscription_id} --resource-group ${local.azure_rg} --name ${module.k8s.cluster_id} --overwrite-existing"
+    "az aks get-credentials --subscription ${local.subscription_id} --resource-group ${local.azure_rg} --name ${module.k8s.cluster_name} --overwrite-existing"
   ])
 }

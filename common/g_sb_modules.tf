@@ -223,6 +223,11 @@ module trino {
     ranger_service          = local.ranger_service
     starburst_service       = local.starburst_service
 
+    # Azure ADLS
+    abfs_client_id          = local.abfs_client_id
+    abfs_endpoint           = local.abfs_endpoint
+    abfs_secret             = local.abfs_secret
+
     # Hive Service URL
     hive_service_url        = module.hive.hive_url
 

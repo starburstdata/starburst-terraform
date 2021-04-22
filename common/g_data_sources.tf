@@ -7,15 +7,15 @@ locals {
     env                 = terraform.workspace
     deployment_id       = var.deployment_id == "" ? random_id.deployment.hex : var.deployment_id
 
-    vpc_name            = "${var.prefix}-${local.env}-${var.vpc_name}-${local.deployment_id}"
-    cluster_name        = "${var.prefix}-${local.env}-${var.k8s_name}-${local.deployment_id}"
-    db_name             = "${var.prefix}-${local.env}-${var.primary_db_instance}-${local.deployment_id}"
-    bucket_name         = "${var.prefix}-${local.env}-${var.bucket_name}-${local.deployment_id}"
-    hive_service        = "${var.prefix}-${local.env}-${var.hive_service}"
-    starburst_service   = "${var.prefix}-${local.env}-${var.starburst_service}-${local.deployment_id}"
-    ranger_service      = "${var.prefix}-${local.env}-${var.ranger_service}-${local.deployment_id}"
-    mc_service          = "${var.prefix}-${local.env}-${var.mc_service}-${local.deployment_id}"
-    cloudbeaver_service = "${var.prefix}-${local.env}-${var.cloudbeaver_service}-${local.deployment_id}"
+    vpc_name            = lower("${var.prefix}-${local.env}-${var.vpc_name}-${local.deployment_id}")
+    cluster_name        = lower("${var.prefix}-${local.env}-${var.k8s_name}-${local.deployment_id}")
+    db_name             = lower("${var.prefix}-${local.env}-${var.primary_db_instance}-${local.deployment_id}")
+    bucket_name         = lower("${var.prefix}-${local.env}-${var.bucket_name}-${local.deployment_id}")
+    hive_service        = lower("${var.prefix}-${local.env}-${var.hive_service}")
+    starburst_service   = lower("${var.prefix}-${local.env}-${var.starburst_service}-${local.deployment_id}")
+    ranger_service      = lower("${var.prefix}-${local.env}-${var.ranger_service}-${local.deployment_id}")
+    mc_service          = lower("${var.prefix}-${local.env}-${var.mc_service}-${local.deployment_id}")
+    cloudbeaver_service = lower("${var.prefix}-${local.env}-${var.cloudbeaver_service}-${local.deployment_id}")
 
     hive_yaml_files     = compact(["${path.root}/../helm_templates/${var.hive_yaml_file}",
                             var.custom_hive_yaml_file])
