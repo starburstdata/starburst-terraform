@@ -2,6 +2,11 @@ locals {
     azure_rg        = "${var.prefix}-${local.env}-${var.rg_name}-${local.deployment_id}"
     storage_name    = "${var.prefix}${local.env}${local.deployment_id}"
     public_ip       = "${var.prefix}-${local.env}-publicIP-${local.deployment_id}"
+    subscription_id = data.azurerm_client_config.current.subscription_id
+    dns_rg          = var.dns_rg
+    dns_sub         = var.dns_sub != "" ? var.dns_sub : local.subscription_id
+
+    resource_group  = var.ex_resource_group != "" ? var.ex_resource_group : azurerm_resource_group.default[0].name
 
     # Object storage credentials
     # GCS

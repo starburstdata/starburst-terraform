@@ -4,7 +4,7 @@ module dns {
 
     providers               = { azurerm.dns = azurerm.dns }
 
-    resource_group          = azurerm_resource_group.default.name
+    resource_group          = local.resource_group
     dns_rg                  = var.dns_rg
     location                = var.region
     public_ip               = local.public_ip

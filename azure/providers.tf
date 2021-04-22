@@ -29,7 +29,7 @@ provider "azurerm" {
 provider "azurerm" {
     features {}
     alias               = "dns"
-    subscription_id     = var.dns_sub != "" ? var.dns_sub : var.subscription
+    subscription_id     = var.dns_sub != "" ? var.dns_sub : local.subscription_id
     # For usage attribution tracking
     partner_id          = var.partner_id
 }
@@ -50,7 +50,7 @@ data "azurerm_client_config" "current" { }
 
 data "azurerm_kubernetes_cluster" "default" {
   name                = module.k8s.cluster_name
-  resource_group_name = azurerm_resource_group.default.name
+  resource_group_name = local.resource_group
 
   depends_on          = [module.k8s]
 }

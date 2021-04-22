@@ -40,7 +40,7 @@ ___
 Each cloud deployment option will create the following infrastructure resources which are required to support the deployment:
 
 - A storage account (S3, ADLS or GCS)
-- A network VPC or VNet (On AWS & GCP you can turn this off and BYO VPC to the deployment)
+- A network VPC or VNet
 - A managed Kubernetes cluster (EKS, GKE or AKS)
 
 In addition, the user has the option to deploy these specific applications to the Kubernetes cluster:
@@ -96,9 +96,9 @@ ___
 *When you require an easy way to bring up and tear down a Starburst environment, while maintaining a stateful configuration when the system is down. This option ensures that application metadata is saved externally and is not impacted by destroying your Kubernetes cluster. You will require one or more externally database instances which are accessible to the cluster for this to work.*
 - Ensure that the following flags are set. You can safely add them to your `terraform.tfvars` file:
     - `create_rds = false` (you won't need the Postgres instance deployed to K8s)
-    - `create_storage = false` (don't let Terraform create a storage account. Use an existing one)
-    - `create_vpc = false` (For GCP/AWS only - suggest you use an existing Network)
-    - `ex_vpc_id = <your-vpc>` (The name/ID of your existing VPC)
+    - `create_bucket = false` (don't let Terraform create a storage account/bucket. Use an existing one)
+    - `create_vpc|vnet = false` (Suggest you use an existing Network)
+    - `ex_vpc_id|ex_vnet_name = <your-vpc or vnet>` (The name/ID of your existing VPC/Vnet)
     - `deployment_id = <your-deployment-identifier>` (set it to a fixed value, so that your application URLs will be static)
 - In addition, you will need to set all the `ex_*` database parameters detailed in each cloud module for the components that need to be persisted (e.g. Hive, Ranger, Insights). You should add these to your `sensitive.auto.tfvars` file (create it if it does not already exist).
 - Add the following parameters to `sensitive.auto.tfvars` to ensure your user login credentials remain consistent:
