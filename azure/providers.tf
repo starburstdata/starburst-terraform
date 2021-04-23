@@ -29,7 +29,7 @@ provider "azurerm" {
 provider "azurerm" {
     features {}
     alias               = "dns"
-    subscription_id     = var.dns_sub != "" ? var.dns_sub : local.subscription_id
+    subscription_id     = var.dns_sub != "" ? var.dns_sub : data.azurerm_client_config.current.subscription_id
     # For usage attribution tracking
     partner_id          = var.partner_id
 }
