@@ -33,11 +33,19 @@ variable trino_yaml_files {
     }
 variable demo_db_name { }
 variable node_taint_key { }
-
-variable abfs_client_id { }
-variable abfs_endpoint { }
-variable abfs_secret { }
-
+# ADL
+variable adl_oauth2_client_id {     default = ""}
+variable adl_oauth2_credential {    default = ""}
+variable adl_oauth2_refresh_url {   default = ""}
+# Azure ADLS
+variable abfs_access_key {          default = ""}
+variable abfs_storage_account {     default = ""}
+variable abfs_auth_type {           default = ""}
+variable abfs_client_id {           default = ""}
+variable abfs_endpoint {            default = ""}
+variable abfs_secret {              default = ""}
+variable wasb_access_key {          default = ""}
+variable wasb_storage_account {     default = ""}
 variable create_rds { }
 variable create_trino { }
 variable create_insights_db { }
@@ -78,6 +86,17 @@ locals {
         reg_user2                   = var.reg_user2
         reg_pass2                   = var.reg_pass2
         node_taint_key              = var.node_taint_key
+        adl_oauth2_client_id        = var.adl_oauth2_client_id
+        adl_oauth2_credential       = var.adl_oauth2_credential
+        adl_oauth2_refresh_url      = var.adl_oauth2_refresh_url
+        abfs_access_key             = var.abfs_access_key
+        abfs_storage_account        = var.abfs_storage_account
+        abfs_auth_type              = var.abfs_auth_type
+        abfs_client_id              = var.abfs_client_id
+        abfs_endpoint               = var.abfs_endpoint
+        abfs_secret                 = var.abfs_secret
+        wasb_access_key             = var.wasb_access_key
+        wasb_storage_account        = var.wasb_storage_account
     }
 
 #    trino_helm_chart_values = templatefile(

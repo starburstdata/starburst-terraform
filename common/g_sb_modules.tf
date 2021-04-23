@@ -223,11 +223,19 @@ module trino {
     ranger_service          = local.ranger_service
     starburst_service       = local.starburst_service
 
+    # ADL
+    adl_oauth2_client_id    = local.adl_oauth2_client_id
+    adl_oauth2_credential   = local.adl_oauth2_credential
+    adl_oauth2_refresh_url  = local.adl_oauth2_refresh_url
     # Azure ADLS
+    abfs_access_key         = local.abfs_access_key
+    abfs_storage_account    = local.abfs_storage_account
+    abfs_auth_type          = local.abfs_auth_type
     abfs_client_id          = local.abfs_client_id
     abfs_endpoint           = local.abfs_endpoint
     abfs_secret             = local.abfs_secret
-
+    wasb_access_key         = local.wasb_access_key
+    wasb_storage_account    = local.wasb_storage_account
     # Hive Service URL
     hive_service_url        = module.hive.hive_url
 
