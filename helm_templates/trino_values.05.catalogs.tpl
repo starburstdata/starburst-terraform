@@ -3,7 +3,7 @@ catalogs:
     connector.name=tpcds
   jmx: |
     connector.name=jmx
-  postgres: |
+  postgresql: |
     connector.name=postgresql
     connection-url=jdbc:postgresql://${primary_ip_address}:${primary_db_port}/${demo_db_name}
     connection-user=${primary_db_user}
