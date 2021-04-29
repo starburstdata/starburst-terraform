@@ -27,8 +27,13 @@ export ARM_CLIENT_ID=<appId-from-json>
 export ARM_CLIENT_SECRET=<password-from-json>
 export ARM_SUBSCRIPTION_ID=<your-subscription-id>
 export ARM_TENANT_ID=<tenant-from-json>
-
+export TF_VAR_ARM_CLIENT_ID=${ARM_CLIENT_ID}
+export TF_VAR_ARM_CLIENT_SECRET=${ARM_CLIENT_SECRET}
+export TF_VAR_ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID}
+export TF_VAR_ARM_TENANT_ID=${ARM_TENANT_ID}
 ```
+*Hint: Add these to your `.bash_profile` / `.zprofile` file for Terraform to automatically pick them up whenever you open a shell terminal*
+
 
 3. Add the `User Access Administrator` IAM permission to the SP at the subscription level:
 ```

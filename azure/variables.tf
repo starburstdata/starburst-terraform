@@ -13,3 +13,7 @@ variable partner_id {               default="eafd5cfa-bcd1-4d3e-98e0-f97508a02ca
 # Azure "NoSchedule" node taint tags
 variable node_taint_key {           default="kubernetes.azure.com/scalesetpriority"}
 variable node_taint_value {         default="spot"}
+variable ARM_CLIENT_ID {            description = "The Service Principal which will access ADLS/Blob v2 storage" }
+variable ARM_CLIENT_SECRET {        description = "The Service Principal secret"}
+variable ARM_SUBSCRIPTION_ID {      description = "The subscription where Starburst will be deployed"}
+variable ARM_TENANT_ID {            description = "The AD tenant"}

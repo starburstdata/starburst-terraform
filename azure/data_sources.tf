@@ -24,9 +24,9 @@ locals {
     abfs_access_key         = var.abfs_access_key
     abfs_storage_account    = var.abfs_storage_account
     abfs_auth_type          = var.abfs_auth_type
-    abfs_client_id          = var.abfs_client_id
+    abfs_client_id          = var.abfs_client_id != "" ? var.abfs_client_id : var.ARM_CLIENT_ID
     abfs_endpoint           = "https://login.microsoftonline.com/${data.azurerm_client_config.current.tenant_id}/oauth2/token"
-    abfs_secret             = var.abfs_secret
+    abfs_secret             = var.abfs_secret != "" ? var.abfs_secret : var.ARM_CLIENT_SECRET
     wasb_access_key         = var.wasb_access_key
     wasb_storage_account    = var.wasb_storage_account
 }
