@@ -28,7 +28,7 @@ locals {
 
     trino_yaml_files    = compact(["${path.root}/../helm_templates/trino_values.01.base.tpl",
                             "${path.root}/../helm_templates/trino_values.02.auth.tpl",
-                            var.create_ranger ? "" : "${path.root}/../helm_templates/trino_values.03.ranger.tpl",
+                            var.create_ranger ? "${path.root}/../helm_templates/trino_values.03.ranger.tpl" : "",
                             var.create_rds == false && var.ex_insights_instance == "" ? "" : "${path.root}/../helm_templates/trino_values.04.insights.tpl",
                             "${path.root}/../helm_templates/trino_values.05.catalogs.tpl",
                             var.custom_trino_yaml_file])
