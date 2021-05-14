@@ -4,8 +4,15 @@ variable worker_node_type {             default="m5.xlarge"}
 variable capacity_type {                default="SPOT"} #SPOT or ON_DEMAND
 
 # AWS "NoSchedule" node taint tags
-variable node_taint_key {           default="kubernetes.io/nodetype"}
-variable node_taint_value {         default="spot"}
+variable node_taint_key {               default="kubernetes.io/nodetype"}
+variable node_taint_value {             default="spot"}
+
+# EKS autoscaling vars
+variable create_metrics_server  {       default=true}
+variable create_cluster_autoscaler {    default=true}
+variable metrics_server_version {       default="5.8.7"}
+variable cluster_autoscaler_version {   default="9.3.0"}
+variable cluster_autoscaler_tag {       default="v1.18.3"}
 
 # AWS roles to attach to EKS & node pools
 variable s3_role { }

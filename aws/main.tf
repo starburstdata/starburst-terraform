@@ -80,9 +80,13 @@ module k8s {
       k8s_labels = {
         starburstpool = var.worker_node_pool
       }
+      additional_tags = {
+        "k8s.io/cluster-autoscaler/enabled" = true
+        "k8s.io/cluster-autoscaler/${local.cluster_name}" = true
+      }
     }
-
   }
+
   # Attach S3 policy to allow worker nodes to interact with Glue/S3
   workers_additional_policies = var.s3_role
 
