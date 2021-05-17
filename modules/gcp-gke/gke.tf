@@ -33,14 +33,14 @@ resource "google_container_cluster" "primary_gke" {
   ip_allocation_policy {
   }
 
-  master_auth {
-    username = ""
-    password = ""
+  # master_auth {
+  #   username = ""
+  #   password = ""
 
-    client_certificate_config {
-      issue_client_certificate = false
-    }
-  }
+  #   client_certificate_config {
+  #     issue_client_certificate = false
+  #   }
+  # }
 }
 
 resource "google_container_node_pool" "primary_nodes" {
