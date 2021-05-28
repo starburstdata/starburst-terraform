@@ -46,7 +46,7 @@ gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVIC
 gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/storage.admin
 ```
 
-*hints: the SERVICE_ACCOUNT_EMAIL should translate to SERVICE_ACCOUNT_ID@MY_PROJECT.iam.gserviceaccount.com*
+***Hint**: the SERVICE_ACCOUNT_EMAIL should translate to SERVICE_ACCOUNT_ID@MY_PROJECT.iam.gserviceaccount.com*
 
 2. Save a copy of your Starburst license locally
 
