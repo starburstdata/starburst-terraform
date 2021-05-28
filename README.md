@@ -93,7 +93,7 @@ ___
 - When this environment is destroyed by Terraform (`terraform destroy`), ALL metadata will be destroyed along with it unless you manually export it beforehand.
 ___
 ### The Stateful "re"-Deployment Option
-*When you require an easy way to bring up and tear down a Starburst environment, while maintaining a stateful configuration when the system is down. This option ensures that application metadata is saved externally and is not impacted by destroying your Kubernetes cluster. You will require one or more externally database instances which are accessible to the cluster for this to work.*
+*When you require an easy way to bring up and tear down a Starburst environment, while maintaining a stateful configuration when the system is down. This option ensures that application metadata is saved externally and is not impacted by destroying your Kubernetes cluster. You will require one or more external database instances which are accessible to the cluster for this to work.*
 - Ensure that the following flags are set. You can safely add them to your `terraform.tfvars` file:
     - `create_rds = false` (you won't need the Postgres instance deployed to K8s)
     - `create_bucket = false` (don't let Terraform create a storage account/bucket. Use an existing one)

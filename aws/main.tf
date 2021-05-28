@@ -75,7 +75,7 @@ module k8s {
       max_capacity     = var.worker_pool_max_size
       min_capacity     = var.worker_pool_min_size
 
-      instance_types = [var.worker_node_type]
+      instance_types = var.capacity_type == "SPOT" ? var.worker_node_types : [var.worker_node_type]
       capacity_type  = var.capacity_type
       k8s_labels = {
         starburstpool = var.worker_node_pool

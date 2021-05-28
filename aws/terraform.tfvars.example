@@ -51,9 +51,9 @@ create_bucket   = true
 
 # K8s applications control
 create_hive         = true
-create_mc           = false
+create_mc           = false     # Refer to MC chart versions: https://harbor.starburstdata.net/harbor/projects/2/helm-charts/starburst-mission-control/versions before setting to true
 create_ranger       = true
 create_trino        = true
-create_cloudbeaver  = true
+create_cloudbeaver  = false
 
 create_nginx        = true

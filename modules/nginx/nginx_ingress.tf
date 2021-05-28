@@ -40,7 +40,7 @@ resource helm_release issuer {
   create_namespace = true
 
   set {
-    name              = "nodeSelector\\.starburstpool"
+    name              = "nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }
 
@@ -64,17 +64,17 @@ resource helm_release cert-manager {
   }
 
   set {
-    name              = "nodeSelector\\.starburstpool"
+    name              = "nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }
 
   set {
-    name              = "webhook\\.nodeSelector\\.starburstpool"
+    name              = "webhook.nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }
 
   set {
-    name              = "cainjector\\.nodeSelector\\.starburstpool"
+    name              = "cainjector.nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }
 
@@ -95,7 +95,7 @@ resource helm_release ingress {
   cleanup_on_fail = true
 
   set {
-    name              = "nodeSelector\\.starburstpool"
+    name              = "nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }
 

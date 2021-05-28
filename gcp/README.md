@@ -1,10 +1,10 @@
-# Starburst-Terraform deployment for GCP
-Deployment scripts built for GCP.
+# Starburst-Terraform deployment for Google Cloud
+Deployment scripts built for Google Cloud.
 
 ### Prerequisites
 Ensure you have [gcloud cli](https://cloud.google.com/sdk/docs/install), [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [helm](https://helm.sh/docs/intro/install/) installed and configured according to the cloud provider's documentation.
 
-Ensure that the GCP project you are working in has the following APIs enabled:
+Ensure that the Google Cloud project you are working in has the following APIs enabled:
 
 *These commands can be run from your command line*
 ```
@@ -19,19 +19,38 @@ gcloud services enable container.googleapis.com
 ```
 
 ## Set up
-1. Create a Service Account in GCP for Terraform to work with. Ensure that the service account includes the following IAM permissions:
+1. Create a Service Account and generate a key file for Terraform to work with. Ensure that the service account includes the following IAM permissions:
 
     - Kubernetes Engine Admin
     - DNS Administrator
     - Editor
     - Service Networking Admin
-    - Storage Admin 
+    - Storage Admin
 
-2. Generate a key and save it locally
+    You can use the Google Cloud console to do this, or you can run these command using the Google Cloud cli, (replace the placeholder variables in CAPS with your own values):
+```
+gcloud iam service-accounts create SERVICE_ACCOUNT_ID --description="DESCRIPTION" --display-name="DISPLAY_NAME"
 
-3. Copy your Starburst license to the same location
+gcloud iam service-accounts keys create key-file --iam-account=SERVICE_ACCOUNT_EMAIL
 
-4. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
+gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/editor
+
+gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/bigquery.admin
+
+gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/container.admin
+
+gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/dns.admin
+
+gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/servicenetworking.serviceAgent
+
+gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVICE_ACCOUNT_EMAIL --role=roles/storage.admin
+```
+
+*hints: the SERVICE_ACCOUNT_EMAIL should translate to SERVICE_ACCOUNT_ID@MY_PROJECT.iam.gserviceaccount.com*
+
+2. Save a copy of your Starburst license locally
+
+3. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
     - `project`
     - `credentials` *(point to your local file)*
     - `sb_license` *(point to your local file)*
@@ -40,15 +59,15 @@ gcloud services enable container.googleapis.com
     - `repo_username`
     - `repo_password`
 
-5. Create a workspace in Terraform for your deployment:
+4. Create a workspace in Terraform for your deployment:
 ```
 terraform workspace new ${your-workspace-name}
 ```
-6. Initialize the Terraform environment:
+5. Initialize the Terraform environment:
 ```
 terraform init
 ```
-7. Deploy your environment:
+6. Deploy your environment:
 ```
 terraform apply
 ```
@@ -79,18 +98,18 @@ ___
 | credentials | The Service Account credentials json file | yes |  |
 | deployment_id | Custom deployment identifier override. When not set, the system will autogenerate a unique 8 alphanumeric value to identify the deployment infrastructure. If manually overriden, ensure that you are not using a value from an existing deployment. | no |  |
 | dns_zone | The DNS zone to deploy applications to | no |  |
-| dns_zone_name | the DNS name in GCP | no |  |
+| dns_zone_name | the DNS name in Google Cloud | no |  |
 | email | Your email address. Required if you need to deploy Nginx | no |  |
 | ex_hive_server_url | An existing Hive Server to point your configuration to? | no |  |
 | ex_vpc_id | An existing VPC to deploy into | no |  |
 | primary_node_type | The VM machine type in the primary pool | no | e2-standard-8 |
 | primary_pool_size | The size of the base pool (runs all apps besides Trino worker nodes) | no | 1 |
-| project | The GCP Project | yes |  |
+| project | The Google Cloud Project | yes |  |
 | reg_pass1 | Password override for addional user #1. Autogenerated by default. | no |  |
 | reg_pass2 | Password override for addional user #2. Autogenerated by default. | no |  |
 | reg_user1 | Additional user login to Starburst | yes | sbuser1 |
 | reg_user2 | Additional user login to Starburst | yes | sbuser2 |
-| region | The GCP region | yes |  |
+| region | The Google Cloud region | yes |  |
 | registry | Starburst registry in Harbor | yes | harbor.starburstdata.net/starburstdata |
 | repo_password | Login password to the Harbor repository | yes |  |
 | repo_username | Login user for the Harbor repository | yes |  |
@@ -108,7 +127,7 @@ ___
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
 | worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
 | worker_pool_min_size | The minimum size of the worker pool (worker pool is reserved for the Trino workers) | no | 1 |
-| zone | the GCP zone within the region | yes |  |
+| zone | the Google Cloud zone within the region | yes |  |
 ___
 ## Default Yaml Files
 |  Parameter | Description | Required | Default |
