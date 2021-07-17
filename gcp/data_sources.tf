@@ -20,4 +20,5 @@ locals {
     abfs_secret             = var.abfs_secret
     wasb_access_key         = var.wasb_access_key
     wasb_storage_account    = var.wasb_storage_account
+
 }

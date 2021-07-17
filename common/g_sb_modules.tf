@@ -198,13 +198,25 @@ module trino {
     repo_username           = var.repo_username
     repo_password           = var.repo_password
 
-    # External Postgres details
+    ## External Postgres details
+    # Insights/Event Logger DB Details
     primary_ip_address      = var.ex_insights_instance != "" ? var.ex_insights_instance : module.db.db_address
     primary_db_port         = var.ex_insights_instance != "" ? var.ex_insights_port : module.db.db_port
     primary_db_user         = var.ex_insights_instance != "" ? var.ex_insights_db_user : module.db.primary_db_user
     primary_user_password   = var.ex_insights_instance != "" ? var.ex_insights_db_password : module.db.primary_db_password
     primary_db_event_logger = var.ex_insights_instance != "" ? var.ex_insights_db : "event_logger"
-    primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
+    # Ranger DB details
+    primary_db_ranger        = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
+    ranger_db_ip_address     = var.ex_ranger_instance != "" ? var.ex_ranger_instance : module.db.db_address
+    ranger_db_port           = var.ex_ranger_instance != "" ? var.ex_ranger_port : module.db.db_port
+    ranger_db_user           = var.ex_ranger_instance != "" ? var.ex_ranger_db_user : module.db.primary_db_user
+    ranger_db_password       = var.ex_ranger_instance != "" ? var.ex_ranger_db_password : module.db.primary_db_password
+    # Cache Redirection DB Details
+    primary_db_cache        = var.ex_cache_instance != "" ? var.ex_cache_db : "cache"
+    cache_db_ip_address     = var.ex_cache_instance != "" ? var.ex_cache_instance : module.db.db_address
+    cache_db_port           = var.ex_cache_instance != "" ? var.ex_cache_port : module.db.db_port
+    cache_db_user           = var.ex_cache_instance != "" ? var.ex_cache_db_user : module.db.primary_db_user
+    cache_db_password       = var.ex_cache_instance != "" ? var.ex_cache_db_password : module.db.primary_db_password
     trino_yaml_files        = local.trino_yaml_files
     service_type            = var.create_nginx ? "ingress" : "loadBalancer"
 
@@ -250,9 +262,15 @@ module trino {
     primary_node_pool       = var.primary_node_pool
     worker_node_pool        = var.worker_node_pool
 
-    # Worker pool autoscaling
-    worker_autoscaling_min_size    = var.worker_autoscaling_min_size
-    worker_autoscaling_max_size    = var.worker_autoscaling_max_size
+    # Worker pool autoscaling and graceful shutdown
+    worker_autoscaling_min_size                 = var.worker_autoscaling_min_size
+    worker_autoscaling_max_size                 = var.worker_autoscaling_max_size
+    targetCPUUtilizationPercentage              = var.targetCPUUtilizationPercentage
+    deploymentTerminationGracePeriodSeconds     = var.deploymentTerminationGracePeriodSeconds
+    starburstWorkerShutdownGracePeriodSeconds   = var.starburstWorkerShutdownGracePeriodSeconds
+
+    worker_cpu              = local.worker_cpu
+    worker_mem              = local.worker_mem
 
     # Node taint for spot/preemptible
     node_taint_key          = var.node_taint_key

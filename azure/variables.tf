@@ -17,3 +17,7 @@ variable ARM_CLIENT_ID {            description = "The Service Principal which w
 variable ARM_CLIENT_SECRET {        description = "The Service Principal secret"}
 variable ARM_SUBSCRIPTION_ID {      description = "The subscription where Starburst will be deployed"}
 variable ARM_TENANT_ID {            description = "The AD tenant"}
+
+# K8s resource offsets
+variable cpu_offset {                 default=500 }
+variable mem_offset {                 default=1000000 }

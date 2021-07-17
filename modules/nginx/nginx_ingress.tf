@@ -95,7 +95,17 @@ resource helm_release ingress {
   cleanup_on_fail = true
 
   set {
-    name              = "nodeSelector.starburstpool"
+    name              = "controller.nodeSelector.starburstpool"
+    value             = var.primary_node_pool
+  }
+
+  set {
+    name              = "defaultBackend.nodeSelector.starburstpool"
+    value             = var.primary_node_pool
+  }
+
+  set {
+    name              = "controller.admissionWebhooks.patch.nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }
 

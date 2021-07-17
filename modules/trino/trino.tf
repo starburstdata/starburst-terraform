@@ -5,16 +5,35 @@ variable repository { }
 variable repo_version { }
 variable repo_username { }
 variable repo_password { }
+# Insights DB details
+variable primary_db_event_logger { }
 variable primary_ip_address { }
 variable primary_db_port { }
-variable primary_db_event_logger { }
-variable primary_db_ranger { }
 variable primary_db_user { }
 variable primary_user_password { }
+# Cache Redirection DB details
+variable primary_db_cache { }
+variable cache_db_ip_address { }
+variable cache_db_port { }
+variable cache_db_user { }
+variable cache_db_password { }
+# Ranger DB
+variable primary_db_ranger { }
+variable ranger_db_ip_address { }
+variable ranger_db_port { }
+variable ranger_db_user { }
+variable ranger_db_password { }
+# Cluster Node details
 variable primary_node_pool { }
 variable worker_node_pool { }
 variable worker_autoscaling_min_size { }
 variable worker_autoscaling_max_size { }
+variable targetCPUUtilizationPercentage { }
+variable deploymentTerminationGracePeriodSeconds { }
+variable starburstWorkerShutdownGracePeriodSeconds { }
+variable worker_cpu { }
+variable worker_mem { }
+# Password DB default user credentials
 variable admin_user { }
 variable admin_pass { }
 variable reg_user1 { }
@@ -72,12 +91,26 @@ locals {
         primary_db_user             = var.primary_db_user
         primary_db_password         = var.primary_user_password
         primary_db_event_logger     = var.primary_db_event_logger
+        ranger_db_ip_address        = var.ranger_db_ip_address
+        ranger_db_port              = var.ranger_db_port
+        ranger_db_user              = var.ranger_db_user
+        ranger_db_password          = var.ranger_db_password
         primary_db_ranger           = var.primary_db_ranger
+        cache_db_ip_address         = var.cache_db_ip_address
+        cache_db_port               = var.cache_db_port
+        cache_db_user               = var.cache_db_user
+        cache_db_password           = var.cache_db_password
+        primary_db_cache            = var.primary_db_cache
         demo_db_name                = var.demo_db_name
         primary_node_pool           = var.primary_node_pool
         worker_node_pool            = var.worker_node_pool
         worker_autoscaling_min_size = var.worker_autoscaling_min_size
         worker_autoscaling_max_size = var.worker_autoscaling_max_size
+        targetCPUUtilizationPercentage              = var.targetCPUUtilizationPercentage
+        deploymentTerminationGracePeriodSeconds     = var.deploymentTerminationGracePeriodSeconds
+        starburstWorkerShutdownGracePeriodSeconds   = var.starburstWorkerShutdownGracePeriodSeconds
+        worker_cpu                  = var.worker_cpu
+        worker_mem                  = var.worker_mem
         service_type                = var.service_type
         admin_user                  = var.admin_user
         admin_pass                  = var.admin_pass

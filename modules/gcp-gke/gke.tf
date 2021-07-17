@@ -13,6 +13,8 @@ variable use_preemptible { }
 variable vpc { }
 variable create_k8s { }
 variable tags { }
+variable node_taint_key { }
+variable node_taint_value { }
 
 # Create resources
 resource "google_container_cluster" "primary_gke" {

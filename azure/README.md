@@ -52,6 +52,8 @@ az role assignment create --assignee <service_principal_id_or_name> --role "User
     - `abfs_client_id` *(your SP appId)*
     - `abfs_secret` *(your SP password)*
 
+**Note:** You do not need to specify the Pod size of the Starburst workers. This is calculated automatically based on the instance type used in the worker node pool.
+
 6. Create a workspace in Terraform for your deployment:
 ```
 terraform workspace new ${your-workspace-name}

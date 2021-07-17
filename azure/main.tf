@@ -94,3 +94,15 @@ resource "null_resource" "configure_kubectl" {
 
   depends_on        = [module.k8s]
 }
+
+data "external" "worker_nodes" {
+  program = ["bash", "-c", "kubectl get nodes --selector='starburstpool=${var.worker_node_pool}' -o jsonpath='{.items[0].status.allocatable}'"]
+
+  depends_on        = [module.k8s,null_resource.configure_kubectl]
+}
+
+data "external" "primary_nodes" {
+  program = ["bash", "-c", "kubectl get nodes --selector='starburstpool=${var.primary_node_pool}' -o jsonpath='{.items[0].status.allocatable}'"]
+
+  depends_on        = [module.k8s,null_resource.configure_kubectl]
+}

@@ -37,3 +37,19 @@ output starburst-endpoints {
     var.create_cloudbeaver ?  "CloudBeaver          = ${local.cloudbeaver_endpoint}" : "CloudBeaver not deployed"
   ])
 }
+
+output worker-node-details {
+  value = tolist([
+    "Allocatable CPU=${data.external.worker_nodes.result.cpu}",
+    "Allocatable MEM=${data.external.worker_nodes.result.memory}",
+    "Usable CPU=${local.worker_cpu}",
+    "Usable MEM=${local.worker_mem}"
+  ])
+}
+
+output primary-node-details {
+  value = tolist([
+    "CPU=${data.external.primary_nodes.result.cpu}",
+    "MEM=${data.external.primary_nodes.result.memory}"
+  ])
+}

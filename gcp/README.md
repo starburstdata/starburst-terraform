@@ -59,6 +59,8 @@ gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVIC
     - `repo_username`
     - `repo_password`
 
+**Note:** You do not need to specify the Pod size of the Starburst workers. This is calculated automatically based on the instance type used in the worker node pool.
+
 4. Create a workspace in Terraform for your deployment:
 ```
 terraform workspace new ${your-workspace-name}

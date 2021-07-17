@@ -34,9 +34,13 @@ resource "helm_release" "postgresql" {
     values          = [local.postgres_helm_chart_values]
 
     set {
-        name        = "nodeSelector\\.starburstpool"
+        name        = "primary.nodeSelector.starburstpool"
         value       = var.primary_node_pool
-        type        = "string"
+    }
+
+    set {
+        name        = "readReplicas.nodeSelector.starburstpool"
+        value       = var.primary_node_pool
     }
 }
 

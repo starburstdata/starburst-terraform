@@ -39,6 +39,7 @@ admin:
     usersync: ${ranger_svc_acc_pwd3}
     keyadmin: ${ranger_svc_acc_pwd4}
     service: ${ranger_svc_acc_pwd5}
+  serviceUser: ${admin_user}
     
 database:
   resources:
@@ -60,7 +61,7 @@ database:
 
 datasources:
   - name: starburst-enterprise
-    host: ${expose_sb_name}
+    host: coordinator
     port: 8080
     username: ${admin_user} 
     password: ${admin_pass}

@@ -24,6 +24,8 @@ Ensure you have [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/insta
     - `s3_role`
     - `map_roles`
 
+**Note:** You do not need to specify the Pod size of the Starburst workers. This is calculated automatically based on the instance type used in the worker node pool.
+
 4. Create a workspace in Terraform for your deployment:
 ```
 terraform workspace new ${your-workspace-name}

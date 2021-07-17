@@ -53,6 +53,10 @@ locals {
     worker_node_tags  = {
         agentpool       = var.worker_node_pool
     }
+
+    worker_cpu              = "${(trimsuffix(data.external.worker_nodes.result.cpu,substr(data.external.worker_nodes.result.cpu,-1,-1)) - var.cpu_offset)}${substr(data.external.worker_nodes.result.cpu,-1,-1)}"
+    worker_mem              = "${(trimsuffix(data.external.worker_nodes.result.memory,substr(data.external.worker_nodes.result.memory,-2,-1)) - var.mem_offset)}${substr(data.external.worker_nodes.result.memory,-2,-1)}"
+
 }
 
 # Generate some visible random passwords the user can use to connect to starburst & Ranger

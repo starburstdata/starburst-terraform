@@ -41,6 +41,8 @@ module k8s {
   use_ondemand          = var.use_ondemand
   use_preemptible       = var.use_preemptible
   vpc                   = module.vpc.vpc_name
+  node_taint_key        = var.node_taint_key
+  node_taint_value      = var.node_taint_value
 
   create_k8s            = var.create_k8s
 
@@ -67,4 +69,16 @@ resource "null_resource" "configure_kubectl" {
   }
 
   depends_on        = [module.k8s]
+}
+
+data "external" "worker_nodes" {
+  program = ["bash", "-c", "kubectl get nodes --selector='starburstpool=${var.worker_node_pool}' -o jsonpath='{.items[0].status.allocatable}'"]
+
+  depends_on        = [module.k8s,null_resource.configure_kubectl]
+}
+
+data "external" "primary_nodes" {
+  program = ["bash", "-c", "kubectl get nodes --selector='starburstpool=${var.primary_node_pool}' -o jsonpath='{.items[0].status.allocatable}'"]
+
+  depends_on        = [module.k8s,null_resource.configure_kubectl]
 }

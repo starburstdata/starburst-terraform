@@ -10,7 +10,7 @@
 
 module vpc {
     source  = "terraform-aws-modules/vpc/aws"
-    version = "2.70.0"
+    version = "3.2.0"
 
     name                 = local.vpc_name
     cidr                 = "172.31.0.0/16"
@@ -34,7 +34,7 @@ module vpc {
 
 module k8s {
   source  = "terraform-aws-modules/eks/aws"
-  version = "15.1.0"
+  version = "17.1.0"
 
   cluster_name    = local.cluster_name
   cluster_version = var.k8s_version
@@ -90,8 +90,9 @@ module k8s {
   # Attach S3 policy to allow worker nodes to interact with Glue/S3
   workers_additional_policies = var.s3_role
 
-  write_kubeconfig   = true
-  config_output_path = "./"
+  write_kubeconfig       = false
+  kubeconfig_name        = "${local.cluster_name}_kubeconfig"
+  #kubeconfig_output_path = "./"
 
   map_roles         = var.map_roles
 
@@ -134,3 +135,26 @@ data aws_subnet_ids subnet {
 #   vcp_id = var.ex_vpc_id != "" ? data.aws_vpc.new_vpc.id : data.aws_vpc.default_vpc
 #   name   = "default"
 # }
+
+
+# Update the local kubectl config
+resource "null_resource" "configure_kubectl" {
+  provisioner "local-exec" {
+    command = "aws eks update-kubeconfig --name ${local.cluster_name} --region ${var.region}"
+    interpreter = ["bash","-c"]
+  }
+
+  depends_on        = [module.k8s]
+}
+
+data "external" "worker_nodes" {
+  program = ["bash", "-c", "kubectl get nodes --selector='starburstpool=${var.worker_node_pool}' -o jsonpath='{.items[0].status.allocatable}'"]
+
+  depends_on        = [module.k8s,null_resource.configure_kubectl]
+}
+
+data "external" "primary_nodes" {
+  program = ["bash", "-c", "kubectl get nodes --selector='starburstpool=${var.primary_node_pool}' -o jsonpath='{.items[0].status.allocatable}'"]
+
+  depends_on        = [module.k8s,null_resource.configure_kubectl]
+}

@@ -56,15 +56,16 @@ worker:
     enabled: true
     minReplicas: ${worker_autoscaling_min_size}
     maxReplicas: ${worker_autoscaling_max_size}
-  deploymentTerminationGracePeriodSeconds: 60 # default is 300; it is actually how long the graceful shutdown waits after it receives the SIGTERM
-  starburstWorkerShutdownGracePeriodSeconds: 120 # default is 120
+    targetCPUUtilizationPercentage: ${targetCPUUtilizationPercentage} # For demo and testing you can set this lower to someting like 50.
+  deploymentTerminationGracePeriodSeconds: ${deploymentTerminationGracePeriodSeconds} # default is 300; it is actually how long the graceful shutdown waits after it receives the SIGTERM
+  starburstWorkerShutdownGracePeriodSeconds: ${starburstWorkerShutdownGracePeriodSeconds} # default is 120
   resources:
     requests:
-      memory: "12Gi"
-      cpu: 2
+      memory: ${worker_mem}
+      cpu: ${worker_cpu}
     limits:
-      memory: "12Gi"
-      cpu: 2
+      memory: ${worker_mem}
+      cpu: ${worker_cpu}
   nodeSelector:
     starburstpool: ${worker_node_pool}
   tolerations:

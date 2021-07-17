@@ -111,7 +111,7 @@ resource "helm_release" "ranger" {
     values = local.ranger_helm_chart_values
 
     set {
-      name = "nodeSelector\\.starburstpool"
+      name = "nodeSelector.starburstpool"
       value = var.primary_node_pool
       type = "string"
     }

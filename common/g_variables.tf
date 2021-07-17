@@ -1,4 +1,5 @@
 variable sb_license { }
+variable ldap_cert {              default = ""}
 variable dns_zone { }
 variable dns_zone_name {          default = ""}
 variable email { }
@@ -8,7 +9,7 @@ variable region { }
 variable zone {                   default = ""}
 variable vpc_name {               default = "vpc"}
 variable k8s_name {               default = "k8s"}
-variable k8s_version {            default = "1.18"}
+variable k8s_version {            default = "1.19"}
 variable bucket_name {            default = "storage"}
 variable storage_location {       default = "US"}
 variable primary_node_pool {      default = "base"}
@@ -40,6 +41,11 @@ variable cloudbeaver_yaml_file {    default = "cloudbeaver_values.yaml.tpl"}
 variable custom_trino_yaml_file {   default = ""}
 variable custom_ranger_yaml_file {  default = ""}
 variable custom_hive_yaml_file {    default = ""}
+
+# Starburst Worker Autoscaling and Graceful shutdown
+variable targetCPUUtilizationPercentage {               default = 80}
+variable deploymentTerminationGracePeriodSeconds {      default = 300}
+variable starburstWorkerShutdownGracePeriodSeconds {    default = 120}
 
 # External Hive RDS
 variable ex_hive_instance {       default = ""} # If this value is set, a database for Hive WILL NOT be created
@@ -76,6 +82,14 @@ variable ex_insights_port {        default = ""}
 variable ex_insights_db {          default = ""}
 variable ex_insights_db_user {     default = ""}
 variable ex_insights_db_password { default = ""}
+
+# External Cache Redirection RDS
+variable ex_cache_instance {    default = ""} # If this value is set, a database for Cache Redirection WILL NOT be created
+variable ex_cache_port {        default = ""}
+variable ex_cache_db {          default = ""}
+variable ex_cache_db_user {     default = ""}
+variable ex_cache_db_password { default = ""}
+
 
 # External HMS
 variable ex_hive_server_url {      default = ""}
