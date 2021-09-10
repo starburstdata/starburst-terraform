@@ -21,6 +21,11 @@ module db {
 
     create_rds              = var.create_rds
 
+    primary_db_hive         = var.ex_hive_instance != "" ? var.ex_hive_db : "hive"
+    primary_db_ranger       = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
+    primary_db_insights     = var.ex_insights_instance != "" ? var.ex_insights_db : "insights"
+    primary_db_cache        = var.ex_cache_instance != "" ? var.ex_cache_db : "cache"
+
     depends_on              = [module.k8s]
 }
 
@@ -85,50 +90,6 @@ module hive {
     ex_hive_server_url      = var.ex_hive_server_url
 
     depends_on              = [module.k8s,module.db]
-}
-
-module mc {
-    source                  = "../modules/mc"
-
-    environment             = local.env
-
-    # Helm Chart Repo
-    registry                = var.registry
-    repository              = var.repository
-    repo_version            = local.mc_version
-    starburst_version       = var.starburst_version
-    repo_username           = var.repo_username
-    repo_password           = var.repo_password
-    
-    # External Postgres details
-    primary_ip_address      = var.ex_mc_instance != "" ? var.ex_mc_instance : module.db.db_address
-    primary_db_port         = var.ex_mc_instance != "" ? var.ex_mc_port : module.db.db_port
-    primary_db_user         = var.ex_mc_instance != "" ? var.ex_mc_db_user : module.db.primary_db_user
-    primary_user_password   = var.ex_mc_instance != "" ? var.ex_mc_db_password : module.db.primary_db_password
-    primary_db_mc           = var.ex_mc_instance != "" ? var.ex_mc_db : "mcdemo"
-    mc_template_file        = "${path.root}/../helm_templates/${local.mc_yaml_file}"
-    operator_template_file  = "${path.root}/../helm_templates/${local.operator_yaml_file}"
-    type                    = var.create_rds == false && var.ex_mc_instance == "" ? "internal" : "external"
-    service_type            = var.create_nginx ? "ingress" : "loadBalancer"
-
-    # MC Service Name
-    mc_service              = local.mc_service
-
-    # Expose this service name
-    expose_mc_name          = var.expose_mc_name
-
-    # DNS Zone for Ranger endpoint
-    dns_zone                = var.dns_zone
-
-    # Node pools to deploy to
-    primary_node_pool       = var.primary_node_pool
-
-    # Conditional create logic
-    create_mc               = var.create_mc
-    create_rds              = var.create_rds
-    create_mc_db            = var.ex_mc_instance == "" ? true : false
-
-    depends_on              = [module.nginx,module.dns,module.k8s,module.db]
 }
 
 module ranger {
@@ -204,7 +165,7 @@ module trino {
     primary_db_port         = var.ex_insights_instance != "" ? var.ex_insights_port : module.db.db_port
     primary_db_user         = var.ex_insights_instance != "" ? var.ex_insights_db_user : module.db.primary_db_user
     primary_user_password   = var.ex_insights_instance != "" ? var.ex_insights_db_password : module.db.primary_db_password
-    primary_db_event_logger = var.ex_insights_instance != "" ? var.ex_insights_db : "event_logger"
+    primary_db_insights     = var.ex_insights_instance != "" ? var.ex_insights_db : "insights"
     # Ranger DB details
     primary_db_ranger        = var.ex_ranger_instance != "" ? var.ex_ranger_db : "ranger"
     ranger_db_ip_address     = var.ex_ranger_instance != "" ? var.ex_ranger_instance : module.db.db_address
@@ -293,32 +254,4 @@ module nginx {
     create_nginx            = var.create_nginx
 
     depends_on              = [module.k8s]
-}
-
-module cloudbeaver {
-    source                  = "../modules/cloudbeaver"
-
-    environment             = local.env
-
-    # Helm Chart Repo
-    repository              = "dbeaver/cloudbeaver"
-
-    cloudbeaver_service     = local.cloudbeaver_service
-    cloudbeaver_yaml_file   = "${path.root}/../helm_templates/${local.cloudbeaver_yaml_file}"
-    service_type            = var.create_nginx ? "ClusterIP" : "LoadBalancer"
-    enable_ingress          = var.create_nginx ? "true" : "false"
-
-    # Expose this service name
-    expose_cloudbeaver_name = var.expose_cloudbeaver_name
-
-    # DNS Zone for starburst endpoint
-    dns_zone                = var.dns_zone
-    
-    # Node pools to deploy to
-    primary_node_pool       = var.primary_node_pool
-
-    # Conditional create logic
-    create_cloudbeaver      = var.create_cloudbeaver
-
-    depends_on              = [module.nginx,module.dns,module.hive,module.db]
 }

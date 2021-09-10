@@ -6,7 +6,7 @@ variable repo_version { }
 variable repo_username { }
 variable repo_password { }
 # Insights DB details
-variable primary_db_event_logger { }
+variable primary_db_insights { }
 variable primary_ip_address { }
 variable primary_db_port { }
 variable primary_db_user { }
@@ -90,7 +90,7 @@ locals {
         primary_db_port             = var.primary_db_port
         primary_db_user             = var.primary_db_user
         primary_db_password         = var.primary_user_password
-        primary_db_event_logger     = var.primary_db_event_logger
+        primary_db_insights         = var.primary_db_insights
         ranger_db_ip_address        = var.ranger_db_ip_address
         ranger_db_port              = var.ranger_db_port
         ranger_db_user              = var.ranger_db_user
@@ -143,25 +143,6 @@ locals {
     
 }
 
-# Create the event_logger DB
-terraform {
-    required_providers {
-        postgresql = {
-            source = "cyrilgdn/postgresql"
-            version = ">= 1.11.2"
-        }
-    }
-}
-
-resource postgresql_database event_logger {
-    count               = var.create_trino && var.create_rds && var.create_insights_db ? 1 : 0
-
-    name                = var.primary_db_event_logger
-    connection_limit    = -1
-    allow_connections   = true
-}
-
-
 resource "helm_release" "trino" {
     # This is how Terraform does conditional logic
     count               = var.create_trino ? 1 : 0
@@ -185,7 +166,6 @@ resource "helm_release" "trino" {
       type = "string"
     }
 
-    depends_on          = [postgresql_database.event_logger]
 }
 
 

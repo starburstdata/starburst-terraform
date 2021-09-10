@@ -9,27 +9,12 @@ terraform {
             version = ">= 2.3.2"
         }
         helm        = ">= 2.2.0"
-        postgresql = {
-            source = "cyrilgdn/postgresql"
-            version = ">= 1.13.0"
-        }
     }
 }        
 
 # Configure the AWS Provider
 provider "aws" {
     region = var.region
-}
-
-# Provider
-provider "postgresql" {
-    host            = module.db.db_ingress
-    port            = module.db.db_port
-    database        = module.db.db_name
-    username        = module.db.primary_db_user
-    password        = module.db.primary_db_password
-    connect_timeout = 15
-    sslmode         = "disable"
 }
 
 provider "kubernetes" {

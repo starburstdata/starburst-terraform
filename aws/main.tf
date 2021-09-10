@@ -10,7 +10,7 @@
 
 module vpc {
     source  = "terraform-aws-modules/vpc/aws"
-    version = "3.2.0"
+    version = "3.7.0"
 
     name                 = local.vpc_name
     cidr                 = "172.31.0.0/16"
@@ -34,7 +34,7 @@ module vpc {
 
 module k8s {
   source  = "terraform-aws-modules/eks/aws"
-  version = "17.1.0"
+  version = "17.18.0"
 
   cluster_name    = local.cluster_name
   cluster_version = var.k8s_version

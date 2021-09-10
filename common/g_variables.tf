@@ -26,7 +26,7 @@ variable starburst_service {      default = "starburst"}
 variable ranger_service {         default = "ranger"}
 variable mc_service {             default = "missioncontrol"}
 variable cloudbeaver_service {    default = "cloudbeaver"}
-variable expose_postgres_name {   default = "postgresql"}
+variable expose_postgres_name {   default = "postgres"}
 variable expose_sb_name {         default = "starburst"}
 variable expose_ranger_name {     default = "ranger"}
 variable expose_mc_name {         default = "starburst-mission-control"}
@@ -119,9 +119,6 @@ variable sb_version {             default = null}
 variable ranger_version {         default = null}
 variable mc_version {             default = null}
 variable operator_version {       default = null}
-
-# Starburst-Trino versions
-variable starburst_version { }
 
 # Object storage credentials
 # GCS

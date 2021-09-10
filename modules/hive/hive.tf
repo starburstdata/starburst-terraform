@@ -83,24 +83,6 @@ locals {
 
 }
 
-terraform {
-    required_providers {
-        postgresql = {
-            source = "cyrilgdn/postgresql"
-            version = ">= 1.11.2"
-        }
-    }
-}
-
-resource postgresql_database hive {
-    count               = var.create_hive && var.create_rds && var.create_hive_db ? 1 : 0
-
-    name                = var.primary_db_hive
-    connection_limit    = -1
-    allow_connections   = true
-}
-
-
 # Helm Deployment
 resource "helm_release" "hive" {
     # This is how Terraform does conditional logic
@@ -123,7 +105,6 @@ resource "helm_release" "hive" {
       type              = "string"
     }
 
-    depends_on          = [postgresql_database.hive]
 }
 
 output hive_url {

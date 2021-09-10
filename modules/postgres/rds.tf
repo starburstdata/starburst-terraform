@@ -5,6 +5,12 @@ variable postgres_template_file { }
 variable primary_node_pool { }
 variable expose_postgres_name { }
 variable wait_this_long { }
+# Create these databases
+variable primary_db_hive { }
+variable primary_db_ranger { }
+variable primary_db_insights { }
+variable primary_db_cache { }
+
 
 # Data Sources
 locals {
@@ -13,6 +19,10 @@ locals {
         expose_postgres_name = var.expose_postgres_name
         primary_db_user      = var.primary_db_user
         primary_db_password  = random_string.primary_db_user.result
+        primary_db_hive      = var.primary_db_hive
+        primary_db_ranger    = var.primary_db_ranger
+        primary_db_insights  = var.primary_db_insights
+        primary_db_cache     = var.primary_db_cache
     }
 
     postgres_helm_chart_values = templatefile(
@@ -44,26 +54,6 @@ resource "helm_release" "postgresql" {
     }
 }
 
-# Add small delay to wait for Cloud provider to complete DB LoadBalancer startup
-resource "time_sleep" "wait_for_postgres" {
-  count           = var.create_rds ? 1 : 0
-
-  depends_on = [helm_release.postgresql]
-
-  create_duration = var.wait_this_long #"60s"
-}
-
-
-data "kubernetes_service" "postgres" {
-  count           = var.create_rds ? 1 : 0
-
-  metadata {
-    name = var.expose_postgres_name
-  }
-  #depends_on = [helm_release.postgresql]
-  depends_on = [time_sleep.wait_for_postgres]
-}
-
 # Always generate this pwd, even if the postgres instance is not being deployed
 resource "random_string" "primary_db_user" {
     # Generate a random password for the primary PostgreSQL DB user
@@ -81,11 +71,6 @@ output "primary_db_user" {
 
 output "primary_db_password" {
     value       = random_string.primary_db_user.result
-}
-
-# Output "" when not creating an rds. Output IP for Azure/GCP. Output hostname for AWS
-output "db_ingress" {
-    value       = !var.create_rds ? "" : data.kubernetes_service.postgres[0].status[0].load_balancer[0].ingress[0].ip != "" ? data.kubernetes_service.postgres[0].status[0].load_balancer[0].ingress[0].ip : data.kubernetes_service.postgres[0].status[0].load_balancer[0].ingress[0].hostname
 }
 
 output "db_address" {

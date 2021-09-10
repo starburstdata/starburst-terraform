@@ -10,10 +10,6 @@ terraform {
             version = "= 2.0.2"
         }
         helm        = "= 2.0.2"
-        postgresql = {
-            source = "cyrilgdn/postgresql"
-            version = "= 1.11.2"
-        }
     }
 }        
 
@@ -32,18 +28,6 @@ provider "azurerm" {
     subscription_id     = var.dns_sub != "" ? var.dns_sub : data.azurerm_client_config.current.subscription_id
     # For usage attribution tracking
     partner_id          = var.partner_id
-}
-
-# Provider
-provider "postgresql" {
-    host            = module.db.db_ingress
-    port            = module.db.db_port
-    database        = module.db.db_name
-    username        = module.db.primary_db_user
-    password        = module.db.primary_db_password
-    connect_timeout = 15
-    #expected_version = "13"
-    sslmode         = "disable"
 }
 
 data "azurerm_client_config" "current" { }

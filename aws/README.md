@@ -55,11 +55,9 @@ ___
 | cluster_autoscaler_tag | Cluster Autoscaler container version. Note, the major.minor version should match your Kubernetes version. | no | v1.18.3 |
 | cluster_autoscaler_version | Version of the cluster_autoscaler Helm chart to be deployed | no | 9.3.0 |
 | create_bucket | Should the cloud storage bucket be created? | no | true |
-| create_cloudbeaver | Should CloudBeaver be deployed? (https://cloudbeaver.io/) | no | true |
 | create_cluster_autoscaler | Should the kubernetes cluster_autoscaler server be deployed? | no | true |
 | create_hive | Should the Hive server resource be deployed? | no | true |
 | create_k8s | Should the cloud K8s cluster be created? | no | true |
-| create_mc | Should Mission Control be deployed? | no | true |
 | create_metrics_server | Should the metrics server be deployed to the cluster? Required to support the cluster autoscaler | no | true |
 | create_nginx | Should the Nginx controller be deployed? | no | true |
 | create_ranger | Should Ranger be deployed? | no | true |
@@ -87,7 +85,6 @@ ___
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
 | s3_role | S3 permission role which will be attached to the EKS nodes to allow S3 access to these nodes. With the role in place, you do not need to set up S3 access via IAM keys in the Starburst-Hive yaml. | no |  |
 | sb_license | The Starburst license file | yes | N/A |
-| starburst_version | The version of Starburst that Mission Control will deploy | yes | 355-e |
 | tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
 | wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
 | worker_autoscaling_max_size | Maximum size of the Starburst worker replicas. Value corresponds to `maxReplicas` in yaml | no | 10 |
@@ -103,7 +100,6 @@ ___
 | hive_yaml_file | Default values.yaml for `starburst-hive` Helm chart | yes | hms_values.yaml.tpl |
 | trino_yaml_files | Default values.yaml for `starburst-enterprise` Helm chart. Note that there are multiple yaml files for this chart, broken out by related components. The application determines which files to layer onto the deployment based on the user's configuration selection criteria. e.g. if Ranger is not being deployed, then `trino_values.03.ranger.tpl` will be omitted. Note: that each file's configuration is successively applied - meaning that values in the later files will overwrite the same value in the previous files. The full path to the file should be included with the name. | yes | ["trino_values.01.base.tpl", "trino_values.02.auth.tpl", "trino_values.03.ranger.tpl", "trino_values.04.insights.tpl", "trino_values.05.catalogs.tpl", `custom_trino_yaml_file`] |
 | ranger_yaml_file | Default values.yaml for `starburst-ranger` Helm chart | yes | ranger_values.yaml.tpl |
-| mc_yaml_file | Default values.yaml for `starburst-mission-control` Helm chart | yes | mission_control.yaml.tpl |
 | operator_yaml_file | Default values.yaml for `starburst-presto-helm-operator` Helm chart | yes | operator_values.yaml.tpl |
 | postgres_yaml_file | Default values.yaml for Bitnami `postgresql` Helm chart | yes | postgresql.yaml.tpl |
 | cloudbeaver_values.yaml.tpl | Default values.yaml for `CloudBeaver` Helm chart | yes | cloudbeaver_values.yaml.tpl |
@@ -142,11 +138,6 @@ ___
 | ex_hive_db | Hive database name (usually `hive` or `hms`) | no |  |
 | ex_hive_db_user | User that can connect to the Hive Database | no |  |
 | ex_hive_db_password | Password for the `ex_hive_db_user` | no |  |
-| ex_mc_instance | Existing RDS instance to point Mission Control to. If this is set, the application will point MC to this existing data store. | no |  |
-| ex_mc_port | Mission Control Database instance port | no |  |
-| ex_mc_db | Mission Control database name (usually `mcdemo`) | no |  |
-| ex_mc_db_user | User that can connect to the Mission Control Database | no |  |
-| ex_mc_db_password | Password for the `ex_mc_db_user` | no |  |
 | ex_ranger_instance | Existing RDS instance to point Ranger to. If set, the application will point to this existing Ranger database store. Note: To avoid any errors, you should also set all related `ex_ranger_?` passwords. | no |  |
 | ex_ranger_port | Ranger Database instance port | no |  |
 | ex_ranger_db | Ranger database name (usually `ranger`) | no |  |
@@ -161,6 +152,6 @@ ___
 | ex_ranger_usersync_pwd | Password for Internal account created by Ranger. Corresponds to `admin.passwords.usersync` in the Ranger yaml file. Set this to an existing value when connecting to an existing Ranger database | no |  |
 | ex_insights_instance | Existing RDS instance to point Starburst Insights to. When set, the application will point the Starburst Insights application to this existing data store. | no |  |
 | ex_insights_port | Insights Database instance port | no |  |
-| ex_insights_db | Insights database name (usually `event_logger`) | no |  |
+| ex_insights_db | Insights database name (usually `insights`) | no |  |
 | ex_insights_db_user | User that can connect to the Starburst Insights Database | no |  |
 | ex_insights_db_password | Password for the `ex_insights_db_user` | no |  |
