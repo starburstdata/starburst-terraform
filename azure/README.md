@@ -32,7 +32,7 @@ export TF_VAR_ARM_CLIENT_SECRET=${ARM_CLIENT_SECRET}
 export TF_VAR_ARM_SUBSCRIPTION_ID=${ARM_SUBSCRIPTION_ID}
 export TF_VAR_ARM_TENANT_ID=${ARM_TENANT_ID}
 ```
-*Hint: Add these to your `.bash_profile` / `.zprofile` file for Terraform to automatically pick them up whenever you open a shell terminal*
+*Hint: Add these to your `.bash_profile` file for Terraform to automatically pick them up whenever you open a shell terminal*
 
 
 3. Add the `User Access Administrator` IAM permission to the SP at the subscription level:
@@ -43,14 +43,19 @@ az role assignment create --assignee <service_principal_id_or_name> --role "User
 
 4. Copy your Starburst license to a local directory on your client machine
 
-5. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
+5. Copy the `terraform.tfvars.example` file to `terraform.tfvars` and edit it to suit your environment. Pay particular attention to these values:
     - `sb_license` *(point to your local file)*
-    - `email`
-    - `repo_username`
-    - `repo_password`
-    - `abfs_auth_type`
-    - `abfs_client_id` *(your SP appId)*
-    - `abfs_secret` *(your SP password)*
+    - `dns_zone`    *(Azure DNS Zone name)*
+    - `dns_rg`      *(Azure Resource Group where the DNS Zone definition resides)*
+    - `dns_sub`     *(Azure subscription where the DNS Zone definition resides)*
+    - `region`      *(Azure Region to deploy to)*
+    - `email`           *(Need an email to request a cert from letsencrypt.org)*
+    - `repo_username`   *(access to the Starburst Harbor Helm chart repository)*
+    - `repo_password`   *(access to the Starburst Harbor Helm chart repository)*
+    - `abfs_auth_type`  *(Cluster access to ADLS Gen2. Defaults to `oauth`)*
+    - `abfs_client_id` *(Cluster access to ADLS Gen2. Your SP appId)*
+    - `abfs_secret` *(Cluster access to ADLS Gen2. Your SP password)*
+    - `tags`            *(Optional: Custom tags for your resources)*
 
 **Note:** You do not need to specify the Pod size of the Starburst workers. This is calculated automatically based on the instance type used in the worker node pool.
 
@@ -121,7 +126,6 @@ ___
 | tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
 | use_ondemand | Should Terraform provision a on-demand instance worker node pool? | no | true |
 | use_spot | Should Terraform provision a spot instance worker node pool? | no | false |
-| wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
 | worker_node_type | The VM machine type in the worker pool | no | Standard_D4s_v3 |
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |
 | worker_pool_max_size | The maximum size of the worker pool (worker pool is reserved for the Trino workers) | no | 10 |

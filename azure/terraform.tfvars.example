@@ -1,14 +1,19 @@
 # NOTE: Rename this file to terraform.tfvars and edit according to your environment
 
 # SB License and DNS zone
-sb_license      = "~/Downloads/signed_trial.license"
+sb_license      = "starburstdata.license" # Full path to starburst license
 dns_zone        = "az.starburstdata.net"
 dns_rg          = "fieldeng" # The RG where the dns zone definition resides
 #dns_sub        = The subscription where the dns zone resides. set in sensitive.auto.tfvars or in environment variable: $TF_VAR_dns_sub
 region          = "East US"
 
+# SP details for ADLS Gen2 access
+abfs_auth_type  = "oauth"
+#abfs_client_id  = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_abfs_client_id
+#abfs_secret     = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_abfs_secret
+
 # email address for certs
-#email           = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_email
+#email           = set here, set in sensitive.auto.tfvars or in environment variable: $TF_VAR_email
 
 # List of usernames to login to Trino & Ranger.
 # NOTE: The first user in the list is assumed to be the admin user.
@@ -21,10 +26,9 @@ reg_user2       = "analyst"
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"
-#repo_username   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
-#repo_password   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
-repo_version        = "355.0.0"
-starburst_version   = "355-e"
+#repo_username   = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
+#repo_password   = set here, set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
+repo_version        = "362.0.1" # Version to deploy
 
 # Optional tagging for cloud resources. Defined as a map of keys and values
 # Replace with your own keys and values, or delete this if not needed
@@ -43,9 +47,7 @@ use_ondemand    = false # If set, a dedicated ON_DEMAND node pool will be create
 
 # K8s applications control
 create_hive         = true
-create_mc           = false     # Refer to MC chart versions: https://harbor.starburstdata.net/harbor/projects/2/helm-charts/starburst-mission-control/versions before setting to true
 create_ranger       = true
 create_trino        = true
-create_cloudbeaver  = false
 
 create_nginx        = true

@@ -1,18 +1,19 @@
 # NOTE: Rename this file to terraform.tfvars and edit according to your environment
 
 # SB License and DNS zone
-sb_license      = "~/Downloads/signed_trial.license"
+sb_license      = "starburstdata.license" # Full path to starburst license
 dns_zone        = "fieldeng.starburstdata.net"
 region          = "us-east-1"
-s3_role         = ["arn:aws:iam::188806360106:policy/EKS-S3-Glue"]
+s3_role         = ["arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy","arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly","arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy","arn:aws:iam::aws:policy/AmazonS3FullAccess","arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"]
 
-map_roles       = [{rolearn    = "arn:aws:iam::188806360106:role/solution_architect",
-                    username   = "solution_architect",
-                    groups     = ["system:masters"]
-                    }]
+map_roles       = []
+# e.g. [{rolearn    = "arn:aws:iam::188806360106:role/solution_architect",
+#                     username   = "solution_architect",
+#                     groups     = ["system:masters"]
+#                     }]
 
 # email address for certs
-#email           = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_email
+#email           = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_email
 
 # List of usernames to login to Trino & Ranger.
 # NOTE: The first user in the list is assumed to be the admin user.
@@ -25,10 +26,9 @@ reg_user2       = "analyst"
 # Helm Repository details
 repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"
-#repo_username   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
-#repo_password   = set in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
-repo_version        = "355.0.0" # For Trino, Ranger & Hive
-starburst_version   = "355-e" # For Mission Control & starburst Operator
+#repo_username   = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
+#repo_password   = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
+repo_version        = "362.0.1" # Version to deploy
 
 # Optional tagging for cloud resources. Defined as a map of keys and values
 # Replace with your own keys and values, or delete this if not needed
@@ -40,9 +40,6 @@ tags         = {cloud        = "aws",
                 user         = "starburst"
                 }
 
-# Custom delay for AWS
-wait_this_long  = "90s"
-
 # Infrastructure control
 create_rds      = true
 create_k8s      = true
@@ -51,9 +48,7 @@ create_bucket   = true
 
 # K8s applications control
 create_hive         = true
-create_mc           = false     # Refer to MC chart versions: https://harbor.starburstdata.net/harbor/projects/2/helm-charts/starburst-mission-control/versions before setting to true
 create_ranger       = true
 create_trino        = true
-create_cloudbeaver  = false
 
 create_nginx        = true

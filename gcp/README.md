@@ -50,14 +50,19 @@ gcloud projects add-iam-policy-binding MY_PROJECT --member=serviceAccount:SERVIC
 
 2. Save a copy of your Starburst license locally
 
-3. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
-    - `project`
-    - `credentials` *(point to your local file)*
+3. Copy the `terraform.tfvars.example` file to `terraform.tfvars` and edit it to suit your environment. Pay particular attention to these values:
+    - `project` *(Google project where Starburst will be deployed)*
+    - `credentials` *(Service Account credentials. Point to your corresponding key.json file)*
     - `sb_license` *(point to your local file)*
-    - `sa_name`
-    - `email`
-    - `repo_username`
-    - `repo_password`
+    - `dns_zone`    *(GCP DNS Zone domain - e.g. gcp.somewhere.net. Check your Google DNS)*
+    - `dns_zone_name`    *(GCP DNS Zone name - e.g. gcp. Check your Google DNS)*
+    - `region`      *(Google Cloud Region to deploy to)*
+    - `zone`      *(Google Cloud Zone to deploy to)*
+    - `gcp_cloud_key_secret` *(Reference to the k8s secret that will contain the Service Account key.json)*
+    - `email`           *(Need an email to request a cert from letsencrypt.org)*
+    - `repo_username`   *(access to the Starburst Harbor Helm chart repository)*
+    - `repo_password`   *(access to the Starburst Harbor Helm chart repository)*
+    - `tags`            *(Optional: Custom tags for your resources)*
 
 **Note:** You do not need to specify the Pod size of the Starburst workers. This is calculated automatically based on the instance type used in the worker node pool.
 
@@ -115,7 +120,6 @@ ___
 | repo_username | Login user for the Harbor repository | yes |  |
 | repo_version | Starburst release to be deployed. This includes all components | yes | 355.0.0 |
 | repository | Starburst Helm repository | yes | https://harbor.starburstdata.net/chartrepo/starburstdata |
-| sa_name | The Google Service Account name | yes |  |
 | sb_license | The Starburst license file | yes |  |
 | tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
 | use_ondemand | Should Terraform provision a on-demand instance worker node pool? | no | true |

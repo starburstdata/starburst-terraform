@@ -1,6 +1,6 @@
 variable project { }
 variable credentials { }
-variable sa_name { }
+#variable sa_name { }
 
 # VM machine types
 variable primary_node_type {          default="e2-standard-8"}

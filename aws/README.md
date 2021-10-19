@@ -16,13 +16,15 @@ Ensure you have [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/insta
 
 2. Copy your Starburst license to a local directory
 
-3. Edit the `terraform.tfvars` file for your environment. For convenience and to ensure you don't accidentally check any sensitive values back into the GitHub repo, set any sensitive values in a separate input variables file ending in: `.auto.tfvars` (e.g. `sensitive.auto.tfvars` and add it to `.gitignore`) file or as global variables (TF_VAR_*) on your local machine:
-    - `sb_license` *(point to your local file)*
-    - `email`
-    - `repo_username`
-    - `repo_password`
-    - `s3_role`
-    - `map_roles`
+3. Copy the `terraform.tfvars.example` file to `terraform.tfvars` and edit it to suit your environment. Pay particular attention to these values:
+    - `sb_license`      *(point to your local file)*
+    - `dns_zone`        *(The Route53 zone name to use to create A record dns entries for the application)*
+    - `email`           *(Need an email to request a cert from letsencrypt.org)*
+    - `repo_username`   *(access to the Starburst Harbor Helm chart repository)*
+    - `repo_password`   *(access to the Starburst Harbor Helm chart repository)*
+    - `s3_role`         *(IAM policies to attach to the cluster nodes. Provides access to S3 & Glue)*
+    - `map_roles`       *(Optional: Map an IAM role to the cluster. Useful if you use a different user to view the cluster in the AWS UI)*
+    - `tags`            *(Optional: Custom tags for your resources)*
 
 **Note:** You do not need to specify the Pod size of the Starburst workers. This is calculated automatically based on the instance type used in the worker node pool.
 
@@ -86,7 +88,6 @@ ___
 | s3_role | S3 permission role which will be attached to the EKS nodes to allow S3 access to these nodes. With the role in place, you do not need to set up S3 access via IAM keys in the Starburst-Hive yaml. | no |  |
 | sb_license | The Starburst license file | yes | N/A |
 | tags | map of keys and values for tagging cloud resources | no | {manager = "starburst-terraform"} |
-| wait_this_long | default time to wait on resources to finalize. Currently only used to wait for Postgres K8s LoadBalancer service to complete | no | 60s |
 | worker_autoscaling_max_size | Maximum size of the Starburst worker replicas. Value corresponds to `maxReplicas` in yaml | no | 10 |
 | worker_autoscaling_min_size | Minimum size of the Starburst worker replicas. Value corresponds to `minReplicas` in yaml | no | 1 |
 | worker_node_type | The EC2 machine type in the worker pool | no | m5.xlarge |
