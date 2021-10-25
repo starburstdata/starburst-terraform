@@ -19,5 +19,5 @@ variable ARM_SUBSCRIPTION_ID {      description = "The subscription where Starbu
 variable ARM_TENANT_ID {            description = "The AD tenant"}
 
 # K8s resource offsets
-variable cpu_offset {                 default=500 }
+variable cpu_offset {                 default=600 }
 variable mem_offset {                 default=1000000 }

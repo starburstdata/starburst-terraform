@@ -42,6 +42,18 @@ variable custom_trino_yaml_file {   default = ""}
 variable custom_ranger_yaml_file {  default = ""}
 variable custom_hive_yaml_file {    default = ""}
 
+# Custom Starburst Coordinator & Worker pod sizes. If left unset, these are calculated based on the machine type
+variable coordinator_cpu {          default = "2500m"}
+variable coordinator_mem {          default = "16Gi"}
+variable worker_cpu {               default = ""}
+variable worker_mem {               default = ""}
+variable ranger_cpu {               default = 1}
+variable ranger_mem {               default = "1Gi"}
+variable postgres_cpu {             default = "500m"}
+variable postgres_mem {             default = "512Mi"}
+variable hive_cpu {                 default = 1}
+variable hive_mem {                 default = "1Gi"}
+
 # Starburst Worker Autoscaling and Graceful shutdown
 variable targetCPUUtilizationPercentage {               default = 80}
 variable deploymentTerminationGracePeriodSeconds {      default = 300}
@@ -158,12 +170,12 @@ variable create_k8s {             default = true}
 # Control the deployment of Kubernetes applications
 variable create_rds {             default = true}
 variable create_hive {            default = true}
-variable create_mc {              default = true}
+variable create_mc {              default = false}
 variable create_ranger {          default = true}
 variable create_trino {           default = true}
 variable create_demo {            default = true}
 variable create_nginx {           default = true}
-variable create_cloudbeaver {     default = true}
+variable create_cloudbeaver {     default = false}
 
 # debug flag
 variable debug_this {             default = false}

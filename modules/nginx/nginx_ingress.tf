@@ -95,6 +95,11 @@ resource helm_release ingress {
   cleanup_on_fail = true
 
   set {
+    name              = "fullnameOverride"
+    value             = "ingress-nginx"
+  }
+
+  set {
     name              = "controller.nodeSelector.starburstpool"
     value             = var.primary_node_pool
   }

@@ -10,6 +10,8 @@ variable primary_db_hive { }
 variable primary_db_ranger { }
 variable primary_db_insights { }
 variable primary_db_cache { }
+variable postgres_cpu { }
+variable postgres_mem { }
 
 
 # Data Sources
@@ -23,6 +25,8 @@ locals {
         primary_db_ranger    = var.primary_db_ranger
         primary_db_insights  = var.primary_db_insights
         primary_db_cache     = var.primary_db_cache
+        postgres_cpu         = var.postgres_cpu
+        postgres_mem         = var.postgres_mem
     }
 
     postgres_helm_chart_values = templatefile(

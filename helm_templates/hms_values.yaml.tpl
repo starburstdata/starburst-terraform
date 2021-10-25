@@ -87,11 +87,11 @@ heapSizePercentage: 85
 
 resources:
   requests:
-    memory: 1Gi
-    cpu: 1
+    memory: ${hive_mem}
+    cpu: ${hive_cpu}
   limits:
-    memory: 1Gi
-    cpu: 1
+    memory: ${hive_mem}
+    cpu: ${hive_cpu}
 
 nodeSelector: {}
 

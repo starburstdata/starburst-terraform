@@ -28,11 +28,11 @@ expose:
 admin:
   resources:
     requests:
-      memory: 1Gi
-      cpu: 1
+      memory: ${ranger_mem}
+      cpu: ${ranger_cpu}
     limits:
-      memory: 1Gi
-      cpu: 1
+      memory: ${ranger_mem}
+      cpu: ${ranger_cpu}
   passwords:
     admin: ${ranger_svc_acc_pwd1}
     tagsync: ${ranger_svc_acc_pwd2}

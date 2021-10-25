@@ -33,8 +33,8 @@ output starburst-endpoints {
 
 output worker-node-details {
   value = tolist([
-    "Allocatable CPU=${data.external.worker_nodes.result.cpu}",
-    "Allocatable MEM=${data.external.worker_nodes.result.memory}",
+    "Allocatable CPU=${data.external.worker_nodes[0].result.cpu}",
+    "Allocatable MEM=${data.external.worker_nodes[0].result.memory}",
     "Usable CPU=${local.worker_cpu}",
     "Usable MEM=${local.worker_mem}"
   ])
@@ -42,7 +42,16 @@ output worker-node-details {
 
 output primary-node-details {
   value = tolist([
-    "CPU=${data.external.primary_nodes.result.cpu}",
-    "MEM=${data.external.primary_nodes.result.memory}"
+    "Allocatable CPU=${data.external.primary_nodes[0].result.cpu}",
+    "Allocatable MEM=${data.external.primary_nodes[0].result.memory}",
+    "Coordinator %: ${local.coordinator_factor}",
+    "Coordinator CPU=${local.coordinator_cpu}",
+    "Coordinator MEM=${local.coordinator_mem}",
+    "Ranger CPU=${local.ranger_cpu}",
+    "Ranger MEM=${local.ranger_mem}",
+    "Hive CPU=${local.hive_cpu}",
+    "Hive MEM=${local.hive_mem}",
+    "Postgres CPU=${local.postgres_cpu}",
+    "Postgres MEM=${local.postgres_mem}"
   ])
 }

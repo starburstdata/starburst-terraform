@@ -35,6 +35,9 @@ variable create_ranger { }
 variable create_rds { }
 variable create_ranger_db { }
 
+variable ranger_cpu { }
+variable ranger_mem { }
+
 # Data Sources
 locals {
     ranger_template_vars = {
@@ -67,6 +70,8 @@ locals {
         ranger_svc_acc_pwd5         = var.ex_ranger_usersync_pwd != "" ? var.ex_ranger_usersync_pwd : random_password.service_acc_password5.result
         type                        = var.type
         service_type                = var.service_type
+        ranger_cpu                  = var.ranger_cpu
+        ranger_mem                  = var.ranger_mem
     }
 
     ranger_helm_chart_values = [for n in var.ranger_yaml_files : templatefile(

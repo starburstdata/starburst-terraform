@@ -29,11 +29,11 @@ expose:
 coordinator:
   resources:
     requests:
-      memory: "12Gi"
-      cpu: 2
+      memory: ${coordinator_mem}
+      cpu: ${coordinator_cpu}
     limits:
-      memory: "12Gi"
-      cpu: 2
+      memory: ${coordinator_mem}
+      cpu: ${coordinator_cpu}
   etcFiles:
     properties:
       config.properties: |

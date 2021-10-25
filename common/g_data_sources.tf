@@ -54,9 +54,26 @@ locals {
         agentpool       = var.worker_node_pool
     }
 
-    worker_cpu              = "${(trimsuffix(data.external.worker_nodes.result.cpu,substr(data.external.worker_nodes.result.cpu,-1,-1)) - var.cpu_offset)}${substr(data.external.worker_nodes.result.cpu,-1,-1)}"
-    worker_mem              = "${(trimsuffix(data.external.worker_nodes.result.memory,substr(data.external.worker_nodes.result.memory,-2,-1)) - var.mem_offset)}${substr(data.external.worker_nodes.result.memory,-2,-1)}"
+    # Coordinator starts with 87.5% of the node. Subtract 1/8 each for: Ranger, Nginx, Hive, Postgres
+    coordinator_factor      = 0.875 - (var.create_ranger ? 0.125 : 0) - (var.create_rds ? 0.125 : 0) - (var.create_hive ? 0.125 : 0) - (var.create_nginx ? 0.125 : 0)
 
+    # Get maximum available node cpu & mem for Worker pods 
+    worker_cpu              = var.worker_cpu != "" ? var.worker_cpu : "${(trimsuffix(data.external.worker_nodes[0].result.cpu,substr(data.external.worker_nodes[0].result.cpu,-1,-1)) - var.cpu_offset)}${substr(data.external.worker_nodes[0].result.cpu,-1,-1)}"
+    worker_mem              = var.worker_mem != "" ? var.worker_mem : "${(trimsuffix(data.external.worker_nodes[0].result.memory,substr(data.external.worker_nodes[0].result.memory,-2,-1)) - var.mem_offset)}${substr(data.external.worker_nodes[0].result.memory,-2,-1)}"
+
+    # Coordinator gets at least 1/2 of available mem & cpu on base node
+    coordinator_cpu         = var.coordinator_cpu != "" ? var.coordinator_cpu : "${((trimsuffix(data.external.primary_nodes[0].result.cpu,substr(data.external.primary_nodes[0].result.cpu,-1,-1)) - var.cpu_offset) * local.coordinator_factor)}m"
+    coordinator_mem         = var.coordinator_mem != "" ? var.coordinator_mem : "${floor(((trimsuffix(data.external.primary_nodes[0].result.memory,substr(data.external.primary_nodes[0].result.memory,-2,-1)) - var.mem_offset) * 0.5)/1000000)}Gi"
+
+    # Ranger gets 1/4 of available cpu & mem on base node
+    ranger_cpu              = var.ranger_cpu != "" ? var.ranger_cpu : "${((trimsuffix(data.external.primary_nodes[0].result.cpu,substr(data.external.primary_nodes[0].result.cpu,-1,-1)) - var.cpu_offset) * 0.125)}m"
+    ranger_mem              = var.ranger_mem != "" ? var.ranger_mem : "${floor(((trimsuffix(data.external.primary_nodes[0].result.memory,substr(data.external.primary_nodes[0].result.memory,-2,-1)) - var.mem_offset) * 0.125)/1000000)}Gi"
+
+    # Hive & Postgres get remaining mem & cpu on base node
+    postgres_cpu            = var.postgres_cpu != "" ? var.postgres_cpu : "${((trimsuffix(data.external.primary_nodes[0].result.cpu,substr(data.external.primary_nodes[0].result.cpu,-1,-1)) - var.cpu_offset) * 0.125)}m"
+    postgres_mem            = var.postgres_mem != "" ? var.postgres_mem : "${floor(((trimsuffix(data.external.primary_nodes[0].result.memory,substr(data.external.primary_nodes[0].result.memory,-2,-1)) - var.mem_offset) * 0.125)/1000000)}Gi"
+    hive_cpu                = var.hive_cpu != "" ? var.hive_cpu : "${((trimsuffix(data.external.primary_nodes[0].result.cpu,substr(data.external.primary_nodes[0].result.cpu,-1,-1)) - var.cpu_offset) * 0.125)}m"
+    hive_mem                = var.hive_mem != "" ? var.hive_mem : "${floor(((trimsuffix(data.external.primary_nodes[0].result.memory,substr(data.external.primary_nodes[0].result.memory,-2,-1)) - var.mem_offset) * 0.125)/1000000)}Gi"
 }
 
 # Generate some visible random passwords the user can use to connect to starburst & Ranger

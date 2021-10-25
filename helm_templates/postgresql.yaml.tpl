@@ -12,3 +12,8 @@ initdbScripts:
 
 service:
   type: ClusterIP
+
+resources:
+  requests:
+    memory: ${postgres_mem}
+    cpu: ${postgres_cpu}

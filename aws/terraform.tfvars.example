@@ -52,3 +52,13 @@ create_ranger       = true
 create_trino        = true
 
 create_nginx        = true
+
+# Set these resource parameters explicitly to null to force the system to calculate
+# the optimal values based on the instance types you have selected. You can override this
+# automated calculation by setting them to your own custom values here
+coordinator_cpu = ""
+coordinator_mem = ""
+ranger_cpu = ""
+ranger_mem = ""
+hive_cpu = ""
+hive_mem = ""

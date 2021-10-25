@@ -33,6 +33,8 @@ variable deploymentTerminationGracePeriodSeconds { }
 variable starburstWorkerShutdownGracePeriodSeconds { }
 variable worker_cpu { }
 variable worker_mem { }
+variable coordinator_cpu { }
+variable coordinator_mem { }
 # Password DB default user credentials
 variable admin_user { }
 variable admin_pass { }
@@ -111,6 +113,8 @@ locals {
         starburstWorkerShutdownGracePeriodSeconds   = var.starburstWorkerShutdownGracePeriodSeconds
         worker_cpu                  = var.worker_cpu
         worker_mem                  = var.worker_mem
+        coordinator_cpu             = var.coordinator_cpu
+        coordinator_mem             = var.coordinator_mem
         service_type                = var.service_type
         admin_user                  = var.admin_user
         admin_pass                  = var.admin_pass

@@ -5,8 +5,8 @@ variable worker_node_types {            default=["m5.xlarge","m5a.xlarge","m5n.x
 variable capacity_type {                default="SPOT"} #SPOT or ON_DEMAND
 
 # K8s resource offsets
-variable cpu_offset {                 default=500 }
-variable mem_offset {                 default=400000 }
+variable cpu_offset {                 default=600 }
+variable mem_offset {                 default=600000 }
 
 # AWS "NoSchedule" node taint tags
 variable node_taint_key {               default="kubernetes.io/nodetype"}

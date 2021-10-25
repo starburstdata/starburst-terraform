@@ -26,6 +26,9 @@ module db {
     primary_db_insights     = var.ex_insights_instance != "" ? var.ex_insights_db : "insights"
     primary_db_cache        = var.ex_cache_instance != "" ? var.ex_cache_db : "cache"
 
+    postgres_cpu            = local.postgres_cpu
+    postgres_mem            = local.postgres_mem
+
     depends_on              = [module.k8s]
 }
 
@@ -89,6 +92,9 @@ module hive {
     # External HMS
     ex_hive_server_url      = var.ex_hive_server_url
 
+    hive_cpu                = local.hive_cpu
+    hive_mem                = local.hive_mem
+
     depends_on              = [module.k8s,module.db]
 }
 
@@ -143,6 +149,9 @@ module ranger {
     create_ranger           = var.create_ranger
     create_rds              = var.create_rds
     create_ranger_db        = var.ex_ranger_instance == "" ? true : false
+
+    ranger_cpu              = local.ranger_cpu
+    ranger_mem              = local.ranger_mem
 
     depends_on              = [module.nginx,module.dns,module.hive,module.db]
 }
@@ -232,6 +241,8 @@ module trino {
 
     worker_cpu              = local.worker_cpu
     worker_mem              = local.worker_mem
+    coordinator_cpu         = local.coordinator_cpu
+    coordinator_mem         = local.coordinator_mem
 
     # Node taint for spot/preemptible
     node_taint_key          = var.node_taint_key

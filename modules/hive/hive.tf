@@ -43,6 +43,9 @@ variable abfs_secret {              default = ""}
 variable wasb_access_key {          default = ""}
 variable wasb_storage_account {     default = ""}
 
+variable hive_cpu { }
+variable hive_mem { }
+
 # Data Sources
 locals {
   hive_template_vars = {    
@@ -75,6 +78,8 @@ locals {
         abfs_secret                 = var.abfs_secret
         wasb_access_key             = var.wasb_access_key
         wasb_storage_account        = var.wasb_storage_account
+        hive_cpu                    = var.hive_cpu
+        hive_mem                    = var.hive_mem
     }
 
     hive_helm_chart_values = [for n in var.hive_yaml_files : templatefile(
