@@ -50,10 +50,13 @@ resource helm_release issuer {
 resource helm_release cert-manager {
   count  = var.create_nginx ? 1 : 0
 
+  depends_on = [time_sleep.wait_for_nginx]
+
   name       = "cert-manager"
   namespace  = local.namespace
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
+  version    = "v1.5.4"
 
   force_update     = false
   create_namespace = true
@@ -89,7 +92,7 @@ resource helm_release ingress {
 
   chart = "ingress-nginx"
 
-  version      = ""
+  version      = "4.0.1"
   force_update = true
 
   cleanup_on_fail = true
@@ -114,4 +117,10 @@ resource helm_release ingress {
     value             = var.primary_node_pool
   }
 
+}
+
+resource "time_sleep" "wait_for_nginx" {
+  depends_on = [helm_release.ingress]
+
+  create_duration = "30s"
 }
