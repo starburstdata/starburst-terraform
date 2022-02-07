@@ -51,16 +51,6 @@ module k8s {
   depends_on            = [module.vpc] 
 }
 
-# Save SA credentials as a secret in Kubernetes. Needed for GCS/BigQuery access
-resource kubernetes_secret dns_sa_credentials {
-  metadata {
-    name = var.gcp_cloud_key_secret
-  }
-  data = {
-    "key.json" = file(var.credentials)
-  }
-}
-
 # Update the local kubectl config
 resource "null_resource" "configure_kubectl" {
   provisioner "local-exec" {

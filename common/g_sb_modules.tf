@@ -266,3 +266,15 @@ module nginx {
 
     depends_on              = [module.k8s]
 }
+
+# Save Google Service Account credentials as a secret in Kubernetes. Needed for GCS/BigQuery access
+# Can set this on any cluster in any cloud
+resource kubernetes_secret dns_sa_credentials {
+    count = var.gcp_cloud_key_secret != "" ? 1 : 0
+  metadata {
+    name = var.gcp_cloud_key_secret
+  }
+  data = {
+    "key.json" = file(var.credentials)
+  }
+}

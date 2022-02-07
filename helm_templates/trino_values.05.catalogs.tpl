@@ -9,7 +9,7 @@ catalogs:
     connection-user=${primary_db_user}
     connection-password=${primary_db_password}
   hive: |
-    connector.name=hive-hadoop2
+    connector.name=hive
     hive.allow-drop-table=true
     hive.metastore.uri=${hive_service_url}
 

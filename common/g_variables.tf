@@ -134,6 +134,7 @@ variable operator_version {       default = null}
 
 # Object storage credentials
 # GCS
+variable credentials {              default = ""}
 variable gcp_cloud_key_secret {     default = ""}
 # ADL
 variable adl_oauth2_client_id {     default = ""}

@@ -1,5 +1,5 @@
 variable project { }
-variable credentials { }
+#variable credentials { }
 #variable sa_name { }
 
 # VM machine types
