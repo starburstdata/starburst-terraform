@@ -15,6 +15,7 @@ coordinator:
     insights.authorized-users=${admin_user}
     starburst.data-product.enabled=true
     data-product.starburst-user=${admin_user}
+    data-product.starburst-password=${admin_pass}
     data-product.starburst-jdbc-url=jdbc:trino://coordinator:8080?roles=system:sysadmin
 
 worker:
