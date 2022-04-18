@@ -16,7 +16,7 @@ coordinator:
         "defaultGracePeriod": "5m",
         "defaultMaxImportDuration": "5m",
         "defaultCacheCatalog": "hive",
-        "defaultCacheSchema": "cache",
+        "defaultCacheSchema": "default",
         "defaultUnpartitionedImportConfig": {
             "usePreferredWritePartitioning": false,
             "preferredWritePartitioningMinNumberOfPartitions": 1,
