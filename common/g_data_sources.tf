@@ -31,6 +31,7 @@ locals {
                             var.create_ranger ? "${path.root}/../helm_templates/trino_values.03.ranger.tpl" : "",
                             var.create_rds == false && var.ex_insights_instance == "" ? "" : "${path.root}/../helm_templates/trino_values.04.insights.tpl",
                             "${path.root}/../helm_templates/trino_values.05.catalogs.tpl",
+                            "${path.root}/../helm_templates/trino_values.06.cache.tpl",
                             var.custom_trino_yaml_file])
 
     hms_version         = var.hms_version       != null ? var.hms_version : var.repo_version

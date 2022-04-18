@@ -16,7 +16,7 @@ coordinator:
     starburst.data-product.enabled=true
     data-product.starburst-user=${admin_user}
     data-product.starburst-password=${admin_pass}
-    data-product.starburst-jdbc-url=jdbc:trino://coordinator:8080?roles=system:sysadmin
+    data-product.starburst-jdbc-url=jdbc:trino://${starburst_service_prefix}.${dns_zone}:443?SSL=true
 
 worker:
   etcFiles:
