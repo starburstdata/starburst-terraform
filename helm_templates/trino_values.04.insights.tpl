@@ -12,7 +12,6 @@ coordinator:
     insights.jdbc.url=jdbc:postgresql://${primary_ip_address}:${primary_db_port}/${primary_db_insights}
     insights.jdbc.user=${primary_db_user}
     insights.jdbc.password=${primary_db_password}
-    insights.authorized-users=${admin_user}
     starburst.data-product.enabled=true
     data-product.starburst-user=${admin_user}
     data-product.starburst-password=${admin_pass}

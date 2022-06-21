@@ -42,6 +42,7 @@ variable reg_user1 { }
 variable reg_pass1 { }
 variable reg_user2 { }
 variable reg_pass2 { }
+variable int_comm_shared_secret { }
 variable ranger_service { }
 variable starburst_service { }
 variable hive_service_url { }
@@ -122,6 +123,7 @@ locals {
         reg_pass1                   = var.reg_pass1
         reg_user2                   = var.reg_user2
         reg_pass2                   = var.reg_pass2
+        int_comm_shared_secret      = var.int_comm_shared_secret
         node_taint_key              = var.node_taint_key
         adl_oauth2_client_id        = var.adl_oauth2_client_id
         adl_oauth2_credential       = var.adl_oauth2_credential

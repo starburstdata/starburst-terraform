@@ -201,6 +201,10 @@ module trino {
     reg_user2               = var.reg_user2
     reg_pass2               = local.reg_pass2
 
+    # internal-communication.shared-secret
+    int_comm_shared_secret  = local.int_comm_shared_secret
+
+
     # Ranger & starburst Service names
     ranger_service          = local.ranger_service
     starburst_service       = local.starburst_service

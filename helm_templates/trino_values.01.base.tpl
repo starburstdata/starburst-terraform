@@ -6,6 +6,8 @@ registryCredentials:
 
 starburstPlatformLicense: "starburst"
 
+sharedSecret: ${int_comm_shared_secret}
+
 expose:
   type: ${service_type} #"loadBalancer"
   loadBalancer:

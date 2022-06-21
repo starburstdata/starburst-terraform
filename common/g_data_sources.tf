@@ -47,6 +47,10 @@ locals {
     reg_pass1           = var.reg_pass1 != "" ? var.reg_pass1 : random_string.user_pass1.result
     reg_pass2           = var.reg_pass2 != "" ? var.reg_pass2 : random_string.user_pass2.result
 
+    # Base64 encode shared-secret
+    #int_comm_shared_secret = base64encode(random_string.int_comm_shared_secret.result)
+    int_comm_shared_secret = random_string.int_comm_shared_secret.result
+
     primary_node_tags = {
         agentpool       = var.primary_node_pool
     }
@@ -102,6 +106,16 @@ resource "random_string" "user_pass1" {
 resource "random_string" "user_pass2" {
 
   # Generate a password to be used in this deployment.
+  length = 32
+  upper  = true
+  lower  = true
+  number = true
+  special = false
+}
+
+resource "random_string" "int_comm_shared_secret" {
+
+  # Generate a random string to be used with this starburst property: internal-communication.shared-secret=<secret>
   length = 32
   upper  = true
   lower  = true
