@@ -54,6 +54,10 @@ coordinator:
 worker:
   etcFiles:
     properties:
+      config.properties: |
+          coordinator=false
+          http-server.http.port=8080
+          discovery.uri=http://coordinator:8080
   autoscaling:
     enabled: true
     minReplicas: ${worker_autoscaling_min_size}
