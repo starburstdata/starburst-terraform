@@ -38,6 +38,8 @@ coordinator:
       cpu: ${coordinator_cpu}
   etcFiles:
     properties:
+      access-control.properties: |
+        access-control.name=allow-all
       config.properties: |
         coordinator=true
         node-scheduler.include-coordinator=false
@@ -54,6 +56,8 @@ coordinator:
 worker:
   etcFiles:
     properties:
+      access-control.properties: |
+        access-control.name=allow-all
       config.properties: |
           coordinator=false
           http-server.http.port=8080

@@ -15,9 +15,9 @@ variable node_taint_value {             default="spot"}
 # EKS autoscaling vars
 variable create_metrics_server  {       default=true}
 variable create_cluster_autoscaler {    default=true}
-variable metrics_server_version {       default="6.0.12"}
-variable cluster_autoscaler_version {   default="9.3.0"}
-variable cluster_autoscaler_tag {       default="v1.18.3"}
+variable metrics_server_version {       default=""}
+variable cluster_autoscaler_version {   default=""}
+variable cluster_autoscaler_tag {       default=""}
 
 # AWS roles to attach to EKS & node pools
 variable s3_role { }

@@ -56,7 +56,7 @@ resource helm_release cert-manager {
   namespace  = local.namespace
   chart      = "cert-manager"
   repository = "https://charts.jetstack.io"
-  version    = "v1.5.4"
+  version    = "v1.9.1"
 
   force_update     = false
   create_namespace = true
@@ -92,7 +92,7 @@ resource helm_release ingress {
 
   chart = "ingress-nginx"
 
-  version      = "4.0.1"
+  version      = "4.2.5"
   force_update = true
 
   cleanup_on_fail = true

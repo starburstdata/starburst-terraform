@@ -28,7 +28,7 @@ repository      = "https://harbor.starburstdata.net/chartrepo/starburstdata"
 registry        = "harbor.starburstdata.net/starburstdata"
 #repo_username   = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_username
 #repo_password   = set here, in sensitive.auto.tfvars or in environment variable: $TF_VAR_repo_password
-repo_version        = "370.0.0" # Version to deploy. Set to 'null' if you just want the latest version installed
+repo_version        = "370.0.0" # Version to deploy. Tip: define as empty variable to deploy latest build
 
 # Optional tagging for cloud resources. Defined as a map of keys and values
 # Replace with your own keys and values, or delete this if not needed

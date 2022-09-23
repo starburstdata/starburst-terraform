@@ -1,6 +1,5 @@
 locals {
-  trino_endpoint    = var.create_nginx ? "https://${module.dns.starburst_url}" : var.create_trino ? "http://${module.trino.starburst_ingress}:8080/ui" : null
-  insights_endpoint = var.create_nginx ? "https://${module.dns.starburst_url}/ui/insights" : var.create_trino ? "http://${module.trino.starburst_ingress}:8080/ui/insights" : null
+  trino_endpoint    = var.create_nginx ? "https://${module.dns.starburst_url}" : var.create_trino ? "http://${module.trino.starburst_ingress}:8080" : null
   ranger_endpoint   = var.create_nginx ? "https://${module.dns.ranger_url}" : var.create_ranger ? "http://${module.ranger.ranger_ingress}:6080" : null
 }
 
@@ -26,7 +25,6 @@ output postgres-details {
 output starburst-endpoints {
   value = tolist([
     var.create_trino ?        "starburst-trino      = ${local.trino_endpoint}" : "Starburst-trino not deployed",
-    var.create_trino ?        "starburst-insights   = ${local.insights_endpoint}" : "Starburst-insights not deployed",
     var.create_ranger ?       "ranger               = ${local.ranger_endpoint}" : "Starburst-Ranger not deployed",
   ])
 }
