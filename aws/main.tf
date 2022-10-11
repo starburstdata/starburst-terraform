@@ -38,7 +38,7 @@ module k8s {
 
   cluster_name    = local.cluster_name
   cluster_version = var.k8s_version
-  subnets         = var.create_vpc ? module.vpc.public_subnets : data.aws_subnet_ids.subnet[0].ids
+  subnets         = var.create_vpc ? module.vpc.public_subnets : data.aws_subnets.subnet[0].ids
   vpc_id          = var.create_vpc ? module.vpc.vpc_id : var.ex_vpc_id
 
   # worker_groups = [
@@ -99,7 +99,7 @@ module k8s {
   tags              = local.common_tags
   create_eks        = var.create_k8s
 
-  depends_on        = [module.vpc,data.aws_subnet_ids.subnet]
+  depends_on        = [module.vpc,data.aws_subnets.subnet]
 }
 
 module s3_bucket {
@@ -125,9 +125,13 @@ data "aws_eks_cluster_auth" "cluster" {
   name = module.k8s.cluster_id
 }
 
-data aws_subnet_ids subnet {
+data aws_subnets subnet {
   count = var.ex_vpc_id != "" ? 1 : 0
-  vpc_id = var.ex_vpc_id
+  filter {
+    name   = "vpc-id"
+    values = [var.ex_vpc_id]
+  }
+  #vpc_id = var.ex_vpc_id
 }
 
 # data "aws_security_group" "default" {

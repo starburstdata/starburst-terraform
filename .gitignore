@@ -6,3 +6,7 @@
 */*.custom.yaml
 */.DS_Store
 .DS_Store
+*/*.cer
+*/*.BAK
+azure/trino_values.10.custom.backup
+azure/tmp

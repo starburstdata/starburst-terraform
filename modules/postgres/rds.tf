@@ -65,7 +65,7 @@ resource "random_string" "primary_db_user" {
     length = 16
     upper  = true
     lower  = true
-    number = true
+    numeric = true
     special = false
 }
 

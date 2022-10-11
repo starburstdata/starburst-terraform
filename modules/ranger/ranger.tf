@@ -119,7 +119,7 @@ resource "random_string" "ranger_db_password" {
   length = 16
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -130,7 +130,7 @@ resource "random_password" "service_acc_password1" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -139,7 +139,7 @@ resource "random_password" "service_acc_password2" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -148,7 +148,7 @@ resource "random_password" "service_acc_password3" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -157,7 +157,7 @@ resource "random_password" "service_acc_password4" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -166,7 +166,7 @@ resource "random_password" "service_acc_password5" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 

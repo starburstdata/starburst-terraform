@@ -21,7 +21,7 @@ terraform {
     required_providers {
         azurerm = {
             source = "hashicorp/azurerm"
-            version = "= 2.50.0"
+            version = "= 3.25.0"
             configuration_aliases = [ azurerm.dns ]
         }
     }

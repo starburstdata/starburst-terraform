@@ -89,7 +89,7 @@ resource "random_string" "admin_pass" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -99,7 +99,7 @@ resource "random_string" "user_pass1" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -109,7 +109,7 @@ resource "random_string" "user_pass2" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }
 
@@ -119,6 +119,6 @@ resource "random_string" "int_comm_shared_secret" {
   length = 32
   upper  = true
   lower  = true
-  number = true
+  numeric = true
   special = false
 }

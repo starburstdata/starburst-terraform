@@ -14,12 +14,12 @@ Getting an environment up and running can be challenging. Successfully repeating
 
 The following components should be installed and pre-configured in your local environment:
 
-- [terraform v1.0](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
+- [terraform v1.3](https://learn.hashicorp.com/tutorials/terraform/install-cli) 
 - [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
 - [gcloud cli](https://cloud.google.com/sdk/docs/install)
 - [azure cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- [helm](https://helm.sh/docs/intro/install/)
+- [kubectl v1.25](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [helm v3.10](https://helm.sh/docs/intro/install/)
 
 ___
 ## Instructions
