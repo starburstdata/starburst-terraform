@@ -10,7 +10,7 @@
 
 module vpc {
     source  = "terraform-aws-modules/vpc/aws"
-    version = "3.7.0"
+    version = "3.19.0"
 
     name                 = local.vpc_name
     cidr                 = "172.31.0.0/16"
@@ -34,70 +34,66 @@ module vpc {
 
 module k8s {
   source  = "terraform-aws-modules/eks/aws"
-  version = "17.18.0"
+  version = "19.10.1"
 
   cluster_name    = local.cluster_name
   cluster_version = var.k8s_version
-  subnets         = var.create_vpc ? module.vpc.public_subnets : data.aws_subnets.subnet[0].ids
+  subnet_ids      = var.create_vpc ? module.vpc.public_subnets : data.aws_subnets.subnet[0].ids
   vpc_id          = var.create_vpc ? module.vpc.vpc_id : var.ex_vpc_id
 
-  # worker_groups = [
-  #   {
-  #     name                          = var.primary_node_pool
-  #     instance_type                 = var.primary_node_type
-  #     asg_max_size                  = var.primary_pool_size
-  #     kubelet_extra_args            = "--node-labels=starburstpool=${var.primary_node_pool}"
-  #     suspended_processes           = ["AZRebalance"]
-  #   },
-  #   {
-  #     name                          = var.worker_node_pool
-  #     instance_type                 = var.worker_node_type
-  #     asg_min_size                  = var.worker_pool_min_size
-  #     asg_max_size                  = var.worker_pool_max_size
-  #     kubelet_extra_args            = "--node-labels=starburstpool=${var.worker_node_pool}"
-  #     suspended_processes           = ["AZRebalance"]
-  #   }
-  # ]
+  cluster_endpoint_public_access  = true
 
-  node_groups = {
+  cluster_addons = {
+    coredns = {
+      most_recent = true
+    }
+    kube-proxy = {
+      most_recent = true
+    }
+    vpc-cni = {
+      most_recent = true
+    }
+  }
+
+  eks_managed_node_group_defaults = {
+    #instance_type                          = var.primary_node_type
+    update_launch_template_default_version = true
+    iam_role_additional_policies = {
+      AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+      additional = var.s3_role
+    }
+  }
+
+  eks_managed_node_groups = {
     (var.primary_node_pool) = {
-      desired_capacity = var.primary_pool_size
-      max_capacity     = var.primary_pool_size
-      min_capacity     = var.primary_pool_size
+      desired_size    = var.primary_pool_size
+      max_size        = var.primary_pool_size
+      min_size        = var.primary_pool_size
 
       instance_types = [var.primary_node_type]
-      k8s_labels = {
+      labels = {
         starburstpool = var.primary_node_pool
       }
     },
     (var.worker_node_pool) = {
-      desired_capacity = var.worker_pool_min_size
-      max_capacity     = var.worker_pool_max_size
-      min_capacity     = var.worker_pool_min_size
+      desired_size    = var.worker_pool_min_size
+      max_size        = var.worker_pool_max_size
+      min_size        = var.worker_pool_min_size
 
       instance_types = var.capacity_type == "SPOT" ? var.worker_node_types : [var.worker_node_type]
       capacity_type  = var.capacity_type
-      k8s_labels = {
+      labels = {
         starburstpool = var.worker_node_pool
       }
-      additional_tags = {
+      tags = {
         "k8s.io/cluster-autoscaler/enabled" = true
         "k8s.io/cluster-autoscaler/${local.cluster_name}" = true
       }
     }
   }
 
-  # Attach S3 policy to allow worker nodes to interact with Glue/S3
-  workers_additional_policies = var.s3_role
-
-  write_kubeconfig       = false
-  kubeconfig_name        = "${local.cluster_name}_kubeconfig"
-  #kubeconfig_output_path = "./"
-
-  map_roles         = var.map_roles
-
   tags              = local.common_tags
-  create_eks        = var.create_k8s
+  create            = var.create_k8s
 
   depends_on        = [module.vpc,data.aws_subnets.subnet]
 }
@@ -117,12 +113,12 @@ data "aws_availability_zones" "available" { }
 
 data "aws_eks_cluster" "cluster" {
   count = var.create_k8s ? 1 : 0
-  name = module.k8s.cluster_id
+  name = module.k8s.cluster_name
 }
 
 data "aws_eks_cluster_auth" "cluster" {
   count = var.create_k8s ? 1 : 0
-  name = module.k8s.cluster_id
+  name = module.k8s.cluster_name
 }
 
 data aws_subnets subnet {

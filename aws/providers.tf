@@ -2,13 +2,13 @@ terraform {
     required_providers {
         aws = {
             source  = "hashicorp/aws"
-            version = ">= 4.32.0"
+            version = ">= 4.59.0"
         }
         kubernetes = {
             source  = "hashicorp/kubernetes"
-            version = ">= 2.13.1"
+            version = ">= 2.18.1"
         }
-        helm        = ">= 2.7.0"
+        helm        = ">= 2.9.0"
     }
 }        
 
@@ -23,7 +23,7 @@ provider "kubernetes" {
     #token                  = data.aws_eks_cluster_auth.cluster.token
     exec {
         api_version = "client.authentication.k8s.io/v1beta1"
-        args        = ["eks", "get-token", "--cluster-name", module.k8s.cluster_id]
+        args        = ["eks", "get-token", "--cluster-name", module.k8s.cluster_name]
         command     = "aws"
     }
 }
@@ -35,7 +35,7 @@ provider helm {
         #token                  = data.aws_eks_cluster_auth.cluster.token
         exec {
             api_version = "client.authentication.k8s.io/v1beta1"
-            args        = ["eks", "get-token", "--cluster-name", module.k8s.cluster_id]
+            args        = ["eks", "get-token", "--cluster-name", module.k8s.cluster_name]
             command     = "aws"
         }
     }

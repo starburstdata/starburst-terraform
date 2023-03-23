@@ -43,7 +43,7 @@ resource "helm_release" "postgresql" {
     name            = var.expose_postgres_name
 
     repository      = "https://charts.bitnami.com/bitnami"
-    version         = "12.1.6"
+    version         = "12.2.5"
 
     chart           = "postgresql"
     values          = [local.postgres_helm_chart_values]

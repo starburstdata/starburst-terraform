@@ -53,7 +53,7 @@ create_trino        = true
 
 create_nginx        = true
 
-# Set these resource parameters explicitly to null to force the system to calculate
+# Set these resource parameters to empty to force the system to calculate
 # the optimal values based on the instance types you have selected. You can override this
 # automated calculation by setting them to your own custom values here
 coordinator_cpu = ""

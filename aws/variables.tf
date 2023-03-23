@@ -1,6 +1,6 @@
 # EC2 Node types
 variable primary_node_type {            default="m5.2xlarge"}
-variable worker_node_type {             default="m5.xlarge"}
+variable worker_node_type {             default="m5.2xlarge"}
 variable worker_node_types {            default=["m5.xlarge","m5a.xlarge","m5n.xlarge","m5.2xlarge","m5a.2xlarge","m5n.2xlarge"]}
 variable capacity_type {                default="SPOT"} #SPOT or ON_DEMAND
 

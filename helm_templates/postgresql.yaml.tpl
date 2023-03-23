@@ -1,4 +1,5 @@
 fullnameOverride: ${expose_postgres_name}
+nameOverride: ${expose_postgres_name}
 
 global:
   postgresql:
@@ -7,7 +8,12 @@ global:
       username: ${primary_db_user}
       postgresPassword: ${primary_db_password}
 
+shmVolume:
+  enabled: false
+
 primary:
+  persistence:
+    enabled: false
   initdb:
     scripts:
       init.sql: |

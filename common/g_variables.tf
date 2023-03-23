@@ -9,7 +9,7 @@ variable region { }
 variable zone {                   default = ""}
 variable vpc_name {               default = "vpc"}
 variable k8s_name {               default = "k8s"}
-variable k8s_version {            default = "1.22"}
+variable k8s_version {            default = "1.26"}
 variable bucket_name {            default = "storage"}
 variable storage_location {       default = "US"}
 variable primary_node_pool {      default = "base"}
